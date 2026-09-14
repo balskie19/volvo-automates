@@ -1,0 +1,463 @@
+<title>Volvo Ebal CV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="vo" viewBox="0 0 220 250">
+  <!-- collar / shoulders -->
+  <path d="M50 250 C 54 212 76 192 110 192 C 144 192 166 212 170 250 Z"
+        fill="var(--sh,#212A6B)" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M92 196 L 110 220 L 128 196" fill="none" stroke="#0B0E1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- neck -->
+  <path d="M92 168 v22 q 18 12 36 0 v-22 Z" fill="var(--sk,#F2F1EA)" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+  <!-- ears -->
+  <path d="M56 108 q -13 -3 -13 11 q 0 13 13 13" fill="var(--sk,#F2F1EA)" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round"/>
+  <path d="M164 108 q 13 -3 13 11 q 0 13 -13 13" fill="var(--sk,#F2F1EA)" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round"/>
+  <!-- head -->
+  <path d="M110 40 C 148 40 166 68 166 106 C 166 146 142 178 110 178 C 78 178 54 146 54 106 C 54 68 72 40 110 40 Z"
+        fill="var(--sk,#F2F1EA)" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+  <!-- hair -->
+  <path d="M53 104 C 47 62 74 34 110 34 C 150 34 173 62 167 106 C 160 86 148 76 130 72
+           C 114 90 82 94 62 82 C 57 88 54 95 53 104 Z"
+        fill="#0B0E1C" stroke="#0B0E1C" stroke-width="6" stroke-linejoin="round"/>
+  <!-- brows -->
+  <path d="M72 101 q 14 -9 28 -3" fill="none" stroke="#0B0E1C" stroke-width="8" stroke-linecap="round"/>
+  <path d="M148 98 q -14 -8 -28 0" fill="none" stroke="#0B0E1C" stroke-width="8" stroke-linecap="round"/>
+  <!-- eyes -->
+  <ellipse cx="88" cy="118" rx="5.5" ry="6.5" fill="#0B0E1C"/>
+  <ellipse cx="132" cy="117" rx="5.5" ry="6.5" fill="#0B0E1C"/>
+  <!-- nose -->
+  <path d="M110 118 v18 q 0 7 -8 8" fill="none" stroke="#0B0E1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- moustache -->
+  <path d="M84 148 q 26 -11 52 0 q -12 13 -26 13 q -14 0 -26 -13 Z" fill="#0B0E1C"/>
+  <!-- mouth -->
+  <path d="M96 165 q 14 7 28 0" fill="none" stroke="#0B0E1C" stroke-width="5.5" stroke-linecap="round"/>
+  <!-- soul patch / light beard -->
+  <path d="M100 172 q 10 6 20 0 q -2 11 -10 12 q -8 -1 -10 -12 Z" fill="#0B0E1C"/>
+</symbol>
+</defs></svg>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VOLVO EBAL · CV
+   Same world as the deck: indigo field, lemon accent, chalk
+   paper, sticker wordmark, hard shadows with no blur.
+   Single committed palette, and it prints.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --field:#212A6B; --field-2:#18205A; --pop:#F5D547; --pop-2:#D4B62E;
+  --paper:#F2F1EA; --paper-2:#E7E5DB; --ink:#0B0E1C; --mute:#4A4F62;
+  --rule:#D2D0C4;
+  --f-disp:"Gabarito",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper-2);color:var(--ink);font-family:var(--f-body);line-height:1.55}
+.page{max-width:1060px;margin:0 auto;background:var(--paper);min-height:100vh;
+  box-shadow:0 0 0 1px var(--rule)}
+.pad{padding:clamp(22px,4vw,54px)}
+
+/* ── masthead ── */
+.top{background:var(--field);color:var(--paper);padding:clamp(24px,4vw,46px) clamp(22px,4vw,54px);
+  position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;opacity:.1;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M28 26V14M42 26V14'/%3E%3Crect x='20' y='26' width='30' height='24' rx='7'/%3E%3Cpath d='M35 50v8c0 7-8 9-15 9'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:72px 72px}
+.top > *{position:relative;z-index:1}
+.mark{display:block;margin-bottom:18px}
+.mark svg{height:30px;width:auto;overflow:visible;display:block}
+.top h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.035em;
+  font-size:clamp(32px,5.4vw,58px);line-height:.98;margin:0 0 10px}
+.top .role{font-family:var(--f-mono);font-size:clamp(11px,1.3vw,13px);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pop);margin:0 0 18px}
+.top .pitch{font-size:clamp(15px,1.6vw,18.5px);max-width:62ch;margin:0;color:rgba(242,241,234,.9)}
+.contact{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.contact a,.contact span{font-family:var(--f-mono);font-size:12px;letter-spacing:.04em;
+  border:2px solid var(--paper);border-radius:99px;padding:7px 14px;text-decoration:none;color:var(--paper)}
+.contact a{background:var(--pop);color:var(--ink);border-color:var(--pop);font-weight:700}
+.contact a.ghost{background:transparent;color:var(--paper);border-color:rgba(242,241,234,.5);font-weight:400}
+.contact a:hover{transform:translateY(-1px)}
+.contact .todo{border-style:dashed;opacity:.72}
+
+.idrow{display:flex;align-items:flex-end;gap:16px;margin-bottom:18px}
+.cv-vo{width:86px;height:auto;flex:none;--sk:#F2F1EA;--sh:#F5D547}
+.mark{margin-bottom:0 !important}
+
+/* ── layout ── */
+.cols{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(24px,3.4vw,48px)}
+@media(max-width:840px){.cols{grid-template-columns:1fr}}
+
+h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;font-size:clamp(19px,2.2vw,25px);
+  margin:0 0 4px}
+.sec{margin-bottom:clamp(24px,3.2vh,36px)}
+.sec > .lede{color:var(--mute);font-size:14px;margin:0 0 14px;max-width:60ch}
+.rulebar{height:4px;background:var(--ink);margin:10px 0 16px;width:46px;border-radius:2px}
+
+/* ── offer blocks ── */
+.offer{display:grid;gap:12px}
+.offer article{border:2px solid var(--ink);border-radius:12px;padding:15px 17px;background:#fff;
+  box-shadow:4px 4px 0 0 var(--ink)}
+.offer h3{font-family:var(--f-disp);font-weight:800;font-size:17.5px;letter-spacing:-.02em;margin:0 0 5px;
+  display:flex;align-items:center;gap:9px}
+.offer h3 .tagn{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  background:var(--pop);color:var(--ink);border-radius:99px;padding:3px 8px;font-weight:700}
+.offer p{margin:0 0 8px;font-size:14px}
+.offer .who{font-family:var(--f-mono);font-size:11px;color:var(--mute);letter-spacing:.03em}
+
+/* ── experience ── */
+.job{padding:15px 0;border-top:1px solid var(--rule)}
+.job:first-of-type{border-top:2px solid var(--ink)}
+.job .hd{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:baseline}
+.job h3{font-family:var(--f-disp);font-weight:800;font-size:17px;letter-spacing:-.02em;margin:0}
+.job .when{font-family:var(--f-mono);font-size:11px;color:var(--mute);white-space:nowrap}
+.job .title{font-size:13.5px;color:var(--mute);margin:3px 0 7px;font-weight:600}
+.job p{margin:0;font-size:14px}
+.job .res{display:inline-block;margin-top:8px;font-family:var(--f-mono);font-size:11.5px;
+  background:var(--pop);color:var(--ink);padding:4px 9px;border-radius:4px;font-weight:700}
+
+/* ── builds ── */
+.builds{display:grid;gap:9px}
+.build{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:baseline;
+  padding:9px 0;border-bottom:1px solid var(--rule);font-size:14px}
+.build .st{font-family:var(--f-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  border:1.5px solid currentColor;border-radius:99px;padding:2px 7px;white-space:nowrap}
+.build .st.live{color:#1D7A44}
+.build .st.local{color:var(--mute)}
+.build b{font-weight:700}
+.build small{display:block;color:var(--mute);font-size:12.5px;margin-top:2px}
+.build a{font-family:var(--f-mono);font-size:11px;color:var(--field);white-space:nowrap}
+
+/* ── reach ── */
+.reach{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,238px),1fr));gap:11px}
+.ch{display:flex;flex-direction:column;gap:3px;border:2px solid var(--ink);border-radius:12px;
+  padding:13px 15px;background:#fff;box-shadow:4px 4px 0 0 var(--ink);text-decoration:none;color:var(--ink);
+  transition:transform .14s cubic-bezier(.2,.8,.3,1),box-shadow .14s ease}
+a.ch:hover{transform:translateY(-3px);box-shadow:6px 8px 0 0 var(--ink)}
+.ch .k{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.ch .v{font-family:var(--f-disp);font-weight:800;font-size:15px;letter-spacing:-.015em;word-break:break-word}
+.ch .m{font-size:12.5px;color:var(--mute);line-height:1.45;margin-top:3px}
+.ch.todo-ch{border-style:dashed;background:#FFFDF2;box-shadow:none}
+.ch.todo-ch .v{color:var(--mute)}
+
+/* ── side column ── */
+.side .box{background:#fff;border:2px solid var(--ink);border-radius:12px;padding:16px;
+  box-shadow:4px 4px 0 0 var(--ink);margin-bottom:18px}
+.side h3{font-family:var(--f-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mute);margin:0 0 11px}
+.side ul{list-style:none;margin:0;padding:0}
+.side li{display:flex;align-items:center;gap:9px;padding:3px 0;font-size:13.5px}
+.side li::before{content:"";width:8px;height:8px;border-radius:50%;border:2px solid var(--ink);flex:none}
+.side li.on::before{background:var(--pop)}
+.side .grp + .grp{margin-top:13px;padding-top:13px;border-top:1px solid var(--rule)}
+.side .grp h4{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--field);margin:0 0 7px}
+blockquote.t{margin:0 0 13px;padding:0 0 13px;border-bottom:1px solid var(--rule);font-size:13.5px}
+blockquote.t:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+blockquote.t cite{display:block;margin-top:7px;font-style:normal;font-family:var(--f-mono);
+  font-size:10.5px;letter-spacing:.03em;color:var(--mute)}
+
+.how{display:grid;gap:10px}
+.how li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;font-size:14px}
+.how .n{font-family:var(--f-mono);font-size:11px;font-weight:700;background:var(--ink);color:var(--paper);
+  border-radius:99px;width:22px;height:22px;display:grid;place-items:center;flex:none}
+
+.foot{background:var(--ink);color:var(--paper);padding:20px clamp(22px,4vw,54px);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em}
+.foot a{color:var(--pop)}
+.note{background:#FFF8DC;border:2px dashed var(--ink);border-radius:10px;padding:13px 15px;
+  font-size:13px;margin-bottom:20px}
+.note b{font-weight:700}
+
+a{color:var(--field)}
+a:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .page{box-shadow:none;max-width:none}
+  .note,.contact .todo,.ch.todo-ch{display:none}
+  .top{background:var(--field) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .offer article,.side .box{box-shadow:none;break-inside:avoid}
+  .job,.build,blockquote.t{break-inside:avoid}
+  .sec{break-inside:avoid-page}
+  .cols{grid-template-columns:1.5fr 1fr}
+}
+</style>
+
+<div class="page">
+
+  <header class="top">
+    <div class="idrow"><svg class="cv-vo" viewBox="0 0 220 250" role="img" aria-label="Volvo Ebal, illustrated"><use href="#vo"/></svg><span class="mark">
+      <svg viewBox="0 0 340 54" role="img" aria-label="Volvo Automates">
+        <g transform="rotate(-2 170 27)">
+          <text x="170" y="27" text-anchor="middle" dominant-baseline="middle" font-family="Gabarito, sans-serif"
+                font-weight="900" font-size="30" letter-spacing="-0.5" fill="#F2F1EA" stroke="#0B0E1C"
+                stroke-width="9" paint-order="stroke" stroke-linejoin="round">VOLVO AUTOMATES</text>
+        </g>
+      </svg>
+    </span></div>
+    <p class="role">Volvo Ebal &middot; AI systems and automation</p>
+    <h1>I build the system that runs the business after the lead comes in.</h1>
+    <p class="pitch">Six businesses since 2023, across solar, electrical, lead generation, content and agency
+      operations. I work in the tools a company already owns, I wire one process end to end before touching
+      anything else, and I build the missing piece myself when nothing on the market does the job.</p>
+    <div class="contact">
+      <a href="https://calendly.com/volvo-ebal8/30min" target="_blank" rel="noopener noreferrer">Book a call &#8250;</a>
+      <a class="ghost" href="mailto:volvo.ebal8@gmail.com">volvo.ebal8@gmail.com</a>
+      <a class="ghost" href="https://volvo-ebal.pages.dev" target="_blank" rel="noopener noreferrer">volvo-ebal.pages.dev</a>
+      <a class="ghost" href="https://wa.me/639977526687" target="_blank" rel="noopener noreferrer">+63 997 752 6687</a>
+      <a class="ghost" href="https://www.linkedin.com/in/volvo-ebal/" target="_blank" rel="noopener noreferrer">linkedin.com/in/volvo-ebal</a>
+      
+    </div>
+  </header>
+
+  <div class="pad">
+
+    <div class="cols">
+      <main>
+
+        <section class="sec">
+          <h2>What I offer</h2>
+          <div class="rulebar"></div>
+          <p class="lede">Most engagements start as one of these three and end up using two.</p>
+          <div class="offer">
+            <article>
+              <h3><span class="tagn">01</span> GoHighLevel</h3>
+              <p>CRM builds and repairs: pipelines, segmentation, reactivation campaigns that actually fire, and
+                an AI voice or chat agent wired into the CRM so an inquiry that arrives at 9pm is answered at 9pm
+                rather than the following morning.</p>
+              <p class="who">Delivered for Omni Power Solar, Corlan Electric, Godzilla Digital</p>
+            </article>
+            <article>
+              <h3><span class="tagn">02</span> n8n and workflow automation</h3>
+              <p>The wiring between the tools you already pay for. Records move between the CRM, the sheets, the
+                inbox and the ad platforms without anyone retyping them, AI steps run in the middle, and the
+                workflows that broke quietly get found and repaired.</p>
+              <p class="who">Delivered for Leadworx.io, Your AI Army, Heartaccent</p>
+            </article>
+            <article>
+              <h3><span class="tagn">03</span> Custom applications, built with Claude Code</h3>
+              <p>When no product on the market does the job, I build it. Eleven applications shipped to date,
+                three of them live on the public internet and openable right now, each documented with the
+                failure it taught me as well as what it does.</p>
+              <p class="who">Database Reactivation, Colorly, SnapVault and eight more</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="sec">
+          <h2>Experience</h2>
+          <div class="rulebar"></div>
+          <p class="lede">Every figure below was stated by the client, not estimated by me.</p>
+
+          <article class="job">
+            <div class="hd"><h3>Omni Power Solar</h3><span class="when">Nov 2025 &ndash; Feb 2026 &middot; Project</span></div>
+            <p class="title">Inbound Voice Agent Builder</p>
+            <p>Designed and deployed an AI voice agent integrated with the CRM to handle inbound inquiries outside
+              business hours, so after-hours leads were captured and qualified instead of going to voicemail.</p>
+            <span class="res">40% more leads captured in month one</span>
+          </article>
+
+          <article class="job">
+            <div class="hd"><h3>Leadworx.io</h3><span class="when">Nov 2025 &ndash; Jan 2026 &middot; Project</span></div>
+            <p class="title">n8n Workflow Developer</p>
+            <p>Built and maintained custom CRM integrations in n8n and GoHighLevel to automate lead reactivation,
+              with accurate data syncing, segmentation and follow-up sequences running without supervision.</p>
+            <span class="res">12 hours a week returned, three campaigns self-running</span>
+          </article>
+
+          <article class="job">
+            <div class="hd"><h3>Your AI Army</h3><span class="when">Oct 2025 &middot; Project</span></div>
+            <p class="title">Automation Lead</p>
+            <p>Audited and repaired existing CRM and marketing automation workflows, removing duplication errors
+              and improving campaign performance tracking.</p>
+            <span class="res">8 workflows repaired, error rate down 70%</span>
+          </article>
+
+          <article class="job">
+            <div class="hd"><h3>Corlan Electric LLC</h3><span class="when">Mar 2025 &ndash; Aug 2025 &middot; Part-time</span></div>
+            <p class="title">Back-end Tech Support and CRM Management</p>
+            <p>Built automated quotation workflows that cut manual processing time and improved response speed on
+              inbound sales leads.</p>
+            <span class="res">Quoting under 10 minutes, 20% less processing time</span>
+          </article>
+
+          <article class="job">
+            <div class="hd"><h3>Heartaccent LLC</h3><span class="when">Nov 2024 &ndash; Mar 2025 &middot; Project</span></div>
+            <p class="title">Pinterest Moderator and Automations</p>
+            <p>Implemented automated content workflows for consistent publishing, with engagement tracking and
+              performance reporting that no longer needed manual assembly.</p>
+            <span class="res">20 posts a week automated, 8 hours a week saved</span>
+          </article>
+
+          <article class="job">
+            <div class="hd"><h3>Godzilla Digital LLC</h3><span class="when">Nov 2023 &ndash; May 2024 &middot; Full-time</span></div>
+            <p class="title">Junior Developer and CRM Specialist</p>
+            <p>Designed and maintained cross-platform automation integrating CRM, marketing and operational
+              systems so records stayed consistent and campaigns ran reliably.</p>
+            <span class="res">5 platforms unified, data loss between tools ended</span>
+          </article>
+        </section>
+
+        <section class="sec">
+          <h2>Systems built under contract</h2>
+          <div class="rulebar"></div>
+          <p class="lede">Built inside a creative agency and in daily use. Described by what they do rather than
+            by whose name is on them, because the client's name is theirs to publish, not mine.</p>
+          <div class="builds">
+            <div class="build"><span class="st local">In use</span><span><b>Voice-driven operations dashboard</b>
+              <small>Hold a key, say the task, and a runner daemon executes it and reports the result back.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Drive-to-database client tracker</b>
+              <small>Sweeps every client folder nightly, diffs it against a database and reports new, changed and missing files by name.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Seven research agents on one library</b>
+              <small>Packaged so a colleague can install the whole set and run it themselves.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Three generation bots in Slack</b>
+              <small>Concepts, then scripts, then storyboards, each written into the real working document.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Multi-platform publisher</b>
+              <small>Write once, schedule to four networks, generate the creative in the same application.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Local-business acquisition system</b>
+              <small>Map search that finds businesses with no website, builds them one, then manages what follows.</small></span><span></span></div>
+            <div class="build"><span class="st local">In use</span><span><b>Research database</b>
+              <small>The reference layer the generation tools read before they write anything.</small></span><span></span></div>
+          </div>
+        </section>
+
+        <section class="sec">
+          <h2>Applications I built myself</h2>
+          <div class="rulebar"></div>
+          <p class="lede">Eleven shipped. Three open in a browser now, the rest run locally and I will demo them
+            on a call.</p>
+          <div class="builds">
+            <div class="build"><span class="st live">Live</span><span><b>Database Reactivation</b>
+              <small>An AI SMS agent that texts a CRM's dead leads, qualifies the replies and books the calls.</small></span>
+              <a href="https://database-reactivation.pages.dev" target="_blank" rel="noopener noreferrer">open &#8250;</a></div>
+            <div class="build"><span class="st live">Live</span><span><b>Colorly</b>
+              <small>An offline paint-by-number game with fifteen generators, built for my wife and daughter.</small></span>
+              <a href="https://colorly.pages.dev" target="_blank" rel="noopener noreferrer">open &#8250;</a></div>
+            <div class="build"><span class="st live">Live</span><span><b>SnapVault</b>
+              <small>Backs up an iPhone's photos and video so the storage can be cleared. Installs to the home screen.</small></span>
+              <a href="https://snapvault-rho.vercel.app" target="_blank" rel="noopener noreferrer">open &#8250;</a></div>
+            <div class="build"><span class="st local">Local</span><span><b>Phone Bridge</b>
+              <small>Scan a QR code and the phone sends files into a watched folder on the PC in realtime, with no app installed.</small></span><span></span></div>
+            <div class="build"><span class="st local">Local</span><span><b>Video editor</b>
+              <small>Raw clips in, captioned vertical cut out. Cuts dead air, times captions to the word, ducks the music under the voice.</small></span><span></span></div>
+            <div class="build"><span class="st local">Local</span><span><b>Video QA reviewer</b>
+              <small>Point it at a folder of review links; it downloads each video, runs the checks and posts the verdict back.</small></span><span></span></div>
+            <div class="build"><span class="st local">Local</span><span><b>MLS prospecting agent</b>
+              <small>Runs daily across fifteen zip codes, finds listings whose photography is thin, scores them and drafts the outreach.</small></span><span></span></div>
+            <div class="build"><span class="st local">Local</span><span><b>Pomodoro Cat</b>
+              <small>A focus timer whose break cannot be skipped: a cat walks across the live desktop and blocks input until the rest is over.</small></span><span></span></div>
+          </div>
+        </section>
+
+
+        <section class="sec">
+          <h2>Where to reach me</h2>
+          <div class="rulebar"></div>
+          <p class="lede">A call is the fastest route. Everything else below reaches me the same day.</p>
+          <div class="reach">
+            <a class="ch" href="https://calendly.com/volvo-ebal8/30min" target="_blank" rel="noopener noreferrer">
+              <span class="k">Book a call</span><span class="v">calendly.com/volvo-ebal8/30min</span>
+              <span class="m">Twenty minutes. Bring the process that is eating your week.</span></a>
+            <a class="ch" href="mailto:volvo.ebal8@gmail.com">
+              <span class="k">Email</span><span class="v">volvo.ebal8@gmail.com</span>
+              <span class="m">Best for a brief, a document, or anything with detail attached.</span></a>
+            <a class="ch" href="https://wa.me/639977526687" target="_blank" rel="noopener noreferrer"><span class="k">WhatsApp</span><span class="v">+63 997 752 6687</span><span class="m">Fastest for a quick question or a voice note.</span></a>
+            <a class="ch" href="https://www.linkedin.com/in/volvo-ebal/" target="_blank" rel="noopener noreferrer"><span class="k">LinkedIn</span><span class="v">linkedin.com/in/volvo-ebal</span><span class="m">The work history, and where most clients check me first.</span></a>
+            <a class="ch" href="https://volvo-ebal.pages.dev" target="_blank" rel="noopener noreferrer">
+              <span class="k">Portfolio</span><span class="v">volvo-ebal.pages.dev</span>
+              <span class="m">The long version, with every build and the failure it taught.</span></a>
+            
+          </div>
+        </section>
+        <section class="sec">
+          <h2>How an engagement runs</h2>
+          <div class="rulebar"></div>
+          <ul class="how" style="padding:0;margin:0">
+            <li><span class="n">1</span><span><b>Week 0, we find the bottleneck.</b> Twenty minutes on a call.
+              You describe what eats the most time. I tell you whether it is worth automating, and I say so when
+              it is not.</span></li>
+            <li><span class="n">2</span><span><b>Week 1, one process wired end to end.</b> Not a platform, not a
+              transformation. One process, working, inside your own tools, where you can watch it run.</span></li>
+            <li><span class="n">3</span><span><b>Then you keep it.</b> Handover with the runbook. If it breaks it
+              tells somebody, because a silent failure is worse than no automation at all.</span></li>
+          </ul>
+        </section>
+
+      </main>
+
+      <aside class="side">
+
+        <div class="box">
+          <h3>Tools I have shipped with</h3>
+          <div class="grp">
+            <h4>Automation</h4>
+            <ul><li class="on">n8n</li><li>Make.com</li><li>Zapier</li><li>Apify</li><li>RapidAPI</li></ul>
+          </div>
+          <div class="grp">
+            <h4>CRM and sales</h4>
+            <ul><li class="on">GoHighLevel</li><li>HubSpot</li><li>Apollo</li><li>Sales Navigator</li><li>Intercom</li></ul>
+          </div>
+          <div class="grp">
+            <h4>AI</h4>
+            <ul><li class="on">Claude Code</li><li class="on">Claude</li><li>Retell AI</li><li>Gemini</li><li>Grok</li><li>DeepSeek</li></ul>
+          </div>
+          <div class="grp">
+            <h4>Build and ship</h4>
+            <ul><li class="on">Node</li><li>JavaScript</li><li>Next.js</li><li>Cloudflare Pages</li><li>Vercel</li><li>Supabase</li></ul>
+          </div>
+          <div class="grp">
+            <h4>Voice and operations</h4>
+            <ul><li>OpenPhone</li><li>Slack</li><li>Monday.com</li><li>Dropbox</li></ul>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3>What clients said</h3>
+          <blockquote class="t">&ldquo;We were bleeding leads after hours and didn't even know it. Volvo fixed
+            that. 40% more leads captured the first month alone.&rdquo;
+            <cite>Kevin Zucker, COO &middot; Omni Power Solar</cite></blockquote>
+          <blockquote class="t">&ldquo;Handed him a messy CRM and he gave us back 12 hours a week. Three campaigns
+            running on their own now.&rdquo;
+            <cite>Martin Williams, CEO &middot; Leadworx.io</cite></blockquote>
+          <blockquote class="t">&ldquo;Found issues in our automations we'd been ignoring for months. Fixed 8
+            workflows, cut our error rate by 70%.&rdquo;
+            <cite>Dom Ricci, Team Lead &middot; Your AI Army</cite></blockquote>
+          <blockquote class="t">&ldquo;Quoting used to take forever. Now it's under 10 minutes and nobody has to
+            touch it.&rdquo;
+            <cite>Rob De Ciantis, Owner &middot; Corlan Electric</cite></blockquote>
+          <blockquote class="t">&ldquo;I stopped worrying about content schedules the day he set this up. 20 posts
+            a week, automated.&rdquo;
+            <cite>Tina Sivaraj, CEO &middot; Heartaccent</cite></blockquote>
+          <blockquote class="t">&ldquo;Five platforms, one clean system. Data stopped getting lost between
+            tools.&rdquo;
+            <cite>Seth Royce, Senior Developer &middot; Godzilla Digital</cite></blockquote>
+        </div>
+
+        <div class="box">
+          <h3>How I work</h3>
+          <ul style="font-size:13.5px;line-height:1.5">
+            <li style="display:block;padding:0 0 9px"><b>Every build carries its failure.</b> I publish what broke
+              and what it cost, not only what shipped. A portfolio that lists wins alone is a brochure.</li>
+            <li style="display:block;padding:9px 0;border-top:1px solid var(--rule)"><b>Silent failure is the real
+              enemy.</b> Anything I build reports into a channel you already read, and says so when it stops.</li>
+            <li style="display:block;padding:9px 0;border-top:1px solid var(--rule)"><b>Your tools, not mine.</b>
+              If it has an API or a webhook it can be wired in. If it does not, I build the missing piece.</li>
+            <li style="display:block;padding:9px 0 0;border-top:1px solid var(--rule)"><b>I will tell you not to
+              automate something.</b> If a process does not cost real hours or real leads, automating it is a
+              hobby.</li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <span><a href="../">&#8249; Back to the deck</a></span>
+    <span>Volvo Ebal &middot; AI systems and automation</span>
+    <span><a href="https://calendly.com/volvo-ebal8/30min" target="_blank" rel="noopener noreferrer">calendly.com/volvo-ebal8/30min</a></span>
+  </footer>
+</div>

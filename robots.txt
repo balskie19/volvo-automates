@@ -1,0 +1,26 @@
+# Every crawler is welcome, including the ones that answer questions.
+User-agent: *
+Allow: /
+
+# Named explicitly because some of these read robots.txt before they read
+# anything else, and a missing file is not the same as an open door.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://volvo-automates.pages.dev/sitemap.xml

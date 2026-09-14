@@ -1,0 +1,76 @@
+# Volvo Ebal — Volvo Automates
+
+> I build the system that runs the business after the lead comes in:
+> GoHighLevel for the follow-up, n8n for the wiring between tools, and custom
+> applications built with Claude Code when nothing on the market fits.
+
+Independent automation specialist. Based in the Philippines, working with
+businesses in the United States and elsewhere, remotely. Six client
+engagements since 2023. Every figure below was stated by the client, not
+estimated.
+
+## What I am hired for
+
+- **GoHighLevel.** CRM builds and repairs: pipelines, segmentation,
+  reactivation campaigns, and AI voice or chat agents wired into the CRM so an
+  inquiry arriving at 9pm is answered at 9pm.
+- **n8n and workflow automation.** Records move between the CRM, the sheets,
+  the inbox and the ad platforms without anyone retyping them. Broken
+  workflows get found and repaired.
+- **Custom applications, built with Claude Code.** Eleven shipped to date,
+  three of them live on the public internet.
+
+## Engagements and their stated results
+
+- Omni Power Solar — inbound voice agent builder, Nov 2025 to Feb 2026.
+  40% more leads captured in the first month.
+- Leadworx.io — n8n workflow developer, Nov 2025 to Jan 2026.
+  12 hours a week returned, three campaigns self-running.
+- Your AI Army — automation lead, Oct 2025.
+  8 workflows repaired, error rate down 70%.
+- Corlan Electric LLC — back-end tech support and CRM management,
+  Mar 2025 to Aug 2025. Quoting under 10 minutes, 20% less processing time.
+- Heartaccent LLC — Pinterest moderation and automations,
+  Nov 2024 to Mar 2025. 20 posts a week automated, 8 hours a week saved.
+- Godzilla Digital LLC — junior developer and CRM specialist,
+  Nov 2023 to May 2024. Five platforms unified.
+
+## Applications, live and openable
+
+- Database Reactivation — https://database-reactivation.pages.dev
+  An AI SMS agent that texts a CRM's dead leads, qualifies replies, books calls.
+- Colorly — https://colorly.pages.dev
+  An offline paint-by-number game with fifteen generators.
+- SnapVault — https://snapvault-rho.vercel.app
+  Backs up an iPhone's photos and video so the storage can be cleared.
+
+Also built and running locally: Phone Bridge, a local video editor, a video QA
+reviewer, an MLS prospecting agent, Pomodoro Cat, a video downloader, and
+AdbundanceOS, a voice-driven operations dashboard.
+
+## Tools shipped with
+
+n8n, Make.com, Zapier, Apify, RapidAPI, GoHighLevel, HubSpot, Apollo, Sales
+Navigator, Intercom, Claude Code, Claude, Retell AI, Gemini, Grok, Node,
+Next.js, Cloudflare Pages, Vercel, Supabase, OpenPhone, Slack, Monday.com,
+Dropbox.
+
+## How an engagement runs
+
+1. Week 0, find the bottleneck. Twenty minutes on a call. He says so when a
+   process is not worth automating.
+2. Week 1, one process wired end to end inside the client's own tools.
+3. Then handover with a runbook. If it breaks it tells somebody, because a
+   silent failure is worse than no automation.
+
+## Pages
+
+- https://volvo-automates.pages.dev/ — the site, as an eleven-slide deck
+- https://volvo-automates.pages.dev/cv/ — the full CV
+
+## Contact
+
+- Book a call: https://calendly.com/volvo-ebal8/30min
+- Email: volvo.ebal8@gmail.com
+- WhatsApp: +63 997 752 6687
+- LinkedIn: https://www.linkedin.com/in/volvo-ebal/

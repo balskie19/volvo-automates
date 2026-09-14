@@ -34,12 +34,16 @@ try {
 // --- stage exactly what should be public
 rmSync(DIST, { recursive: true, force: true });
 mkdirSync(join(DIST, "cv"), { recursive: true });
-cpSync(join(ROOT, "index.html"), join(DIST, "index.html"));
-cpSync(join(ROOT, "cv", "index.html"), join(DIST, "cv", "index.html"));
-for (const f of ["index.html", "cv/index.html"]) {
+const FILES = ["index.html", "cv/index.html", "robots.txt", "sitemap.xml", "llms.txt", "404.html", "og.png"];
+for (const f of FILES) {
+  const from = join(ROOT, f);
+  if (!existsSync(from)) { console.log("  (skipping missing " + f + ")"); continue; }
+  cpSync(from, join(DIST, f));
+}
+for (const f of ["index.html", "cv/index.html", "robots.txt", "sitemap.xml", "llms.txt", "404.html"]) {
   if (!existsSync(join(DIST, f))) throw new Error("staging missed " + f);
 }
-console.log("staged: index.html, cv/index.html");
+console.log("staged: " + FILES.join(", "));
 
 // --- credentials
 const token = await findToken();

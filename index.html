@@ -156,7 +156,25 @@ h2{font-size:clamp(29px,5.2vw,70px)}
 .bay li{gap:10px}
 .bay li::before{display:none}
 .bay li.on{font-weight:600}
-.bay li.on .mk,.bay li.on .mk-in{color:var(--acc)}
+.bay li.on .mk-in{color:var(--acc)}
+
+
+/* vendor marks in their own brand colour. A mark under 3:1 on the field is
+   lifted toward the paper: same hue, still legible. Initials stay type-coloured. */
+.mk-n8n{color:#EA4B71}
+.mk-make{color:#A260D8}
+.mk-zapier{color:#FF4F00}
+.mk-rapid{color:#3A7ADE}
+.mk-hubspot{color:#FF7A59}
+.mk-intercom{color:#6AFDEF}
+.mk-claude{color:#D97757}
+.mk-googlegemini{color:#8E75B2}
+.mk-nodedotjs{color:#5FA04E}
+.mk-nextdotjs{color:#F2F1EA}
+.mk-cloudflarepages{color:#F38020}
+.mk-vercel{color:#F2F1EA}
+.mk-supabase{color:#3FCF8E}
+.mk-dropbox{color:#2778FC}
 
 /* ── sticker card: cut out, hard shadow, no blur ── */
 .card{
@@ -372,7 +390,22 @@ a.ch:hover{transform:translateY(-3px)}
   transition:opacity .4s ease, transform .4s cubic-bezier(.2,.84,.3,1)}
 .guide[hidden]{display:none !important}
 .guide.away{opacity:0;transform:translateY(14px) scale(.9)}
-.guide > svg{width:100%;height:auto;display:block}
+.guide{pointer-events:auto}
+.guide > svg{width:100%;height:auto;display:block;overflow:visible}
+#gBody{animation:breathe 4.2s ease-in-out infinite;transform-origin:50% 92%;transform-box:fill-box}
+@keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.012)}}
+#gHead{transition:transform .28s cubic-bezier(.2,.84,.3,1)}
+#gEyes{transition:transform .16s ease-out}
+.eye{transform-box:fill-box;transform-origin:50% 50%}
+.guide.blink .eye{animation:blink .18s ease-in-out}
+@keyframes blink{50%{transform:scaleY(.12)}}
+.guide{cursor:pointer}
+.guide:hover #gHead{transform:translateY(-3px) rotate(-2.5deg)}
+.guide:active #gBody{transform:scale(.96)}
+@keyframes nod{0%,100%{transform:rotate(0)}30%{transform:rotate(6deg)}65%{transform:rotate(-4deg)}}
+.guide.talk #gHead{animation:nod .5s ease-in-out}
+.guide .hand{transform-origin:20% 90%;transform-box:fill-box}
+.guide.waving .hand{animation:wave 2.2s ease-in-out 2}
 @keyframes hopF{0%{transform:translate(0,0) rotate(0)}
   32%{transform:translate(10px,-18px) rotate(8deg)}
   62%{transform:translate(3px,3px) rotate(-4deg)}
@@ -396,7 +429,7 @@ a.ch:hover{transform:translateY(-3px)}
 
 @keyframes wave{0%,55%,100%{transform:rotate(0)}
   66%{transform:rotate(-24deg)}78%{transform:rotate(16deg)}90%{transform:rotate(-12deg)}}
-.guide .hand{transform-origin:20% 90%;animation:wave 2.2s ease-in-out 2}
+
 @media(max-width:900px){.guide{display:none}}
 
 /* drawn props */
@@ -511,20 +544,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
 }
 
 
-/* a different pointer on every slide, drawn in the same hand as the icons */
+/* Six pointers, one per slide. Each is an object from the kit, drawn along the
+   diagonal so its working end sits on the hotspot. Lemon when something is
+   clickable, chalk otherwise. */
 @media (hover:hover) and (pointer:fine){
-  body.cur-arrow,body.cur-arrow .slide,body.cur-arrow .menu,body.cur-arrow .notes,body.cur-arrow .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2026.4%20L12.6%2020.2%20L16.2%2028.8%20L20.7%2026.9%20L17%2018.8%20L25.4%2018.4%20Z%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-arrow a,body.cur-arrow button,body.cur-arrow .app,body.cur-arrow .card,body.cur-arrow .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2026.4%20L12.6%2020.2%20L16.2%2028.8%20L20.7%2026.9%20L17%2018.8%20L25.4%2018.4%20Z%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-plug,body.cur-plug .slide,body.cur-plug .menu,body.cur-plug .notes,body.cur-plug .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M23%205%20v4%20M28.5%205%20v4%20M21%209%20h9.5%20v6%20a4.2%204.2%200%200%201%20-4.2%204.2%20h-1.1%20a4.2%204.2%200%200%201%20-4.2%20-4.2%20z%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-plug a,body.cur-plug button,body.cur-plug .app,body.cur-plug .card,body.cur-plug .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M23%205%20v4%20M28.5%205%20v4%20M21%209%20h9.5%20v6%20a4.2%204.2%200%200%201%20-4.2%204.2%20h-1.1%20a4.2%204.2%200%200%201%20-4.2%20-4.2%20z%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-wrench,body.cur-wrench .slide,body.cur-wrench .menu,body.cur-wrench .notes,body.cur-wrench .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M29%205.6%20a5.2%205.2%200%200%200%20-6.9%206.9%20l-5.6%205.6%202.5%202.5%205.6%20-5.6%20a5.2%205.2%200%200%200%206.9%20-6.9%20l-2.9%202.9%20-2.5%20-.6%20-.6%20-2.5%20z%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-wrench a,body.cur-wrench button,body.cur-wrench .app,body.cur-wrench .card,body.cur-wrench .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M29%205.6%20a5.2%205.2%200%200%200%20-6.9%206.9%20l-5.6%205.6%202.5%202.5%205.6%20-5.6%20a5.2%205.2%200%200%200%206.9%20-6.9%20l-2.9%202.9%20-2.5%20-.6%20-.6%20-2.5%20z%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-node,body.cur-node .slide,body.cur-node .menu,body.cur-node .notes,body.cur-node .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M23.6%206.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M23.6%2018.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M29.4%2012.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M26%208.4%20l1.8%202.6%20M26%2017%20l1.8%20-2.6%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-node a,body.cur-node button,body.cur-node .app,body.cur-node .card,body.cur-node .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M23.6%206.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M23.6%2018.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M29.4%2012.4%20a2.6%202.6%200%201%200%20.1%200%20z%20M26%208.4%20l1.8%202.6%20M26%2017%20l1.8%20-2.6%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-card,body.cur-card .slide,body.cur-card .menu,body.cur-card .notes,body.cur-card .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M19.6%205.4%20h9.8%20v6.6%20h-9.8%20z%20M22.4%2014%20h9.8%20v6.6%20h-9.8%20z%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-card a,body.cur-card button,body.cur-card .app,body.cur-card .card,body.cur-card .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M19.6%205.4%20h9.8%20v6.6%20h-9.8%20z%20M22.4%2014%20h9.8%20v6.6%20h-9.8%20z%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-caret,body.cur-caret .slide,body.cur-caret .menu,body.cur-caret .notes,body.cur-caret .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M21.6%205.6%20h9.4%20v14.4%20h-9.4%20z%20M24%209.6%20l2.6%202.4%20-2.6%202.4%27%20fill%3D%27%23F2F1EA%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
-  body.cur-caret a,body.cur-caret button,body.cur-caret .app,body.cur-caret .card,body.cur-caret .ccard{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%3Cpath%20d%3D%27M6%203%20L6%2022%20L11%2017.6%20L13.6%2024%20L17.6%2022.4%20L15%2016.4%20L21%2016%20Z%20M21.6%205.6%20h9.4%20v14.4%20h-9.4%20z%20M24%209.6%20l2.6%202.4%20-2.6%202.4%27%20fill%3D%27%23F5D547%27%20stroke%3D%27%230B0E1C%27%20stroke-width%3D%273%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%20paint-order%3D%27stroke%27%2F%3E%3C%2Fsvg%3E") 6 3, auto}
+  body.cur-plug,body.cur-plug .slide,body.cur-plug .menu,body.cur-plug .notes,body.cur-plug .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L13%2012%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9%201.5%20L18.5%2011%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.4%2011.4%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.8%202.6%20L17.6%2010.4%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2212.2%22%20y%3D%2212.2%22%20width%3D%2213%22%20height%3D%2210.6%22%20rx%3D%224%22%20transform%3D%22rotate(45%2018.7%2017.5)%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%20%3Cpath%20d%3D%22M23%2022%20q%205%204%204%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-plug a,body.cur-plug button,body.cur-plug .app,body.cur-plug .card,body.cur-plug .ccard,body.cur-plug .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L13%2012%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9%201.5%20L18.5%2011%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.4%2011.4%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.8%202.6%20L17.6%2010.4%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2212.2%22%20y%3D%2212.2%22%20width%3D%2213%22%20height%3D%2210.6%22%20rx%3D%224%22%20transform%3D%22rotate(45%2018.7%2017.5)%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%20%3Cpath%20d%3D%22M23%2022%20q%205%204%204%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-driver,body.cur-driver .slide,body.cur-driver .menu,body.cur-driver .notes,body.cur-driver .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3%202%20L11.5%2010.5%20L9.5%2012.5%20L1%204%20Z%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M10.5%2011.5%20L17%2018%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M11.4%2012.4%20L16.1%2017.1%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2215.6%22%20y%3D%2216.4%22%20width%3D%2213.4%22%20height%3D%229.4%22%20rx%3D%224.2%22%20transform%3D%22rotate(45%2022.3%2021.1)%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-driver a,body.cur-driver button,body.cur-driver .app,body.cur-driver .card,body.cur-driver .ccard,body.cur-driver .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3%202%20L11.5%2010.5%20L9.5%2012.5%20L1%204%20Z%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M10.5%2011.5%20L17%2018%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M11.4%2012.4%20L16.1%2017.1%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2215.6%22%20y%3D%2216.4%22%20width%3D%2213.4%22%20height%3D%229.4%22%20rx%3D%224.2%22%20transform%3D%22rotate(45%2022.3%2021.1)%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-nib,body.cur-nib .slide,body.cur-nib .menu,body.cur-nib .notes,body.cur-nib .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3%202%20L13%209%20L9%2013%20L2%203%20Z%22%20fill%3D%22%230B0E1C%22%2F%3E%20%3Cpath%20d%3D%22M11.5%2010.5%20L20%2019%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M12.6%2011.6%20L18.9%2017.9%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M19%2018%20q%206%203%208%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-nib a,body.cur-nib button,body.cur-nib .app,body.cur-nib .card,body.cur-nib .ccard,body.cur-nib .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3%202%20L13%209%20L9%2013%20L2%203%20Z%22%20fill%3D%22%230B0E1C%22%2F%3E%20%3Cpath%20d%3D%22M11.5%2010.5%20L20%2019%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M12.6%2011.6%20L18.9%2017.9%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.6%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M19%2018%20q%206%203%208%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-hex,body.cur-hex .slide,body.cur-hex .menu,body.cur-hex .notes,body.cur-hex .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L14%2013%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.9%2011.9%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M14%2013%20L26%2013%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M15%2013%20L24.8%2013%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Ccircle%20cx%3D%2226%22%20cy%3D%2213%22%20r%3D%224.6%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-hex a,body.cur-hex button,body.cur-hex .app,body.cur-hex .card,body.cur-hex .ccard,body.cur-hex .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L14%2013%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.9%2011.9%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M14%2013%20L26%2013%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%226.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M15%2013%20L24.8%2013%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.8%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Ccircle%20cx%3D%2226%22%20cy%3D%2213%22%20r%3D%224.6%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-tape,body.cur-tape .slide,body.cur-tape .menu,body.cur-tape .notes,body.cur-tape .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M2.5%202%20L14%206.5%20L9.5%2013.5%20L1.5%204.5%20Z%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.5%2013.5%20L14%206.5%20L27%2013%20L21%2023%20Z%22%20fill%3D%22%230B0E1C%22%2F%3E%20%3Cpath%20d%3D%22M21%2023%20L27%2013%20L30%2017.5%20L24.5%2026%20Z%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.2%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-tape a,body.cur-tape button,body.cur-tape .app,body.cur-tape .card,body.cur-tape .ccard,body.cur-tape .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M2.5%202%20L14%206.5%20L9.5%2013.5%20L1.5%204.5%20Z%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.5%2013.5%20L14%206.5%20L27%2013%20L21%2023%20Z%22%20fill%3D%22%230B0E1C%22%2F%3E%20%3Cpath%20d%3D%22M21%2023%20L27%2013%20L30%2017.5%20L24.5%2026%20Z%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.2%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-caret,body.cur-caret .slide,body.cur-caret .menu,body.cur-caret .notes,body.cur-caret .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M2.5%202%20L12%2011.5%20L2.5%2021%20L6.5%2024.5%20L19.5%2011.5%20L6.5%20-1.5%20Z%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M14%2025%20L28%2025%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
+  body.cur-caret a,body.cur-caret button,body.cur-caret .app,body.cur-caret .card,body.cur-caret .ccard,body.cur-caret .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M2.5%202%20L12%2011.5%20L2.5%2021%20L6.5%2024.5%20L19.5%2011.5%20L6.5%20-1.5%20Z%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M14%2025%20L28%2025%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
 }
 </style>
 
@@ -619,11 +654,31 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
 
 <div class="guide" id="guide" hidden>
   <div class="hello" id="hello" hidden><span id="helloText"></span><b>_</b></div>
-  <svg viewBox="0 0 260 250" aria-hidden="true">
-    <use href="#vo" x="0" y="0" width="220" height="250"/>
-    <g class="hand" fill="var(--paper)" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M182 236 q 18 -6 26 -22 q 5 -11 4 -24"/>
-      <path d="M206 190 q 4 -14 14 -20 q 9 -5 14 2 q 5 7 -2 15 q 10 -4 15 3 q 5 7 -4 14 q 9 0 10 8 q 1 8 -9 12 q -14 6 -28 2 q -12 -4 -14 -16 z"/>
+  <svg id="guideSvg" viewBox="0 0 260 250" role="img" aria-label="Volvo, your guide through the deck">
+    <g id="gBody">
+      <path d="M50 250 C 54 212 76 192 110 192 C 144 192 166 212 170 250 Z" fill="#212A6B" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M92 196 L 110 220 L 128 196" fill="none" stroke="#0B0E1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M92 168 v22 q 18 12 36 0 v-22 Z" fill="#F2F1EA" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+      <g id="gHead">
+        <path d="M56 108 q -13 -3 -13 11 q 0 13 13 13" fill="#F2F1EA" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round"/>
+        <path d="M164 108 q 13 -3 13 11 q 0 13 -13 13" fill="#F2F1EA" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round"/>
+        <path d="M110 40 C 148 40 166 68 166 106 C 166 146 142 178 110 178 C 78 178 54 146 54 106 C 54 68 72 40 110 40 Z" fill="#F2F1EA" stroke="#0B0E1C" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M53 104 C 47 62 74 34 110 34 C 150 34 173 62 167 106 C 160 86 148 76 130 72 C 114 90 82 94 62 82 C 57 88 54 95 53 104 Z" fill="#0B0E1C" stroke="#0B0E1C" stroke-width="6" stroke-linejoin="round"/>
+        <path id="gBrowL" d="M72 101 q 14 -9 28 -3" fill="none" stroke="#0B0E1C" stroke-width="8" stroke-linecap="round"/>
+        <path id="gBrowR" d="M148 98 q -14 -8 -28 0" fill="none" stroke="#0B0E1C" stroke-width="8" stroke-linecap="round"/>
+        <g id="gEyes">
+          <ellipse class="eye" cx="88" cy="118" rx="5.5" ry="6.5" fill="#0B0E1C"/>
+          <ellipse class="eye" cx="132" cy="117" rx="5.5" ry="6.5" fill="#0B0E1C"/>
+        </g>
+        <path d="M110 118 v18 q 0 7 -8 8" fill="none" stroke="#0B0E1C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M84 148 q 26 -11 52 0 q -12 13 -26 13 q -14 0 -26 -13 Z" fill="#0B0E1C"/>
+        <path id="gMouth" d="M96 165 q 14 7 28 0" fill="none" stroke="#0B0E1C" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M100 172 q 10 6 20 0 q -2 11 -10 12 q -8 -1 -10 -12 Z" fill="#0B0E1C"/>
+      </g>
+      <g class="hand" fill="#F2F1EA" stroke="#0B0E1C" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M182 236 q 18 -6 26 -22 q 5 -11 4 -24"/>
+        <path d="M206 190 q 4 -14 14 -20 q 9 -5 14 2 q 5 7 -2 15 q 10 -4 15 3 q 5 7 -4 14 q 9 0 10 8 q 1 8 -9 12 q -14 6 -28 2 q -12 -4 -14 -16 z"/>
+      </g>
     </g>
   </svg>
 </div>
@@ -867,11 +922,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
         '<p class="kick">The stack</p>' +
         '<h2 data-rv>Named because I have shipped with them.</h2>' +
         '<div class="bays" data-fade>' +
-          '<div class="bay"><h4>' + ic('node') + ' Automation</h4><ul><li class="on"><svg class="mk" aria-hidden="true"><use href="#b-n8n"/></svg><span>n8n</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-make"/></svg><span>Make.com</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-zapier"/></svg><span>Zapier</span></li><li><span class="mk-in" aria-hidden="true">AP</span><span>Apify</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-rapid"/></svg><span>RapidAPI</span></li></ul></div>' +
-          '<div class="bay"><h4>' + ic('card') + ' CRM and sales</h4><ul><li class="on"><span class="mk-in" aria-hidden="true">GH</span><span>GoHighLevel</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-hubspot"/></svg><span>HubSpot</span></li><li><span class="mk-in" aria-hidden="true">AO</span><span>Apollo</span></li><li><span class="mk-in" aria-hidden="true">SN</span><span>Sales Navigator</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-intercom"/></svg><span>Intercom</span></li></ul></div>' +
-          '<div class="bay"><h4>' + ic('chip') + ' AI</h4><ul><li class="on"><svg class="mk" aria-hidden="true"><use href="#b-claude"/></svg><span>Claude Code</span></li><li class="on"><svg class="mk" aria-hidden="true"><use href="#b-claude"/></svg><span>Claude</span></li><li><span class="mk-in" aria-hidden="true">RT</span><span>Retell AI</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-googlegemini"/></svg><span>Gemini</span></li><li><span class="mk-in" aria-hidden="true">GK</span><span>Grok</span></li></ul></div>' +
-          '<div class="bay"><h4>' + ic('cloud') + ' Build and ship</h4><ul><li class="on"><svg class="mk" aria-hidden="true"><use href="#b-nodedotjs"/></svg><span>Node</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-nextdotjs"/></svg><span>Next.js</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-cloudflarepages"/></svg><span>Cloudflare Pages</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-vercel"/></svg><span>Vercel</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-supabase"/></svg><span>Supabase</span></li></ul></div>' +
-          '<div class="bay"><h4>' + ic('speaker') + ' Voice and comms</h4><ul><li><span class="mk-in" aria-hidden="true">OP</span><span>OpenPhone</span></li><li><span class="mk-in" aria-hidden="true">SL</span><span>Slack</span></li><li><span class="mk-in" aria-hidden="true">MO</span><span>Monday.com</span></li><li><svg class="mk" aria-hidden="true"><use href="#b-dropbox"/></svg><span>Dropbox</span></li></ul></div>' +
+          '<div class="bay"><h4>' + ic('node') + ' Automation</h4><ul><li class="on"><svg class="mk mk-n8n" aria-hidden="true"><use href="#b-n8n"/></svg><span>n8n</span></li><li><svg class="mk mk-make" aria-hidden="true"><use href="#b-make"/></svg><span>Make.com</span></li><li><svg class="mk mk-zapier" aria-hidden="true"><use href="#b-zapier"/></svg><span>Zapier</span></li><li><span class="mk-in" aria-hidden="true">AP</span><span>Apify</span></li><li><svg class="mk mk-rapid" aria-hidden="true"><use href="#b-rapid"/></svg><span>RapidAPI</span></li></ul></div>' +
+          '<div class="bay"><h4>' + ic('card') + ' CRM and sales</h4><ul><li class="on"><span class="mk-in" aria-hidden="true">GH</span><span>GoHighLevel</span></li><li><svg class="mk mk-hubspot" aria-hidden="true"><use href="#b-hubspot"/></svg><span>HubSpot</span></li><li><span class="mk-in" aria-hidden="true">AO</span><span>Apollo</span></li><li><span class="mk-in" aria-hidden="true">SN</span><span>Sales Navigator</span></li><li><svg class="mk mk-intercom" aria-hidden="true"><use href="#b-intercom"/></svg><span>Intercom</span></li></ul></div>' +
+          '<div class="bay"><h4>' + ic('chip') + ' AI</h4><ul><li class="on"><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg><span>Claude Code</span></li><li class="on"><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg><span>Claude</span></li><li><span class="mk-in" aria-hidden="true">RT</span><span>Retell AI</span></li><li><svg class="mk mk-googlegemini" aria-hidden="true"><use href="#b-googlegemini"/></svg><span>Gemini</span></li><li><span class="mk-in" aria-hidden="true">GK</span><span>Grok</span></li></ul></div>' +
+          '<div class="bay"><h4>' + ic('cloud') + ' Build and ship</h4><ul><li class="on"><svg class="mk mk-nodedotjs" aria-hidden="true"><use href="#b-nodedotjs"/></svg><span>Node</span></li><li><svg class="mk mk-nextdotjs" aria-hidden="true"><use href="#b-nextdotjs"/></svg><span>Next.js</span></li><li><svg class="mk mk-cloudflarepages" aria-hidden="true"><use href="#b-cloudflarepages"/></svg><span>Cloudflare Pages</span></li><li><svg class="mk mk-vercel" aria-hidden="true"><use href="#b-vercel"/></svg><span>Vercel</span></li><li><svg class="mk mk-supabase" aria-hidden="true"><use href="#b-supabase"/></svg><span>Supabase</span></li></ul></div>' +
+          '<div class="bay"><h4>' + ic('speaker') + ' Voice and comms</h4><ul><li><span class="mk-in" aria-hidden="true">OP</span><span>OpenPhone</span></li><li><span class="mk-in" aria-hidden="true">SL</span><span>Slack</span></li><li><span class="mk-in" aria-hidden="true">MO</span><span>Monday.com</span></li><li><svg class="mk mk-dropbox" aria-hidden="true"><use href="#b-dropbox"/></svg><span>Dropbox</span></li></ul></div>' +
           '</div>'
     },
 
@@ -1150,7 +1205,67 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
   // the guide travels with the visitor and leans the way they are going
   var guide = document.getElementById('guide');
   var hello = document.getElementById('hello');
-  var CURSOR_KEYS = ["arrow","plug","wrench","node","card","caret"];
+  var CURSOR_KEYS = ["plug","driver","nib","hex","tape","caret"];
+  // ── the guide is alive: it looks where the pointer is, blinks, and talks ──
+  var guideSvg = document.getElementById('guideSvg');
+  var gEyes = document.getElementById('gEyes');
+  var gHead = document.getElementById('gHead');
+  var reduceMo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LINES = [
+    ['Hi, I am Volvo.'],
+    ['Sound familiar?', 'Most people recognise all three.'],
+    ['Three lines in. One system out.', 'Follow the amber one.'],
+    ['Most start on one, end up on two.'],
+    ['Three of these open right now.', 'Go on, click one.'],
+    ['This is the part nobody fakes.'],
+    ['Their words, not mine.', 'Drag a card.'],
+    ['If you use it, I have shipped with it.'],
+    ['One process. One week.'],
+    ['Ask the awkward one.', 'I will not dodge it.'],
+    ['Send me the thing eating your week.']
+  ];
+  var said = {};
+
+  function say(text, ms){
+    if (!hello) return;
+    hello.hidden = false;
+    document.getElementById('helloText').textContent = text;
+    guide.classList.remove('talk'); void guide.offsetWidth; guide.classList.add('talk');
+    window.clearTimeout(say._t);
+    say._t = window.setTimeout(function(){ hello.hidden = true; }, ms || 2800);
+  }
+
+  if (guide && !reduceMo){
+    // eyes track the pointer, within a couple of pixels
+    document.addEventListener('pointermove', function(e){
+      if (!gEyes || guide.hidden) return;
+      var r = guideSvg.getBoundingClientRect();
+      var dx = (e.clientX - (r.left + r.width / 2)) / Math.max(r.width, 1);
+      var dy = (e.clientY - (r.top + r.height * 0.42)) / Math.max(r.height, 1);
+      var x = Math.max(-1, Math.min(1, dx)) * 7;
+      var y = Math.max(-1, Math.min(1, dy)) * 5;
+      gEyes.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
+      if (gHead) gHead.style.transform = 'translateX(' + (x * 0.35).toFixed(1) + 'px)';
+    }, {passive:true});
+
+    // blinks at irregular intervals, the way a person does
+    (function blink(){
+      window.setTimeout(function(){
+        if (!guide.hidden){
+          guide.classList.remove('blink'); void guide.offsetWidth; guide.classList.add('blink');
+        }
+        blink();
+      }, 2600 + Math.random() * 3400);
+    })();
+
+    // click it and it says something about where you are
+    guide.addEventListener('click', function(){
+      var set = LINES[i] || LINES[0];
+      say(set[Math.floor(Math.random() * set.length)]);
+      guide.classList.remove('waving'); void guide.offsetWidth; guide.classList.add('waving');
+    });
+  }
+
   function moveGuide(k, dir){
     var cls = document.body.className.replace(/\bcur-[a-z]+/g, '').replace(/\s+/g, ' ').trim();
     document.body.className = (cls + ' cur-' + CURSOR_KEYS[k % CURSOR_KEYS.length]).trim();
@@ -1163,6 +1278,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
     guide.classList.remove('fwd', 'bwd');
     void guide.offsetWidth;
     if (!first) guide.classList.add(dir > 0 ? 'fwd' : 'bwd');
+    if (!reduceMo && !said[k] && LINES[k]){
+      said[k] = true;
+      window.setTimeout(function(){ if (i === k) say(LINES[k][0], 2400); }, 780);
+    }
   }
   function openMenu(){ menu.hidden = false; menuBtn.setAttribute('aria-expanded','true'); menuClose.focus(); }
   function closeMenu(){ menu.hidden = true; menuBtn.setAttribute('aria-expanded','false'); menuBtn.focus(); }
@@ -1245,6 +1364,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--pop);outline-offset
     window.setTimeout(function(){
       if (i !== 0) return;
       guide.hidden = false;
+      guide.classList.add('waving');
       host.hidden = false;
       if (reduce){ el.textContent = line; return; }
       var k = 0;

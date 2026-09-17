@@ -215,56 +215,109 @@
 #vo-site .ch:active{transform:translate3d(0,1px,0)}
 
 /* ── the opening sequence ─────────────────────────────────────────────────
-   Their opener is a coffee drop, because their brand is coffee. Copying the
-   drop would be borrowing someone else's meaning, so this one is the site's
-   own thesis: the lemon dot falls, and snaps into the socket that was waiting
-   for it. That is the whole pitch - the piece between the tools that nobody
-   owns - said in one and a third seconds.
+   The first version was a dot falling into a socket: 1.6s of decoration that
+   said nothing. This one does the job an opener should do, which is to tell a
+   visitor what the work IS before they have read a word - a lead arrives at
+   nine at night, gets routed, gets answered, and turns into a booked call,
+   with nobody awake. That is the whole practice in one sentence, animated.
 
-   It is PURE CSS and self-removing, so a visitor with JavaScript off sees it
-   play and clear rather than being left under a permanent indigo sheet.
-   JavaScript's only job is to skip it on later navigations in the same session.
-   Nobody should watch an intro twice. */
+   Built as a STATE MACHINE, not a keyframe timeline: a class lands on each
+   step and CSS transitions carry the change. A timeline forces every property
+   onto one clock and has to be re-tuned end to end whenever a beat moves; a
+   state machine lets each beat own its timing, which is what makes a sequence
+   this long stay adjustable. Timings all derive from --beat, so the whole
+   thing is retimed by changing one number.
+
+   It is also SKIPPABLE and it only plays once a session. A four second opener
+   that a visitor cannot dismiss is an obstacle, however good it looks. */
 #vo-site .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
-  justify-items:center;gap:0;background:var(--field);
-  animation:intro-out .42s var(--ease-out) 1.16s both}
+  justify-items:center;background:var(--field);--beat:.72s;
+  transition:opacity .5s var(--ease-out),visibility .5s}
+#vo-site .intro.gone{opacity:0;visibility:hidden;pointer-events:none}
 #vo-site.seen-intro .intro{display:none}
-#vo-site .intro-stage{position:relative;width:132px;height:132px;display:grid;place-items:center}
-#vo-site .intro-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-#vo-site .intro-ring circle{fill:none;stroke:var(--pop);stroke-width:3;stroke-linecap:round;
-  stroke-dasharray:214;stroke-dashoffset:214;opacity:.85;
-  animation:intro-draw .62s var(--ease-out) .34s both}
-#vo-site .intro-socket{position:absolute;width:30px;height:30px;border-radius:50%;
-  border:3px solid rgba(242,241,234,.34);opacity:0;
-  animation:intro-socket .3s var(--ease-out) .1s both}
-#vo-site .intro-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--pop);
-  animation:intro-drop .62s both}
-#vo-site .intro-flash{position:absolute;width:30px;height:30px;border-radius:50%;
-  border:2px solid var(--pop);opacity:0;
-  animation:intro-flash .46s var(--ease-out) .52s both}
-#vo-site .intro-word{margin-top:22px;font-family:var(--f-disp);font-weight:900;color:var(--paper);
-  font-size:clamp(21px,5vw,28px);animation:intro-word .5s var(--ease-out) .58s both}
-#vo-site .intro-tag{margin-top:7px;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;
-  color:var(--pop);animation:intro-tag .44s var(--ease-out) .76s both}
 
-/* falls from above the fold, accelerating, then squashes on contact - the
-   squash is what sells the impact, and it is two keyframes */
-@keyframes intro-drop{
-  0%{opacity:0;transform:translate3d(0,-62vh,0) scale(1)}
-  18%{opacity:1}
-  72%{transform:translate3d(0,0,0) scale(1);animation-timing-function:var(--ease-out)}
-  82%{transform:translate3d(0,2px,0) scale(1.42,.62)}
-  100%{transform:translate3d(0,0,0) scale(1)}}
-@keyframes intro-flash{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.5)}}
-@keyframes intro-draw{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
-@keyframes intro-socket{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
-/* the letter-spacing settling as it rises is the detail that makes a wordmark
-   feel placed rather than faded in */
-@keyframes intro-word{from{opacity:0;transform:translate3d(0,12px,0);letter-spacing:.18em}
-  to{opacity:1;transform:none;letter-spacing:-.02em}}
-@keyframes intro-tag{from{opacity:0;transform:translate3d(0,6px,0);letter-spacing:.22em}
-  to{opacity:.75;transform:none;letter-spacing:.16em}}
-@keyframes intro-out{to{opacity:0;visibility:hidden;pointer-events:none}}
+#vo-site .intro-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+#vo-site .intro.go .intro-eyebrow{opacity:.85;transform:none}
+
+/* the pipeline. A row on a desktop, a column on a phone, because four cards
+   across a 390px screen is a diagram nobody can read. The wire rotates with
+   it, so one set of rules serves both. */
+#vo-site .pipe{display:flex;align-items:flex-start;justify-content:center;
+  margin:26px 0 22px;padding:0 18px;max-width:100%}
+#vo-site .step{display:flex;flex-direction:column;align-items:center;gap:9px;width:84px;flex:none}
+#vo-site .step .card{position:relative;width:56px;height:56px;border-radius:15px;
+  background:var(--paper);border:3px solid var(--ink);box-shadow:4px 4px 0 0 var(--ink);
+  display:grid;place-items:center;
+  opacity:0;transform:translateY(10px) scale(.92);
+  transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),
+             background-color .3s var(--ease-out)}
+#vo-site .intro.go .step .card{opacity:1;transform:none}
+#vo-site .step svg{width:26px;height:26px;stroke:var(--ink);stroke-width:2.1;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+#vo-site .step .lbl{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(242,241,234,.62);text-align:center;line-height:1.45;
+  opacity:0;transition:opacity .42s var(--ease-out),color .3s var(--ease-out)}
+#vo-site .intro.go .step .lbl{opacity:1}
+
+/* the tick. It lands with a slight overshoot, which is the difference between
+   a step completing and a step merely turning on. */
+#vo-site .step .tick{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;
+  background:var(--pop);border:3px solid var(--ink);display:grid;place-items:center;
+  transform:scale(0);transition:transform .34s cubic-bezier(.34,1.5,.5,1)}
+#vo-site .step .tick svg{width:11px;height:11px;stroke:var(--ink);stroke-width:3.4}
+#vo-site .step.done .tick{transform:scale(1)}
+#vo-site .step.done .card{background:var(--pop)}
+#vo-site .step.done .lbl{color:var(--paper)}
+
+/* the wire, and the packet that runs along it */
+#vo-site .wire{position:relative;flex:1 1 auto;min-width:26px;max-width:92px;height:3px;
+  background:rgba(242,241,234,.22);border-radius:2px;margin-top:29px}
+#vo-site .wire .fill{position:absolute;inset:0;background:var(--pop);border-radius:2px;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1)}
+#vo-site .wire.run .fill{transform:scaleX(1)}
+#vo-site .wire .pk{position:absolute;top:50%;left:0;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
+  border-radius:50%;background:var(--pop);border:2.5px solid var(--ink);opacity:0;
+  transition:left calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
+#vo-site .wire.run .pk{left:100%;opacity:1}
+#vo-site .wire.spent .pk{opacity:0;transition:opacity .2s linear}
+
+/* the status line is the narration, and it must CHANGE - a label that reads
+   the same at the start and the end has not told anyone anything */
+#vo-site .intro-status{display:flex;align-items:center;gap:9px;font-family:var(--f-mono);
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(242,241,234,.6);min-height:16px}
+#vo-site .intro-status i{width:7px;height:7px;border-radius:50%;background:var(--pop);
+  animation:ping 1.5s var(--ease-out) infinite}
+#vo-site .intro-status .s2{display:none}
+#vo-site .intro.done .intro-status .s1{display:none}
+#vo-site .intro.done .intro-status .s2{display:inline}
+#vo-site .intro.done .intro-status{color:var(--pop)}
+#vo-site .intro.done .intro-status i{animation:none}
+
+#vo-site .intro-skip{position:fixed;right:18px;bottom:16px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);
+  background:none;border:0;padding:9px 12px;cursor:pointer;border-radius:99px;
+  opacity:0;transition:opacity .4s var(--ease-out) .8s,color .2s}
+#vo-site .intro.go .intro-skip{opacity:1}
+#vo-site .intro-skip:hover,
+#vo-site .intro-skip:focus-visible{color:var(--pop)}
+
+@media(max-width:620px){
+  /* stacked, so four labelled steps still read on a phone */
+  #vo-site .pipe{flex-direction:column;align-items:center;margin:20px 0 18px}
+  #vo-site .step{flex-direction:row;width:auto;min-width:210px;gap:13px;justify-content:flex-start}
+  #vo-site .step .lbl{text-align:left;font-size:10px}
+  #vo-site .wire{width:3px;height:26px;min-width:0;max-width:none;flex:none;
+    margin:0 0 0 -112px;align-self:center}
+  #vo-site .wire .fill{transform-origin:top center;transform:scaleY(0)}
+  #vo-site .wire.run .fill{transform:scaleY(1)}
+  #vo-site .wire .pk{top:0;left:50%;margin:-6.5px 0 0 -6.5px;
+    transition:top calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
+  #vo-site .wire.run .pk{top:100%;left:50%}
+}
 #vo-site .room > header{margin-bottom:18px}
 #vo-site .room > header h2{font-size:clamp(24px,3.2vw,38px)}
 #vo-site .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
@@ -438,8 +491,10 @@
 
 </style>
 
-<!-- The opening sequence. aria-hidden because it repeats the sidebar's own
-     words, and a screen reader should be given the page, not a title card. -->
+<!-- The opening sequence. It states the practice before a word is read:
+     a lead lands at 9pm and leaves as a booked call with nobody awake.
+     aria-hidden, because a screen reader should be handed the page, not a
+     title card - and every word here is said again inside the site. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
   <symbol id="i-node" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.6"/><circle cx="5" cy="18" r="2.6"/><circle cx="19" cy="12" r="2.6"/><path d="M7.5 7.2 16.6 11M7.5 16.8 16.6 13"/></symbol>

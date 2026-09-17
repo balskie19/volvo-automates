@@ -200,56 +200,108 @@ a{color:inherit}
 .tile:active,.card:active,.btn:active,.ch:active{transform:translate3d(0,1px,0)}
 
 /* ── the opening sequence ─────────────────────────────────────────────────
-   Their opener is a coffee drop, because their brand is coffee. Copying the
-   drop would be borrowing someone else's meaning, so this one is the site's
-   own thesis: the lemon dot falls, and snaps into the socket that was waiting
-   for it. That is the whole pitch - the piece between the tools that nobody
-   owns - said in one and a third seconds.
+   The first version was a dot falling into a socket: 1.6s of decoration that
+   said nothing. This one does the job an opener should do, which is to tell a
+   visitor what the work IS before they have read a word - a lead arrives at
+   nine at night, gets routed, gets answered, and turns into a booked call,
+   with nobody awake. That is the whole practice in one sentence, animated.
 
-   It is PURE CSS and self-removing, so a visitor with JavaScript off sees it
-   play and clear rather than being left under a permanent indigo sheet.
-   JavaScript's only job is to skip it on later navigations in the same session.
-   Nobody should watch an intro twice. */
+   Built as a STATE MACHINE, not a keyframe timeline: a class lands on each
+   step and CSS transitions carry the change. A timeline forces every property
+   onto one clock and has to be re-tuned end to end whenever a beat moves; a
+   state machine lets each beat own its timing, which is what makes a sequence
+   this long stay adjustable. Timings all derive from --beat, so the whole
+   thing is retimed by changing one number.
+
+   It is also SKIPPABLE and it only plays once a session. A four second opener
+   that a visitor cannot dismiss is an obstacle, however good it looks. */
 .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
-  justify-items:center;gap:0;background:var(--field);
-  animation:intro-out .42s var(--ease-out) 1.16s both}
+  justify-items:center;background:var(--field);--beat:.72s;
+  transition:opacity .5s var(--ease-out),visibility .5s}
+.intro.gone{opacity:0;visibility:hidden;pointer-events:none}
 html.seen-intro .intro{display:none}
-.intro-stage{position:relative;width:132px;height:132px;display:grid;place-items:center}
-.intro-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.intro-ring circle{fill:none;stroke:var(--pop);stroke-width:3;stroke-linecap:round;
-  stroke-dasharray:214;stroke-dashoffset:214;opacity:.85;
-  animation:intro-draw .62s var(--ease-out) .34s both}
-.intro-socket{position:absolute;width:30px;height:30px;border-radius:50%;
-  border:3px solid rgba(242,241,234,.34);opacity:0;
-  animation:intro-socket .3s var(--ease-out) .1s both}
-.intro-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--pop);
-  animation:intro-drop .62s both}
-.intro-flash{position:absolute;width:30px;height:30px;border-radius:50%;
-  border:2px solid var(--pop);opacity:0;
-  animation:intro-flash .46s var(--ease-out) .52s both}
-.intro-word{margin-top:22px;font-family:var(--f-disp);font-weight:900;color:var(--paper);
-  font-size:clamp(21px,5vw,28px);animation:intro-word .5s var(--ease-out) .58s both}
-.intro-tag{margin-top:7px;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;
-  color:var(--pop);animation:intro-tag .44s var(--ease-out) .76s both}
 
-/* falls from above the fold, accelerating, then squashes on contact - the
-   squash is what sells the impact, and it is two keyframes */
-@keyframes intro-drop{
-  0%{opacity:0;transform:translate3d(0,-62vh,0) scale(1)}
-  18%{opacity:1}
-  72%{transform:translate3d(0,0,0) scale(1);animation-timing-function:var(--ease-out)}
-  82%{transform:translate3d(0,2px,0) scale(1.42,.62)}
-  100%{transform:translate3d(0,0,0) scale(1)}}
-@keyframes intro-flash{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.5)}}
-@keyframes intro-draw{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
-@keyframes intro-socket{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
-/* the letter-spacing settling as it rises is the detail that makes a wordmark
-   feel placed rather than faded in */
-@keyframes intro-word{from{opacity:0;transform:translate3d(0,12px,0);letter-spacing:.18em}
-  to{opacity:1;transform:none;letter-spacing:-.02em}}
-@keyframes intro-tag{from{opacity:0;transform:translate3d(0,6px,0);letter-spacing:.22em}
-  to{opacity:.75;transform:none;letter-spacing:.16em}}
-@keyframes intro-out{to{opacity:0;visibility:hidden;pointer-events:none}}
+.intro-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+.intro.go .intro-eyebrow{opacity:.85;transform:none}
+
+/* the pipeline. A row on a desktop, a column on a phone, because four cards
+   across a 390px screen is a diagram nobody can read. The wire rotates with
+   it, so one set of rules serves both. */
+.pipe{display:flex;align-items:flex-start;justify-content:center;
+  margin:26px 0 22px;padding:0 18px;max-width:100%}
+.step{display:flex;flex-direction:column;align-items:center;gap:9px;width:84px;flex:none}
+.step .card{position:relative;width:56px;height:56px;border-radius:15px;
+  background:var(--paper);border:3px solid var(--ink);box-shadow:4px 4px 0 0 var(--ink);
+  display:grid;place-items:center;
+  opacity:0;transform:translateY(10px) scale(.92);
+  transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),
+             background-color .3s var(--ease-out)}
+.intro.go .step .card{opacity:1;transform:none}
+.step svg{width:26px;height:26px;stroke:var(--ink);stroke-width:2.1;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.step .lbl{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(242,241,234,.62);text-align:center;line-height:1.45;
+  opacity:0;transition:opacity .42s var(--ease-out),color .3s var(--ease-out)}
+.intro.go .step .lbl{opacity:1}
+
+/* the tick. It lands with a slight overshoot, which is the difference between
+   a step completing and a step merely turning on. */
+.step .tick{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;
+  background:var(--pop);border:3px solid var(--ink);display:grid;place-items:center;
+  transform:scale(0);transition:transform .34s cubic-bezier(.34,1.5,.5,1)}
+.step .tick svg{width:11px;height:11px;stroke:var(--ink);stroke-width:3.4}
+.step.done .tick{transform:scale(1)}
+.step.done .card{background:var(--pop)}
+.step.done .lbl{color:var(--paper)}
+
+/* the wire, and the packet that runs along it */
+.wire{position:relative;flex:1 1 auto;min-width:26px;max-width:92px;height:3px;
+  background:rgba(242,241,234,.22);border-radius:2px;margin-top:29px}
+.wire .fill{position:absolute;inset:0;background:var(--pop);border-radius:2px;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1)}
+.wire.run .fill{transform:scaleX(1)}
+.wire .pk{position:absolute;top:50%;left:0;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
+  border-radius:50%;background:var(--pop);border:2.5px solid var(--ink);opacity:0;
+  transition:left calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
+.wire.run .pk{left:100%;opacity:1}
+.wire.spent .pk{opacity:0;transition:opacity .2s linear}
+
+/* the status line is the narration, and it must CHANGE - a label that reads
+   the same at the start and the end has not told anyone anything */
+.intro-status{display:flex;align-items:center;gap:9px;font-family:var(--f-mono);
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(242,241,234,.6);min-height:16px}
+.intro-status i{width:7px;height:7px;border-radius:50%;background:var(--pop);
+  animation:ping 1.5s var(--ease-out) infinite}
+.intro-status .s2{display:none}
+.intro.done .intro-status .s1{display:none}
+.intro.done .intro-status .s2{display:inline}
+.intro.done .intro-status{color:var(--pop)}
+.intro.done .intro-status i{animation:none}
+
+.intro-skip{position:fixed;right:18px;bottom:16px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);
+  background:none;border:0;padding:9px 12px;cursor:pointer;border-radius:99px;
+  opacity:0;transition:opacity .4s var(--ease-out) .8s,color .2s}
+.intro.go .intro-skip{opacity:1}
+.intro-skip:hover,.intro-skip:focus-visible{color:var(--pop)}
+
+@media(max-width:620px){
+  /* stacked, so four labelled steps still read on a phone */
+  .pipe{flex-direction:column;align-items:center;margin:20px 0 18px}
+  .step{flex-direction:row;width:auto;min-width:210px;gap:13px;justify-content:flex-start}
+  .step .lbl{text-align:left;font-size:10px}
+  .wire{width:3px;height:26px;min-width:0;max-width:none;flex:none;
+    margin:0 0 0 -112px;align-self:center}
+  .wire .fill{transform-origin:top center;transform:scaleY(0)}
+  .wire.run .fill{transform:scaleY(1)}
+  .wire .pk{top:0;left:50%;margin:-6.5px 0 0 -6.5px;
+    transition:top calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
+  .wire.run .pk{top:100%;left:50%}
+}
 .room > header{margin-bottom:18px}
 .room > header h2{font-size:clamp(24px,3.2vw,38px)}
 .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
@@ -408,24 +460,103 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://volvo-automates.pages.dev/#volvo","name":"Volvo Ebal","jobTitle":"AI systems and automation specialist","email":"mailto:volvo.ebal8@gmail.com","url":"https://volvo-automates.pages.dev","sameAs":["https://www.linkedin.com/in/volvo-ebal/","https://github.com/balskie19"],"address":{"@type":"PostalAddress","addressCountry":"PH"},"knowsAbout":["GoHighLevel","n8n","Claude Code","Marketing automation","CRM automation","Workflow automation","AI voice agents","Make.com","Zapier","HubSpot","Lead reactivation"],"worksFor":{"@id":"https://volvo-automates.pages.dev/#practice"}},{"@type":"ProfessionalService","@id":"https://volvo-automates.pages.dev/#practice","name":"Volvo Automates","description":"Automation for agencies and service businesses: GoHighLevel CRM builds, n8n workflow automation, and custom applications built with Claude Code.","url":"https://volvo-automates.pages.dev","founder":{"@id":"https://volvo-automates.pages.dev/#volvo"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Philippines"}],"availableLanguage":"en","serviceType":["CRM automation","Workflow automation","AI voice and chat agents","Custom application development"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"What I am hired for","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"GoHighLevel CRM builds and repairs"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"n8n workflow automation and integration"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Custom applications built with Claude Code"}}]}},{"@type":"WebSite","@id":"https://volvo-automates.pages.dev/#site","url":"https://volvo-automates.pages.dev","name":"Volvo Automates","publisher":{"@id":"https://volvo-automates.pages.dev/#volvo"},"inLanguage":"en"},{"@type":"FAQPage","@id":"https://volvo-automates.pages.dev/#faq","mainEntity":[{"@type":"Question","name":"We tried automation before and it broke.","acceptedAnswer":{"@type":"Answer","text":"Usually it did not break, it stopped being watched. Anything I build reports to a channel you already read, and says so when it fails. A silent automation is worse than none, which is why failure is a feature I build on purpose."}},{"@type":"Question","name":"Our setup is complicated.","acceptedAnswer":{"@type":"Answer","text":"Good. Simple setups rarely need me. I start by wiring ONE process end to end rather than mapping everything, so you see it working in week one instead of reading a discovery document in month three."}},{"@type":"Question","name":"We already know the problem, we need someone to fix it.","acceptedAnswer":{"@type":"Answer","text":"Then we skip the audit. Send me the process, I will tell you on the call whether it is worth automating, and I will tell you when it is not."}},{"@type":"Question","name":"Why you and not an agency?","acceptedAnswer":{"@type":"Answer","text":"An agency sells you a retainer and a project manager. You get the person who builds it. And every build I have shipped is on this site with the part that went wrong, which is not a thing a brochure can fake."}},{"@type":"Question","name":"We do not have budget for this.","acceptedAnswer":{"@type":"Answer","text":"Then the honest answer may be no. If the process does not cost you real hours or real leads, automating it is a hobby. Bring the one that hurts and we will size it in twenty minutes."}},{"@type":"Question","name":"Can you work with the tools we already have?","acceptedAnswer":{"@type":"Answer","text":"That is the whole job. GoHighLevel, HubSpot, n8n, Make, Zapier, Apify, Slack, OpenPhone, Intercom, Monday. If it has an API or a webhook, it can be wired in. If it does not, I build the missing piece."}}]}]}</script>
 </head>
 <body>
-<!-- The opening sequence. aria-hidden because it repeats the sidebar's own
-     words, and a screen reader should be given the page, not a title card. -->
+<!-- The opening sequence. It states the practice before a word is read:
+     a lead lands at 9pm and leaves as a booked call with nobody awake.
+     aria-hidden, because a screen reader should be handed the page, not a
+     title card - and every word here is said again inside the site. -->
 <div class="intro" aria-hidden="true">
-  <span class="intro-stage">
-    <svg class="intro-ring" viewBox="0 0 76 76"><circle cx="38" cy="38" r="34"/></svg>
-    <span class="intro-socket"></span>
-    <span class="intro-flash"></span>
-    <span class="intro-dot"></span>
+  <span class="intro-eyebrow">Volvo Ebal &middot; Automation &amp; AI systems</span>
+  <span class="pipe">
+    <span class="step" data-s="0">
+      <span class="card"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+        <i class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></i></span>
+      <span class="lbl">Lead arrives<br>9:02pm</span>
+    </span>
+    <span class="wire" data-w="0"><i class="fill"></i><i class="pk"></i></span>
+    <span class="step" data-s="1">
+      <span class="card"><svg viewBox="0 0 24 24"><path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="7.5" cy="7.5" r="1.4"/></svg>
+        <i class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></i></span>
+      <span class="lbl">Tagged<br>and routed</span>
+    </span>
+    <span class="wire" data-w="1"><i class="fill"></i><i class="pk"></i></span>
+    <span class="step" data-s="2">
+      <span class="card"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/></svg>
+        <i class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></i></span>
+      <span class="lbl">Answered<br>in seconds</span>
+    </span>
+    <span class="wire" data-w="2"><i class="fill"></i><i class="pk"></i></span>
+    <span class="step" data-s="3">
+      <span class="card"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2.2 2.2L15.5 13"/></svg>
+        <i class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></i></span>
+      <span class="lbl">Call<br>booked</span>
+    </span>
   </span>
-  <span class="intro-word">Volvo Ebal</span>
-  <span class="intro-tag">Automation &amp; AI systems</span>
+  <span class="intro-status"><i></i><span class="s1">Executing workflow</span><span class="s2">Booked. Nobody was awake.</span></span>
+  <button class="intro-skip" type="button">Skip &rsaquo;</button>
 </div>
 <script>
-/* Runs before the stylesheet paints the overlay, so a second visit in the same
-   session never flashes it. sessionStorage, not localStorage: it should return
-   for a genuinely new visit, just not on every click within one. */
-try{ if(sessionStorage.getItem("vo-intro")) document.documentElement.className += " seen-intro";
-     else sessionStorage.setItem("vo-intro","1"); }catch(e){}
+(function(){
+  var intro = document.querySelector(".intro");
+  if (!intro) return;
+
+  /* Skip on a second visit in the same session. sessionStorage, not local:
+     it should come back for a genuinely new visit, just not on every click. */
+  try{ if (sessionStorage.getItem("vo-intro")){ document.documentElement.className += " seen-intro"; return; }
+       sessionStorage.setItem("vo-intro","1"); }catch(e){}
+
+  /* Someone who has asked not to be moved is shown nothing at all, rather
+     than the same sequence at 1ms a beat. */
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches){
+    document.documentElement.className += " seen-intro"; return;
+  }
+
+  var steps = intro.querySelectorAll(".step");
+  var wires = intro.querySelectorAll(".wire");
+  var timers = [];
+  var at = function(ms, fn){ timers.push(setTimeout(fn, ms)); };
+
+  /* One beat, and every moment derived from it, so the pace is a single
+     number rather than a dozen magic ones. */
+  var BEAT = 720;
+  var START = 420;
+
+  function end(){
+    timers.forEach(clearTimeout); timers = [];
+    intro.classList.add("gone");
+    /* Taken out of the flow once it has faded, so it can never intercept a
+       click. Visibility alone has caught pages out before. */
+    at(600, function(){ intro.style.display = "none"; });
+  }
+
+  requestAnimationFrame(function(){ intro.classList.add("go"); });
+
+  steps.forEach(function(s, i){
+    at(START + i * 110, function(){ s.style.setProperty("--in","1"); });
+  });
+
+  /* Each step completes, then its wire carries the packet to the next. The
+     tick lands BEFORE the wire runs, so the eye reads "this finished, and
+     therefore that starts" rather than watching both at once. */
+  for (var i = 0; i < steps.length; i++){
+    (function(i){
+      var t = START + 420 + i * BEAT;
+      at(t, function(){ steps[i].classList.add("done"); });
+      if (wires[i]){
+        at(t + 120, function(){ wires[i].classList.add("run"); });
+        at(t + 120 + BEAT, function(){ wires[i].classList.add("spent"); });
+      }
+    })(i);
+  }
+
+  var finished = START + 420 + (steps.length - 1) * BEAT + 260;
+  at(finished, function(){ intro.classList.add("done"); });
+  at(finished + 1150, end);
+
+  intro.querySelector(".intro-skip").addEventListener("click", end);
+  /* Any key, any tap, anywhere. An opener nobody can dismiss is an obstacle. */
+  addEventListener("keydown", function(e){ if (!intro.classList.contains("gone")) end(); }, { once:true });
+  intro.addEventListener("click", end);
+})();
 </script>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>

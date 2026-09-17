@@ -261,11 +261,15 @@
   opacity:0;transition:opacity .42s var(--ease-out),color .3s var(--ease-out)}
 #vo-site .intro.go .step .lbl{opacity:1}
 
-/* the tick. It lands with a slight overshoot, which is the difference between
-   a step completing and a step merely turning on. */
+/* The tick wants to LAND rather than merely switch on, and the first cut
+   bought that with an overshoot curve - which is a bounce, and a bounce reads
+   as dated however small it is. The same authority comes from the decelerating
+   --ease-out that every other transition on this site already uses: fast off
+   the mark, settling hard. One curve for the whole page, one less magic
+   number, and nothing about the beat changes. */
 #vo-site .step .tick{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;
   background:var(--pop);border:3px solid var(--ink);display:grid;place-items:center;
-  transform:scale(0);transition:transform .34s cubic-bezier(.34,1.5,.5,1)}
+  transform:scale(0);transition:transform .3s var(--ease-out)}
 #vo-site .step .tick svg{width:11px;height:11px;stroke:var(--ink);stroke-width:3.4}
 #vo-site .step.done .tick{transform:scale(1)}
 #vo-site .step.done .card{background:var(--pop)}

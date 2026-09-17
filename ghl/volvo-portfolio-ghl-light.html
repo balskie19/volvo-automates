@@ -253,7 +253,13 @@
   margin-bottom:clamp(16px,min(1.6vw,2.6vh),30px)}
 #vo-site .intro.go .intro-eyebrow{opacity:.85;transform:none}
 
-#vo-site .intro .deck{position:relative;width:min(1180px,90vw)}
+#vo-site .intro .deck{position:relative;width:min(1180px,90vw);
+  /* The stamp is absolutely positioned, so it occupies no space and the eyebrow
+     above it does not know it is there. The clearance is reserved HERE rather
+     than as a larger margin on the eyebrow, because this is the element the
+     stamp actually belongs to. */
+  margin-top:clamp(54px,min(5.2vw,8.4vh),134px);
+  margin-bottom:clamp(14px,min(1.8vw,3vh),38px)}
 #vo-site .intro .card{display:flex;align-items:center;gap:clamp(12px,min(1.5vw,2.4vh),22px);
   background:var(--paper);border:3px solid var(--ink);
   border-radius:clamp(14px,min(1.3vw,2vh),22px);box-shadow:6px 6px 0 0 var(--ink);
@@ -288,7 +294,7 @@
 
    It arrives oversized and rotated and snaps down - a stamp that fades in is a
    sticker, a stamp that lands has weight. */
-#vo-site .intro .stamp{position:absolute;right:-1%;top:100%;margin-top:-15px;
+#vo-site .intro .stamp{position:absolute;right:-1%;bottom:100%;margin-bottom:-14px;
   font-family:var(--f-mono);font-weight:700;
   font-size:clamp(17px,min(3.4vw,5.6vh),56px);letter-spacing:.14em;
   color:var(--pop);border:5px solid var(--pop);border-radius:12px;
@@ -298,7 +304,7 @@
   transition:opacity .18s linear,transform .42s cubic-bezier(.3,.9,.2,1)}
 #vo-site .intro.done .stamp{opacity:1;transform:rotate(-7deg) scale(1)}
 
-#vo-site .intro-kicker{margin-top:clamp(28px,min(4vw,6.6vh),72px);font-family:var(--f-disp);font-weight:900;
+#vo-site .intro-kicker{margin-top:clamp(10px,min(1.6vw,2.6vh),30px);font-family:var(--f-disp);font-weight:900;
   letter-spacing:-.035em;line-height:1.04;font-size:clamp(21px,min(5vw,8.4vh),88px);
   color:var(--paper);opacity:0;transform:translateY(14px);
   transition:opacity .55s var(--ease-out) .5s,transform .55s var(--ease-out) .5s}
@@ -322,11 +328,25 @@
      The stamp also drops lower here. A short third line leaves the right half
      of the card empty, so a wide stamp word lands on the sentence instead of
      past it - measured at 18% of the glyphs before this. */
-  #vo-site .intro .card{font-size:clamp(22px,6.4vw,34px);line-height:1.2;
+  #vo-site .intro .deck{margin-top:58px;margin-bottom:12px}
+  #vo-site .intro card{font-size:clamp(22px,6.4vw,34px);line-height:1.2;
     padding:16px 18px;margin-bottom:14px;gap:14px;border-radius:15px}
   #vo-site .intro .card i{width:11px;height:11px}
-  #vo-site .intro-kicker{font-size:clamp(27px,8.6vw,44px);margin-top:34px}
-  #vo-site .intro .stamp{right:-2%;top:100%;margin-top:-11px;font-size:clamp(15px,4.8vw,22px);padding:7px 13px}
+  #vo-site .intro-kicker{font-size:clamp(27px,8.6vw,44px);margin-top:16px}
+  #vo-site .intro .stamp{right:-2%;bottom:100%;margin-bottom:-10px;font-size:clamp(15px,4.8vw,22px);padding:7px 13px}
+}
+/* A phone on its side is 390px TALL. The stamp's clearance above the stack plus
+   three cards plus a closing line does not fit in that, and place-content:center
+   clips at BOTH ends when it overflows - measured 105% of the viewport before
+   this. Height is the scarce axis here, so the query is on height. */
+@media(max-height:560px){
+  #vo-site .intro{padding:12px}
+  #vo-site .intro-eyebrow{margin-bottom:8px;font-size:10px}
+  #vo-site .intro .deck{margin-top:42px;margin-bottom:8px}
+  #vo-site .intro .card{padding:8px 14px;margin-bottom:8px;font-size:clamp(15px,4.4vh,22px);border-radius:12px}
+  #vo-site .intro .card i{width:9px;height:9px}
+  #vo-site .intro .stamp{font-size:clamp(14px,4vh,22px);padding:6px 12px;margin-bottom:-8px;border-width:4px}
+  #vo-site .intro-kicker{margin-top:10px;font-size:clamp(18px,6vh,30px)}
 }
 #vo-site .room > header{margin-bottom:18px}
 #vo-site .room > header h2{font-size:clamp(24px,3.2vw,38px)}
@@ -618,33 +638,33 @@
     <span aria-hidden="true">&#9776;</span> Menu
   </button>
 
-  <div class="top">
-    <div>
-      <p class="kick">Volvo Ebal &middot; open for new projects</p>
-      <h1>I build systems that reduce manual work for busy business owners.</h1>
-      <p class="lede">GoHighLevel, n8n, and Claude Code. Three stacks I use that help my clients scale by
-        giving back their time. Six businesses since 2023, and every number on this site came from the
-        person who paid for the work.</p>
-    </div>
-    <a class="btn" href="https://calendly.com/volvo-ebal8/30min" target="_blank" rel="noopener">Book a call &rsaquo;</a>
-  </div>
-
-  <div class="tools">
-    <span class="lbl">Daily<b>drivers</b></span>
-    <ul>
-      <li><svg class="mk mk-n8n" aria-hidden="true"><use href="#b-n8n"/></svg>n8n</li>
-      <li><span class="mk-in" aria-hidden="true">GH</span>GoHighLevel</li>
-      <li><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg>Claude Code</li>
-      <li><svg class="mk mk-make" aria-hidden="true"><use href="#b-make"/></svg>Make.com</li>
-      <li><svg class="mk mk-zapier" aria-hidden="true"><use href="#b-zapier"/></svg>Zapier</li>
-      <li><svg class="mk mk-supabase" aria-hidden="true"><use href="#b-supabase"/></svg>Supabase</li>
-      <li><svg class="mk mk-nodedotjs" aria-hidden="true"><use href="#b-nodedotjs"/></svg>Node</li>
-      <li><svg class="mk mk-cloudflarepages" aria-hidden="true"><use href="#b-cloudflarepages"/></svg>Cloudflare</li>
-    </ul>
-  </div>
 
   <!-- ─── HOME: the whole map, one screen ──────────────────────────────── -->
   <section class="room on" id="room-home" aria-labelledby="home-h">
+    <div class="top">
+      <div>
+        <p class="kick">Volvo Ebal &middot; open for new projects</p>
+        <h1>I build systems that reduce manual work for busy business owners.</h1>
+        <p class="lede">GoHighLevel, n8n, and Claude Code. Three stacks I use that help my clients scale by
+          giving back their time. Six businesses since 2023, and every number on this site came from the
+          person who paid for the work.</p>
+      </div>
+      <a class="btn" href="https://calendly.com/volvo-ebal8/30min" target="_blank" rel="noopener">Book a call &rsaquo;</a>
+    </div>
+
+    <div class="tools">
+      <span class="lbl">Daily<b>drivers</b></span>
+      <ul>
+        <li><svg class="mk mk-n8n" aria-hidden="true"><use href="#b-n8n"/></svg>n8n</li>
+        <li><span class="mk-in" aria-hidden="true">GH</span>GoHighLevel</li>
+        <li><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg>Claude Code</li>
+        <li><svg class="mk mk-make" aria-hidden="true"><use href="#b-make"/></svg>Make.com</li>
+        <li><svg class="mk mk-zapier" aria-hidden="true"><use href="#b-zapier"/></svg>Zapier</li>
+        <li><svg class="mk mk-supabase" aria-hidden="true"><use href="#b-supabase"/></svg>Supabase</li>
+        <li><svg class="mk mk-nodedotjs" aria-hidden="true"><use href="#b-nodedotjs"/></svg>Node</li>
+        <li><svg class="mk mk-cloudflarepages" aria-hidden="true"><use href="#b-cloudflarepages"/></svg>Cloudflare</li>
+      </ul>
+    </div>
     <h2 id="home-h" class="vh">Everything on this site</h2>
     <div class="bento">
 

@@ -1,4 +1,4 @@
-// Render the share card from the real first slide.
+// Render the share card from the real home screen.
 //   node tools/og.mjs
 // A social card drawn by hand drifts from the site; a screenshot cannot.
 import { pathToFileURL } from "node:url";
@@ -14,11 +14,17 @@ const page = await browser.newPage();
 await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 1 });
 await page.goto(pathToFileURL(join(ROOT, "index.html")).href, { waitUntil: "networkidle0" });
 await new Promise(r => setTimeout(r, 1800));
-// the chrome belongs to the deck, not to a shared link
+// A share card has one job: who, and what they do. The room grid crops into
+// meaningless fragments at 1200x630, so it is removed and the sidebar plus the
+// promise are what the card carries.
 await page.evaluate(() => {
-  document.querySelectorAll(".bar,.hint,.ticks,.guide").forEach(el => el.remove());
+  document.querySelectorAll(".room,.menu-btn,.scrim").forEach(el => el.remove());
+  var tools = document.querySelector(".tools");
+  if (tools) tools.style.marginTop = "26px";
+  var main = document.querySelector(".main");
+  if (main) main.style.paddingTop = "34px";
 });
 await new Promise(r => setTimeout(r, 300));
 await page.screenshot({ path: join(ROOT, "og.png") });
 await browser.close();
-console.log("og.png written from slide 1 at 1200x630");
+console.log("og.png written from the home screen at 1200x630");

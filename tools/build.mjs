@@ -166,16 +166,18 @@ function jsonLd(data, page) {
 }
 
 /* ── 4 · wrap ─────────────────────────────────────────────────────────────── */
+// 2026-09-18: index.html became a static hub - sidebar plus rooms, all real
+// markup - so it carries its OWN head and schema and must not be wrapped.
+// Wrapping it again would strip that head and inject a duplicate. The CV is
+// still authored as a fragment, so it is the only page left here.
 const PAGES = [
-  { file: "index.html", key: "index", title: "Volvo Ebal · AI systems and automation",
-    desc: "I build the system that runs the business after the lead comes in. GoHighLevel, n8n, and applications built with Claude Code. Six businesses since 2023.",
-    url: SITE + "/" },
   { file: "cv/index.html", key: "cv", title: "Volvo Ebal · CV",
     desc: "Six client engagements with the results those clients stated, eleven applications shipped, and the tools behind them.",
     url: SITE + "/cv/" }
 ];
 
-const data = await prerender();
+// nothing to prerender any more: the hub's rooms are static markup.
+const data = null;
 
 for (const page of PAGES) {
   const path = join(ROOT, page.file);

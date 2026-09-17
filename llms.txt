@@ -65,7 +65,9 @@ Dropbox.
 
 ## Pages
 
-- https://volvo-automates.pages.dev/ — the site, as an eleven-slide deck
+- https://volvo-automates.pages.dev/ — the site: a sidebar and a grid of rooms
+  (work, apps, services, clients, stack, about, questions, contact), all of it
+  readable without running any JavaScript
 - https://volvo-automates.pages.dev/cv/ — the full CV
 
 ## Contact

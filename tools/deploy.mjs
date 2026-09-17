@@ -37,7 +37,7 @@ mkdirSync(join(DIST, "cv"), { recursive: true });
 const FILES = ["index.html", "cv/index.html", "robots.txt", "sitemap.xml", "llms.txt", "404.html", "og.png"];
 // The websites slide ships screenshots, and a directory is not a file:
 // staging only the named files would publish a slide of four broken tiles.
-const DIRS = ["shots"];
+const DIRS = ["shots", "img"];
 for (const f of FILES) {
   const from = join(ROOT, f);
   if (!existsSync(from)) { console.log("  (skipping missing " + f + ")"); continue; }

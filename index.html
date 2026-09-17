@@ -85,7 +85,8 @@ a{color:inherit}
 .me{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
 .me .frame{width:118px;background:var(--paper);border:4px solid var(--ink);border-radius:16px;
   padding:10px 10px 6px;box-shadow:6px 7px 0 0 var(--ink);transform:rotate(-1.6deg)}
-.me .frame svg{width:100%;height:auto}
+.me .frame img,.me .frame svg{width:100%;height:auto;display:block;border-radius:7px}
+.tile .port img{width:100%;height:auto;display:block;border-radius:6px}
 .me b{font-family:var(--f-disp);font-size:23px;font-weight:900;letter-spacing:-.03em;display:block}
 .me .role{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;opacity:.8;display:block}
 .me .open{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10px;
@@ -374,7 +375,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 <!-- ─── the sidebar: who, and where to go ─────────────────────────────────── -->
 <aside class="side" id="side">
   <div class="me">
-    <span class="frame"><svg viewBox="0 0 220 250" role="img" aria-label="Volvo, drawn"><use href="#vo"/></svg></span>
+    <span class="frame"><img src="img/volvo.webp" width="480" height="480" alt="Volvo Ebal" decoding="async"></span>
     <span>
       <b>Volvo Ebal</b>
       <span class="role">Automation &amp; AI systems</span>
@@ -462,7 +463,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
         <span class="hd"><span class="ic"><svg><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/></svg></span><h3>About</h3></span>
         <p>Who hires me and why, what actually stays broken in a business, and the one thing I will
           talk you out of.</p>
-        <span class="port" aria-hidden="true"><svg viewBox="0 0 220 250"><use href="#vo"/></svg></span>
+        <span class="port" aria-hidden="true"><img src="img/volvo.webp" width="480" height="480" alt="" decoding="async"></span>
         <span class="chips">
           <span class="chip">Not brochure sites</span>
           <span class="chip">Not logos</span>

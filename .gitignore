@@ -2,3 +2,7 @@ dist/
 node_modules/
 .wrangler/
 .edit-backups/
+
+# Rejected illustration attempts from tools/portrait.mjs. The real source photo
+# (src-img/volvo-photo.png) IS tracked, because it is what img/volvo.webp is built from.
+src-img/portrait-*

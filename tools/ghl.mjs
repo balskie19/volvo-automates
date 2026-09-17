@@ -183,6 +183,22 @@ if (!seen.size) throw new Error("no relative assets found; check the markup");
 if (markupFull === markup) throw new Error("nothing was embedded");
 const inlined = [...seen.entries()];
 
+/* ── 2b · relative links must become absolute ────────────────────────────
+   Inside GoHighLevel the page lives on THEIR domain, so href="explainers/x.html"
+   resolves against their site and 404s. Same class of bug as the relative image
+   paths, and just as silent: the link is there, it is styled, it looks fine, and
+   it goes nowhere. Hashes, mail and telephone links are left alone - they are
+   not paths. */
+let linksAbsolute = 0;
+for (const html of [{ get: () => markup, set: v => (markup = v) }]) {
+  html.set(html.get().replace(/href="(?!#|https?:|mailto:|tel:|data:)([^"]+)"/g, (whole, rel) => {
+    linksAbsolute++;
+    return 'href="' + LIVE + rel.replace(/^\.?\//, "") + '"';
+  }));
+}
+if (/href="(?!#|https?:|mailto:|tel:|data:)/.test(markup))
+  throw new Error("a relative link survived the rewrite");
+
 /* ── 3 · the router loses document.body and the bare hash ────────────────── */
 let js = scriptM[1];
 const jsEdits = [
@@ -300,6 +316,7 @@ writeFileSync(join(ROOT, "ghl", "preview.html"), hostile);
 const kb = n => Math.round(n / 1024);
 console.log("rooms            :", rooms.length, "->", rooms.join(", "));
 console.log("routes namespaced:", routesRewritten);
+console.log("links made absolute:", linksAbsolute);
 console.log("root rules moved :", rootRules, "(:root/html/body -> " + SCOPE + ")");
 console.log("images inlined   :", inlined.map(a => a[0] + " " + a[1] + "KB").join(", "));
 console.log("json-ld carried  :", !!ldM);

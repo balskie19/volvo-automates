@@ -657,6 +657,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
     <ul class="nav">
       <li><a href="#home" data-room="home"><svg><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/></svg>Home</a></li>
       <li><a href="#work" data-room="work"><svg><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 13h6"/></svg>Work</a></li>
+      <li><a href="#systems" data-room="systems"><svg><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 9h18M7 13h6"/></svg>Systems</a></li>
       <li><a href="#apps" data-room="apps"><svg><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>Apps</a></li>
       <li><a href="#services" data-room="services"><svg><circle cx="5" cy="6" r="2.4"/><circle cx="5" cy="18" r="2.4"/><circle cx="19" cy="12" r="2.4"/><path d="M7.4 7.1 16.6 11M7.4 16.9 16.6 13"/></svg>Services</a></li>
       <li><a href="#clients" data-room="clients"><svg><circle cx="12" cy="8" r="3.6"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/></svg>Clients</a></li>
@@ -718,6 +719,21 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
         <span class="go">See the work &rsaquo;</span>
       </a>
 
+      <a class="tile" href="#systems" data-room="systems">
+        <span class="hd"><i class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5.5" cy="6" r="2.4"/><circle cx="18.5" cy="6" r="2.4"/>
+            <circle cx="12" cy="18" r="2.4"/><path d="M7.6 7.4 10.6 15.8M16.4 7.4 13.4 15.8M8 6h8"/>
+          </svg></i><b>Systems</b></span>
+        <p>Four builds for one client, shown the way they actually behave. Three ways a customer
+          gets in, and the one word that stops everything.</p>
+        <span class="chips">
+          <span class="chip">Calls out</span><span class="chip">Calls in</span>
+          <span class="chip">Website chat</span><span class="chip">The way out</span>
+        </span>
+        <span class="go">See how they work &rsaquo;</span>
+      </a>
       <a class="tile" href="#about" data-room="about">
         <span class="hd"><span class="ic"><svg><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6h.01"/></svg></span><h3>About</h3></span>
         <p>Who hires me and why, what actually stays broken in a business, and the one thing I will
@@ -1057,6 +1073,44 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </section>
 
   <!-- ─── ABOUT ────────────────────────────────────────────────────────── -->
+  <!-- ─── SYSTEMS: how the builds actually behave ─────────────────────── -->
+  <section class="room" id="room-systems" aria-labelledby="systems-h">
+    <a class="back" href="#home" data-room="home">&lsaquo; Back to everything</a>
+    <header>
+      <p class="kick">Under the hood</p>
+      <h2 id="systems-h">Three ways in. One way out.</h2>
+      <p class="lede">Four systems built for one client. Each one opens in full, and each is shown
+        the way it actually behaves rather than as a diagram. Every line quoted is word for word
+        from the live build. Client names are withheld.</p>
+    </header>
+    <div class="cards">
+      <article class="card">
+        <p class="kick">Calls out</p>
+        <h3>The AI that phones people</h3>
+        <p>Ten places a call can go and thirteen things it writes down on the way. No two calls take the same route, so you walk it rather than read it.</p>
+        <a class="lk" href="explainers/retell-agent.html">Open it &rsaquo;</a>
+      </article>
+      <article class="card">
+        <p class="kick">Calls in</p>
+        <h3>When the phone rings</h3>
+        <p>One question with two answers: is the office open? Move the clock and follow the same call down two different paths.</p>
+        <a class="lk" href="explainers/call-routing.html">Open it &rsaquo;</a>
+      </article>
+      <article class="card">
+        <p class="kick">Website chat</p>
+        <h3>The chat on the website</h3>
+        <p>144 people opened it. Eleven booked without speaking to anyone. The real numbers, including the ones that are not flattering.</p>
+        <a class="lk" href="explainers/website-chat.html">Open it &rsaquo;</a>
+      </article>
+      <article class="card">
+        <p class="kick">The way out</p>
+        <h3>The word that stops everything</h3>
+        <p>Type quit and watch five conversations switch off at once. This is the part almost nobody builds, and the part that earns trust.</p>
+        <a class="lk" href="explainers/the-way-out.html">Open it &rsaquo;</a>
+      </article>
+    </div>
+  </section>
+
   <section class="room" id="room-about" aria-labelledby="about-h">
     <a class="back" href="#home" data-room="home">&lsaquo; Back to everything</a>
     <header>

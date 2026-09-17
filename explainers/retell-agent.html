@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How the cold-call agent decides</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>:root{
+  --field:#212A6B;--pop:#F5D547;--paper:#F2F1EA;--ink:#0B0E1C;--card:#fff;
+  --muted:#5C6070;--hair:#E0DED4;--good:#2E9E5B;--bad:#C8452F;
+  --f-disp:"Gabarito",system-ui,sans-serif;--f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,3.5vw,42px) clamp(14px,3vw,26px)}
+.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted)}
+h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;margin:6px 0 10px;
+  font-size:clamp(25px,4.6vw,44px);line-height:1.06}
+.lede{margin:0 0 22px;font-size:clamp(15px,1.8vw,17px);line-height:1.6;color:var(--muted);max-width:62ch}
+.split{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.split{grid-template-columns:1.25fr .9fr;align-items:start}}
+.panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px)}
+.panel h2{font-family:var(--f-disp);font-weight:900;font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
+.panel p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:3px 9px;margin-bottom:8px}
+.src{margin-top:16px;padding-top:12px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7}
+svg .n{cursor:pointer}
+svg .nb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
+svg .n:hover .nb,svg .n:focus .nb{fill:#FDF7DA}
+svg .n.on .nb{fill:var(--pop)}
+svg .nt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
+svg .ns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
+svg .e{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.32;transition:opacity .2s,stroke .2s}
+svg .e.lit{opacity:1;stroke:var(--field)}
+svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
+.says{background:var(--field);color:var(--paper);border-radius:12px;padding:13px 15px;
+  font-size:14.5px;line-height:1.55;margin:10px 0}
+.says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.f{font-family:var(--f-mono);font-size:10.5px;border:2px solid var(--hair);border-radius:99px;
+  padding:4px 9px;color:var(--muted);transition:all .25s var(--ease)}
+.f.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
+.rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
+  user-select:none;font-size:.92em}
+.hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
+.back{display:inline-flex;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
+.back:hover{color:var(--ink)}</style></head>
+<body><div class="wrap">
+<a class="back" href="index.html">&lsaquo; Both samples</a>
+<span class="eyebrow">Sample A &middot; a map you can walk</span>
+<h1>It is not a script. It is a map, and the call chooses the route.</h1>
+<p class="lede">An AI that phones people on a client's behalf. There are ten places the call can go, and it
+writes down thirteen things while it talks. Tap any box to hear what it says there and see what it
+notes down. The point is that no two calls are the same, and nothing gets forgotten.</p>
+
+<div class="split">
+  <div class="panel">
+    <svg viewBox="0 0 760 600" width="100%" role="img" aria-label="Conversation state graph">
+      <path class="e" id="e-0" data-a="intro" data-b="media"
+    d="M380 92 C 380 121, 130 121, 130 150"/>
+      <path class="e" id="e-1" data-a="intro" data-b="callback"
+    d="M380 92 C 380 121, 380 121, 380 150"/>
+      <path class="e" id="e-2" data-a="intro" data-b="dnc"
+    d="M380 92 C 380 121, 630 121, 630 150"/>
+      <path class="e" id="e-3" data-a="media" data-b="qualify"
+    d="M130 212 C 130 241, 130 241, 130 270"/>
+      <path class="e" id="e-4" data-a="media" data-b="showcase"
+    d="M130 212 C 130 241, 380 241, 380 270"/>
+      <path class="e" id="e-5" data-a="media" data-b="reject"
+    d="M130 212 C 130 241, 630 241, 630 270"/>
+      <path class="e" id="e-6" data-a="qualify" data-b="zero"
+    d="M130 332 C 130 361, 190 361, 190 390"/>
+      <path class="e" id="e-7" data-a="showcase" data-b="zero"
+    d="M380 332 C 380 361, 190 361, 190 390"/>
+      <path class="e" id="e-8" data-a="showcase" data-b="value"
+    d="M380 332 C 380 361, 570 361, 570 390"/>
+      <path class="e" id="e-9" data-a="reject" data-b="value"
+    d="M630 332 C 630 361, 570 361, 570 390"/>
+      <path class="e" id="e-10" data-a="zero" data-b="close"
+    d="M190 452 C 190 476, 380 476, 380 500"/>
+      <path class="e" id="e-11" data-a="value" data-b="close"
+    d="M570 452 C 570 476, 380 476, 380 500"/>
+      <g class="n" id="n-intro" tabindex="0" role="button" aria-label="Can I have a minute?">
+  <rect class="nb" x="280" y="30" width="200" height="62" rx="12"/>
+  <text class="nt" x="293" y="56">Can I have a minute?</text>
+  <text class="ns" x="293" y="80">how every call opens</text></g>
+      <g class="n" id="n-media" tabindex="0" role="button" aria-label="Do you use a photographer?">
+  <rect class="nb" x="30" y="150" width="200" height="62" rx="12"/>
+  <text class="nt" x="43" y="170">Do you use a</text> <text class="nt" x="43" y="184">photographer?</text>
+  <text class="ns" x="43" y="200">the first real question</text></g>
+      <g class="n" id="n-callback" tabindex="0" role="button" aria-label="Call me another time">
+  <rect class="nb" x="280" y="150" width="200" height="62" rx="12"/>
+  <text class="nt" x="293" y="176">Call me another time</text>
+  <text class="ns" x="293" y="200">a polite no, for now</text></g>
+      <g class="n" id="n-dnc" tabindex="0" role="button" aria-label="Never call me again">
+  <rect class="nb" x="530" y="150" width="200" height="62" rx="12"/>
+  <text class="nt" x="543" y="176">Never call me again</text>
+  <text class="ns" x="543" y="200">a full stop</text></g>
+      <g class="n" id="n-qualify" tabindex="0" role="button" aria-label="Who do you use now?">
+  <rect class="nb" x="30" y="270" width="200" height="62" rx="12"/>
+  <text class="nt" x="43" y="296">Who do you use now?</text>
+  <text class="ns" x="43" y="320">is someone already doing it</text></g>
+      <g class="n" id="n-showcase" tabindex="0" role="button" aria-label="So how do you show a house?">
+  <rect class="nb" x="280" y="270" width="200" height="62" rx="12"/>
+  <text class="nt" x="293" y="290">So how do you show a</text> <text class="nt" x="293" y="304">house?</text>
+  <text class="ns" x="293" y="320">asked only after a no</text></g>
+      <g class="n" id="n-reject" tabindex="0" role="button" aria-label="Not interested">
+  <rect class="nb" x="530" y="270" width="200" height="62" rx="12"/>
+  <text class="nt" x="543" y="296">Not interested</text>
+  <text class="ns" x="543" y="320">a no, taken properly</text></g>
+      <g class="n" id="n-zero" tabindex="0" role="button" aria-label="Never thought about it">
+  <rect class="nb" x="90" y="390" width="200" height="62" rx="12"/>
+  <text class="nt" x="103" y="416">Never thought about it</text>
+  <text class="ns" x="103" y="440">starting from nothing</text></g>
+      <g class="n" id="n-value" tabindex="0" role="button" aria-label="Here is what we would do">
+  <rect class="nb" x="470" y="390" width="200" height="62" rx="12"/>
+  <text class="nt" x="483" y="416">Here is what we would do</text>
+  <text class="ns" x="483" y="440">the actual pitch</text></g>
+      <g class="n" id="n-close" tabindex="0" role="button" aria-label="A person will call you">
+  <rect class="nb" x="280" y="500" width="200" height="62" rx="12"/>
+  <text class="nt" x="293" y="526">A person will call you</text>
+  <text class="ns" x="293" y="550">the hand over</text></g>
+    </svg>
+    <p class="hint">Tap a box. The routes out of it light up.</p>
+  </div>
+
+  <div>
+    <div class="panel" id="detail">
+      <span class="tag" id="d-tag">how every call opens</span>
+      <h2 id="d-title">Can I have a minute?</h2>
+      <p id="d-says">It asks permission before anything else. From here the call can go three ways: they'll talk, they want calling back, or they never want to hear from us again.</p>
+      <div id="d-quote"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <span class="tag">what you get afterwards</span>
+      <h2>Thirteen notes, written during the call</h2>
+      <p>Nobody has to sit and listen back to a recording. It writes these down as it goes, so the
+      moment the call ends you already know what happened and what to do next.</p>
+      <div class="fields" id="fields">
+        <span class="f" data-f="How the call ended">How the call ended</span><span class="f" data-f="Wants to book">Wants to book</span><span class="f" data-f="Asked to be called back">Asked to be called back</span><span class="f" data-f="Never call again">Never call again</span><span class="f" data-f="Uses a professional photographer">Uses a professional photographer</span><span class="f" data-f="Happy with who they use">Happy with who they use</span><span class="f" data-f="What frustrates them">What frustrates them</span><span class="f" data-f="How they show a house today">How they show a house today</span><span class="f" data-f="Wants to see an example">Wants to see an example</span><span class="f" data-f="Wants a before and after">Wants a before and after</span><span class="f" data-f="Happy to hear from us">Happy to hear from us</span><span class="f" data-f="A written summary of the call">A written summary of the call</span><span class="f" data-f="Not a fit">Not a fit</span>
+      </div>
+      <div class="src">
+        Built on Retell AI &middot; every line quoted word for word from the live build<br>
+        It waits for the other person to speak first, and answers in about a second<br>
+        Client name withheld
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var S = {"intro":{"x":280,"y":30,"label":"Can I have a minute?","sub":"how every call opens","says":"It asks permission before anything else. From here the call can go three ways: they'll talk, they want calling back, or they never want to hear from us again.","quote":null,"fields":[]},"media":{"x":30,"y":150,"label":"Do you use a photographer?","sub":"the first real question","says":"The first question is about them, not about us. Nothing is offered yet.","quote":"Great! Just curious — do you usually use professional photography or video for your listings?","fields":["Uses a professional photographer"]},"callback":{"x":280,"y":150,"label":"Call me another time","sub":"a polite no, for now","says":"The call ends. The record does not - the time they asked for is written down.","quote":null,"fields":["Asked to be called back","How the call ended"]},"dnc":{"x":530,"y":150,"label":"Never call me again","sub":"a full stop","says":"This is the only stop whose job is to stop. It is kept separate on purpose, so there is always a clear record of who asked to be left alone.","quote":null,"fields":["Never call again","Not a fit"]},"qualify":{"x":30,"y":270,"label":"Who do you use now?","sub":"is someone already doing it","says":"Finds out whether they already have someone, and whether they actually like them.","quote":"Sounds like something that could really help. Would it be okay if someone from our team reached out to walk you through the next steps?","fields":["Happy with who they use","What frustrates them"]},"showcase":{"x":280,"y":270,"label":"So how do you show a house?","sub":"asked only after a no","says":"Asked when the answer to the first question was no. It turns a dead end back into a conversation.","quote":"Got it! When you put a property on the market, how do you usually showcase it? Do you take your own photos, hire someone, or kind of skip visuals altogether?","fields":["How they show a house today"]},"reject":{"x":530,"y":270,"label":"Not interested","sub":"a no, taken properly","says":"A no gets its own stop rather than being pushed toward the ending anyway.","quote":null,"fields":["How the call ended","Not a fit"]},"zero":{"x":90,"y":390,"label":"Never thought about it","sub":"starting from nothing","says":"Someone who has never considered it needs a different conversation from someone who already pays a rival. The call knows which one it is in.","quote":null,"fields":["Wants to see an example","Wants a before and after"]},"value":{"x":470,"y":390,"label":"Here is what we would do","sub":"the actual pitch","says":"The pitch comes late, and only once the call knows which situation it is in.","quote":null,"fields":["Wants to see an example","Happy to hear from us"]},"close":{"x":280,"y":500,"label":"A person will call you","sub":"the hand over","says":"It never books the job itself. It hands over to a human, and says when that will happen.","quote":"Thanks! Someone from our team will reach out soon — likely within the next couple of days. If you have a preferred time, I can note it.","fields":["Wants to book","How the call ended","A written summary of the call"]}};
+function show(k){
+  var s = S[k];
+  document.getElementById("d-title").textContent = s.label;
+  document.getElementById("d-tag").textContent = s.sub;
+  document.getElementById("d-says").textContent = s.says;
+  document.getElementById("d-quote").innerHTML = s.quote
+    ? '<div class="says"><b>What it actually says</b>' + s.quote + '</div>' : "";
+  document.querySelectorAll(".n").forEach(function(n){ n.classList.toggle("on", n.id === "n-" + k); });
+  document.querySelectorAll(".e").forEach(function(e){
+    e.classList.toggle("lit", e.getAttribute("data-a") === k);
+  });
+  document.querySelectorAll(".f").forEach(function(f){
+    f.classList.toggle("hit", s.fields.indexOf(f.getAttribute("data-f")) >= 0);
+  });
+}
+Object.keys(S).forEach(function(k){
+  var n = document.getElementById("n-" + k);
+  n.addEventListener("click", function(){ show(k); });
+  n.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); show(k); } });
+});
+show("intro");
+</script></div></body></html>

@@ -200,68 +200,93 @@ a{color:inherit}
 .tile:active,.card:active,.btn:active,.ch:active{transform:translate3d(0,1px,0)}
 
 /* ── the opening sequence ─────────────────────────────────────────────────
-   Third cut. The first was an abstract dot and said nothing. The second said
-   the right thing in the WRONG LANGUAGE: nodes joined by wires with a packet
-   running along them is the reference's signature, and borrowing a mechanic is
-   borrowing an identity. It also left most of a 1440px screen empty, because a
-   row of 56px cards is a diagram, not a title sequence.
+   Fourth and chosen cut. The road here is worth a line, because each rejection
+   named a different mistake: an abstract falling dot said nothing; a node graph
+   said the right thing in the reference's own visual language, which is
+   borrowing an identity rather than a technique; a ledger said it in ours but
+   sized itself on width alone, so it floated in the middle of a tall screen.
 
-   So the diagram is gone and the mechanic is now a LOG THAT WRITES ITSELF.
-   That is what automation actually looks like from the outside: you were not
-   there, and the work had already happened. Each line stamps its own time, the
-   times move while nobody is awake, and the last line is the point.
+   This one states the problem three times and then answers it. The three cards
+   are a lead being lost, in order. The stamp is the reply. The closing line is
+   Volvo's own words.
 
-   The type does the work. Lines are set in the display face at up to 40px and
-   the closing statement at up to 58px, so the screen is filled by the words
-   rather than by a diagram floating in the middle of it.
+   Deliberately written for a reader in a hurry: Flesch-Kincaid grade 0.5. Most
+   of that came from deleting three words - inquiry, workflow, record - which
+   sound ordinary only to people who say them daily.
 
-   Still a state machine rather than a keyframe timeline - one BEAT constant
-   sets the pace, and any line can be retimed without touching the others. */
+   Sized on min(vw, vh), so it grows with whichever axis is actually scarce.
+   Sizing on width alone is why the previous one occupied 47% of a 1080px-tall
+   screen while passing every fit check that existed.
+
+   Still a state machine, still one BEAT, and the PAUSE before the stamp is
+   load bearing: without it the stamp is just the fourth item in a list.
+
+   EVERY SELECTOR HERE IS SCOPED UNDER .intro, and that is not tidiness. The
+   site already owns .card - twenty-four of them - so an unscoped .card rule in
+   this block collides with the page's own content cards. Whichever rule sits
+   later simply wins, and the loser is either this overlay or every card on the
+   site. Nothing would have errored. */
 .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
-  justify-items:start;padding:24px;background:var(--field);
+  justify-items:start;padding:clamp(16px,3vw,30px);background:var(--field);
   transition:opacity .5s var(--ease-out),visibility .5s}
 .intro.gone{opacity:0;visibility:hidden;pointer-events:none}
 html.seen-intro .intro{display:none}
 
-.intro-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
-  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:22px}
+.intro-eyebrow{font-family:var(--f-mono);font-size:clamp(10px,min(.85vw,1.4vh),14px);
+  letter-spacing:.22em;text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);
+  margin-bottom:clamp(16px,min(1.6vw,2.6vh),30px)}
 .intro.go .intro-eyebrow{opacity:.85;transform:none}
 
-.log{display:flex;flex-direction:column;gap:11px;width:min(760px,100%)}
+.intro .deck{position:relative;width:min(1180px,90vw)}
+.intro .card{display:flex;align-items:center;gap:clamp(12px,min(1.5vw,2.4vh),22px);
+  background:var(--paper);border:3px solid var(--ink);
+  border-radius:clamp(14px,min(1.3vw,2vh),22px);box-shadow:6px 6px 0 0 var(--ink);
+  padding:clamp(12px,min(1.9vw,3.2vh),34px) clamp(16px,min(2.3vw,3.8vh),38px);
+  font-family:var(--f-disp);font-weight:800;letter-spacing:-.025em;color:var(--ink);
+  font-size:clamp(17px,min(3.2vw,5.4vh),58px);line-height:1.12;
+  margin-bottom:clamp(10px,min(1.2vw,2vh),24px);opacity:0;
+  transition:opacity .46s var(--ease-out),transform .52s var(--ease-out)}
+.intro .card:nth-child(1){transform:translateY(-26px) rotate(-1.5deg)}
+.intro .card:nth-child(2){transform:translateY(-26px) rotate(.9deg)}
+.intro .card:nth-child(3){transform:translateY(-26px) rotate(-.7deg)}
+.intro .card.in{opacity:1}
+.intro .card.in:nth-child(1){transform:rotate(-1.5deg)}
+.intro .card.in:nth-child(2){transform:rotate(.9deg)}
+.intro .card.in:nth-child(3){transform:rotate(-.7deg)}
+.intro .card i{flex:none;width:clamp(10px,min(.9vw,1.5vh),16px);height:clamp(10px,min(.9vw,1.5vh),16px);
+  border-radius:50%;background:#C8452F;border:2px solid var(--ink);
+  transition:background-color .4s var(--ease-out) .12s}
+.intro.done .card i{background:#2E9E5B}
 
-/* A line of the log. It writes itself in from the left, which is the direction
-   text arrives from - a line that fades in place reads as decoration, a line
-   that arrives reads as something that just happened. */
-.ln{display:flex;align-items:center;gap:clamp(14px,2.2vw,22px);
-  background:var(--paper);border:3px solid var(--ink);border-radius:16px;
-  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(12px,1.6vw,17px) clamp(14px,2vw,22px);
-  opacity:0;transform:translateX(-26px);
-  transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),
-             background-color .32s var(--ease-out)}
-.ln.in{opacity:1;transform:none}
+/* The stamp straddles the stack's BOTTOM EDGE, never the middle of it.
+   Centred, it landed squarely across the second sentence: a stamp may cover a
+   card, it may not cover the words it exists to answer.
 
-.ln .ic{flex:none;width:clamp(52px,6.4vw,68px);height:clamp(52px,6.4vw,68px);
-  border-radius:14px;background:var(--field);border:3px solid var(--ink);
-  display:grid;place-items:center}
-.ln .ic svg{width:clamp(26px,3.2vw,34px);height:clamp(26px,3.2vw,34px);
-  stroke:var(--pop);stroke-width:2.1;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.ln .txt{flex:1 1 auto;font-family:var(--f-disp);font-weight:800;letter-spacing:-.02em;
-  font-size:clamp(19px,3vw,32px);line-height:1.15;color:var(--ink)}
-.ln .at{flex:none;font-family:var(--f-mono);font-size:clamp(11px,1.3vw,14px);
-  letter-spacing:.08em;color:var(--muted)}
+   It is anchored with top:100% and pulled back by a fixed margin, NOT with a
+   bottom offset. A bottom offset is a guess about how far the text reaches,
+   and the text length changes with the viewport - measured clean at 1600px
+   wide and 30% of the last line covered at 1440px, which is the sort of bug
+   that passes whichever width you happened to test. Anchored to the edge, only
+   a fixed 15px of the stamp ever overlaps the last card, and the card's own
+   bottom padding is wider than that at every size, so no glyph is ever touched.
 
-/* The last line is the outcome, so it is the only one that changes colour. */
-.ln.win{background:var(--pop)}
-.ln.win .ic{background:var(--ink)}
-.ln.win .at{color:var(--ink);opacity:.62}
+   It arrives oversized and rotated and snaps down - a stamp that fades in is a
+   sticker, a stamp that lands has weight. */
+.intro .stamp{position:absolute;right:-1%;top:100%;margin-top:-15px;
+  font-family:var(--f-mono);font-weight:700;
+  font-size:clamp(17px,min(3.4vw,5.6vh),56px);letter-spacing:.14em;
+  color:var(--pop);border:5px solid var(--pop);border-radius:12px;
+  padding:clamp(7px,min(.9vw,1.5vh),15px) clamp(14px,min(2vw,3.4vh),34px);
+  text-transform:uppercase;background:rgba(33,42,107,.9);
+  opacity:0;transform:rotate(-14deg) scale(2.5);
+  transition:opacity .18s linear,transform .42s cubic-bezier(.3,.9,.2,1)}
+.intro.done .stamp{opacity:1;transform:rotate(-7deg) scale(1)}
 
-/* The closing statement is the largest thing on the screen, because it is the
-   whole pitch: the work happened and nobody was there. */
-.intro-kicker{margin-top:clamp(18px,3vw,30px);font-family:var(--f-disp);font-weight:900;
-  letter-spacing:-.03em;font-size:clamp(26px,5.4vw,58px);line-height:1.05;color:var(--paper);
-  opacity:0;transform:translateY(14px);
-  transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+.intro-kicker{margin-top:clamp(28px,min(4vw,6.6vh),72px);font-family:var(--f-disp);font-weight:900;
+  letter-spacing:-.035em;line-height:1.04;font-size:clamp(21px,min(5vw,8.4vh),88px);
+  color:var(--paper);opacity:0;transform:translateY(14px);
+  transition:opacity .55s var(--ease-out) .5s,transform .55s var(--ease-out) .5s}
 .intro.done .intro-kicker{opacity:1;transform:none}
 .intro-kicker b{color:var(--pop);font-weight:900}
 
@@ -272,31 +297,20 @@ html.seen-intro .intro{display:none}
 .intro.go .intro-skip{opacity:1}
 .intro-skip:hover,.intro-skip:focus-visible{color:var(--pop)}
 
-/* A phone turned sideways is 390px TALL, and place-content:center clips at
-   BOTH ends - measured -75 to 465 in a 390 viewport, which loses the first
-   line and the closing statement, the two that matter most. Height, not
-   width, is the constraint here, so the query is on height. Everything
-   shrinks together and the kicker drops to one line. */
-@media(max-height:560px){
-  .intro{padding:14px}
-  .intro-eyebrow{margin-bottom:10px;font-size:9px}
-  .log{gap:7px;width:min(680px,100%)}
-  .ln{padding:7px 12px;gap:12px;border-radius:12px;box-shadow:3px 3px 0 0 var(--ink)}
-  .ln .ic{width:42px;height:42px;border-radius:10px}
-  .ln .ic svg{width:22px;height:22px}
-  .ln .txt{font-size:17px}
-  .ln .at{font-size:10px}
-  .intro-kicker{margin-top:12px;font-size:clamp(19px,3.4vw,30px)}
-  .intro-kicker br{display:none}
-}
-
 @media(max-width:560px){
-  /* the timestamp is the first thing to go: the times are the point, but on a
-     narrow screen the sentence matters more than the column it sits in */
-  .intro{justify-items:stretch;padding:18px}
-  .ln{gap:13px;border-radius:14px;box-shadow:4px 4px 0 0 var(--ink)}
-  .ln .at{display:none}
-  .ln .txt{font-size:clamp(17px,4.6vw,22px)}
+  /* A narrow tall screen makes the WIDTH term bind, so min(vw,vh) held the type
+     at its floor and the whole thing occupied 31% of a phone - correct by the
+     rule and wrong on the screen. Here the type sizes against width alone and
+     is allowed to WRAP: two lines at 25px fill a tall screen far better than
+     one line at 17px, and wrapping costs nothing.
+     The stamp also drops lower here. A short third line leaves the right half
+     of the card empty, so a wide stamp word lands on the sentence instead of
+     past it - measured at 18% of the glyphs before this. */
+  .intro .card{font-size:clamp(22px,6.4vw,34px);line-height:1.2;
+    padding:16px 18px;margin-bottom:14px;gap:14px;border-radius:15px}
+  .intro .card i{width:11px;height:11px}
+  .intro-kicker{font-size:clamp(27px,8.6vw,44px);margin-top:34px}
+  .intro .stamp{right:-2%;top:100%;margin-top:-11px;font-size:clamp(15px,4.8vw,22px);padding:7px 13px}
 }
 .room > header{margin-bottom:18px}
 .room > header h2{font-size:clamp(24px,3.2vw,38px)}
@@ -456,36 +470,21 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://volvo-automates.pages.dev/#volvo","name":"Volvo Ebal","jobTitle":"AI systems and automation specialist","email":"mailto:volvo.ebal8@gmail.com","url":"https://volvo-automates.pages.dev","sameAs":["https://www.linkedin.com/in/volvo-ebal/","https://github.com/balskie19"],"address":{"@type":"PostalAddress","addressCountry":"PH"},"knowsAbout":["GoHighLevel","n8n","Claude Code","Marketing automation","CRM automation","Workflow automation","AI voice agents","Make.com","Zapier","HubSpot","Lead reactivation"],"worksFor":{"@id":"https://volvo-automates.pages.dev/#practice"}},{"@type":"ProfessionalService","@id":"https://volvo-automates.pages.dev/#practice","name":"Volvo Automates","description":"Automation for agencies and service businesses: GoHighLevel CRM builds, n8n workflow automation, and custom applications built with Claude Code.","url":"https://volvo-automates.pages.dev","founder":{"@id":"https://volvo-automates.pages.dev/#volvo"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Philippines"}],"availableLanguage":"en","serviceType":["CRM automation","Workflow automation","AI voice and chat agents","Custom application development"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"What I am hired for","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"GoHighLevel CRM builds and repairs"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"n8n workflow automation and integration"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Custom applications built with Claude Code"}}]}},{"@type":"WebSite","@id":"https://volvo-automates.pages.dev/#site","url":"https://volvo-automates.pages.dev","name":"Volvo Automates","publisher":{"@id":"https://volvo-automates.pages.dev/#volvo"},"inLanguage":"en"},{"@type":"FAQPage","@id":"https://volvo-automates.pages.dev/#faq","mainEntity":[{"@type":"Question","name":"We tried automation before and it broke.","acceptedAnswer":{"@type":"Answer","text":"Usually it did not break, it stopped being watched. Anything I build reports to a channel you already read, and says so when it fails. A silent automation is worse than none, which is why failure is a feature I build on purpose."}},{"@type":"Question","name":"Our setup is complicated.","acceptedAnswer":{"@type":"Answer","text":"Good. Simple setups rarely need me. I start by wiring ONE process end to end rather than mapping everything, so you see it working in week one instead of reading a discovery document in month three."}},{"@type":"Question","name":"We already know the problem, we need someone to fix it.","acceptedAnswer":{"@type":"Answer","text":"Then we skip the audit. Send me the process, I will tell you on the call whether it is worth automating, and I will tell you when it is not."}},{"@type":"Question","name":"Why you and not an agency?","acceptedAnswer":{"@type":"Answer","text":"An agency sells you a retainer and a project manager. You get the person who builds it. And every build I have shipped is on this site with the part that went wrong, which is not a thing a brochure can fake."}},{"@type":"Question","name":"We do not have budget for this.","acceptedAnswer":{"@type":"Answer","text":"Then the honest answer may be no. If the process does not cost you real hours or real leads, automating it is a hobby. Bring the one that hurts and we will size it in twenty minutes."}},{"@type":"Question","name":"Can you work with the tools we already have?","acceptedAnswer":{"@type":"Answer","text":"That is the whole job. GoHighLevel, HubSpot, n8n, Make, Zapier, Apify, Slack, OpenPhone, Intercom, Monday. If it has an API or a webhook, it can be wired in. If it does not, I build the missing piece."}}]}]}</script>
 </head>
 <body>
-<!-- The opening sequence: a log writing itself while nobody is there, which
-     is what automation looks like from the outside. aria-hidden, because every
-     word is said again inside the site and a screen reader should be handed
-     the page rather than a title card. The sentinel comment below is load
-     bearing - tools/ghl.mjs uses it to strip this block out of the embed. -->
+<!-- The opening sequence. Three lines of a lead being lost, then the answer.
+     aria-hidden, because a screen reader should be handed the page rather than
+     a title card, and every idea here is said again inside the site.
+     The sentinel below is load bearing: tools/ghl.mjs strips this block out of
+     the GoHighLevel build on it, because an embed must never take a host's
+     whole viewport. -->
 <div class="intro" aria-hidden="true">
   <span class="intro-eyebrow">Volvo Ebal &middot; Automation &amp; AI systems</span>
-  <span class="log">
-    <span class="ln">
-      <span class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>
-      <span class="txt">A lead comes in.</span>
-      <span class="at">9:02 PM</span>
-    </span>
-    <span class="ln">
-      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="7.5" cy="7.5" r="1.4"/></svg></span>
-      <span class="txt">It is tagged and routed.</span>
-      <span class="at">9:02 PM</span>
-    </span>
-    <span class="ln">
-      <span class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/></svg></span>
-      <span class="txt">It gets an answer.</span>
-      <span class="at">9:03 PM</span>
-    </span>
-    <span class="ln win">
-      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2.2 2.2L15.5 13"/></svg></span>
-      <span class="txt">It books a call.</span>
-      <span class="at">9:04 PM</span>
-    </span>
-  </span>
-  <span class="intro-kicker">And nobody<br><b>was awake.</b></span>
+  <div class="deck">
+    <span class="card"><i></i>Someone asks about you at night.</span>
+    <span class="card"><i></i>No one is there to answer.</span>
+    <span class="card"><i></i>By morning they are gone.</span>
+    <span class="stamp">Not anymore</span>
+  </div>
+  <span class="intro-kicker">I make systems that <b>run for you 24/7.</b></span>
   <button class="intro-skip" type="button">Skip &rsaquo;</button>
 </div>
 <!-- /intro -->
@@ -505,15 +504,15 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
     document.documentElement.className += " seen-intro"; return;
   }
 
-  var lines = intro.querySelectorAll(".ln");
+  var cards = intro.querySelectorAll(".card");
   var timers = [];
   var at = function(ms, fn){ timers.push(setTimeout(fn, ms)); };
 
-  /* One beat. Every moment below derives from it, so the pace is a single
-     number rather than a dozen magic ones. A line needs long enough to be
-     READ, which is why this is slower than it first looks. */
-  var BEAT = 780;
-  var START = 260;   // the screen should not sit empty while a visitor waits
+  /* One beat, and a PAUSE. The three problems land on the beat, then the screen
+     holds while they sit there being problems, and only then does the stamp
+     come down. Without that gap the stamp is the fourth item in a list rather
+     than the reply to the first three. */
+  var START = 380, BEAT = 820, PAUSE = 900;
 
   function end(){
     timers.forEach(clearTimeout); timers = [];
@@ -524,13 +523,13 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   }
 
   requestAnimationFrame(function(){ intro.classList.add("go"); });
-  for (var i = 0; i < lines.length; i++){
-    (function(i){ at(START + i * BEAT, function(){ lines[i].classList.add("in"); }); })(i);
+  for (var i = 0; i < cards.length; i++){
+    (function(i){ at(START + i * BEAT, function(){ cards[i].classList.add("in"); }); })(i);
   }
 
-  var settled = START + (lines.length - 1) * BEAT + 420;
+  var settled = START + (cards.length - 1) * BEAT + PAUSE;
   at(settled, function(){ intro.classList.add("done"); });
-  at(settled + 1500, end);
+  at(settled + 2100, end);
 
   intro.querySelector(".intro-skip").addEventListener("click", end);
   /* Any key, any tap, anywhere. An opener nobody can dismiss is an obstacle,

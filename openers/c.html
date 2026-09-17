@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Opener C · Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --field:#212A6B; --pop:#F5D547; --paper:#F2F1EA; --ink:#0B0E1C; --muted:#5C6070;
+  --f-disp:"Gabarito",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--field);font-family:var(--f-body);overflow:hidden}
+.intro{position:fixed;inset:0;display:grid;place-content:center;justify-items:start;
+  padding:clamp(16px,3vw,30px);background:var(--field)}
+.eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:20px}
+.go .eyebrow{opacity:.85;transform:none}
+.skip{position:fixed;right:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);background:none;
+  border:0;padding:9px 12px;cursor:pointer;opacity:0;transition:opacity .4s var(--ease-out) .8s,color .2s}
+.go .skip{opacity:1}
+.skip:hover{color:var(--pop)}
+.replay{position:fixed;left:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:var(--pop);
+  border:2px solid var(--ink);border-radius:99px;padding:8px 15px;cursor:pointer;z-index:9}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms !important;transition-duration:1ms !important;
+    animation-delay:0ms !important;transition-delay:0ms !important;animation-iteration-count:1 !important}
+}
+.term{width:min(720px,100%);font-family:var(--f-mono);font-size:clamp(13px,1.9vw,19px);
+  line-height:1.85;color:var(--paper);background:rgba(11,14,28,.34);border:3px solid var(--ink);
+  border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:clamp(16px,2.4vw,26px)}
+.term .bar{display:flex;gap:6px;margin-bottom:14px}
+.term .bar i{width:11px;height:11px;border-radius:50%;background:rgba(242,241,234,.28)}
+.term .bar i:first-child{background:var(--pop)}
+.row{display:block;white-space:pre-wrap;min-height:1.85em}
+.row.cmd{color:var(--pop)}
+.row.out{color:rgba(242,241,234,.82)}
+.row.big{font-family:var(--f-disp);font-weight:900;font-size:clamp(20px,3.4vw,36px);
+  letter-spacing:-.02em;color:var(--paper);line-height:1.2;margin-top:10px}
+.cur{display:inline-block;width:.62em;height:1.05em;background:var(--pop);vertical-align:-.18em;
+  animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+@media(max-height:560px){.term{font-size:13px;line-height:1.6;padding:14px}.row.big{font-size:20px}}
+</style></head>
+<body>
+<div class="intro" id="intro">
+  <span class="eyebrow">Volvo Ebal &middot; Automation &amp; AI systems</span>
+  <div class="term">
+    <span class="bar"><i></i><i></i><i></i></span>
+    <span class="row cmd" data-t="&gt; volvo --what-do-you-do"></span>
+    <span class="row out" data-t="  the piece between your tools that nobody owns"></span>
+    <span class="row cmd" data-t="&gt; volvo --proof"></span>
+    <span class="row out" data-t="  6 businesses · 11 apps · 3 live right now"></span>
+    <span class="row big" data-t="Send me the thing eating your week."></span>
+  </div>
+  <button class="skip" type="button">Skip &rsaquo;</button>
+</div>
+<button class="replay" type="button" onclick="play()">Replay</button>
+<script>
+var intro=document.getElementById("intro"),timers=[],intervals=[],DONE=0;
+function q(s){return [].slice.call(intro.querySelectorAll(s));}
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clear(){timers.forEach(clearTimeout);intervals.forEach(clearInterval);timers=[];intervals=[];}
+function play(){
+  clear();
+  // rebuild from the pristine markup so a replay is identical to a first run
+  intro.innerHTML = START_HTML;
+  intro.className = "intro";
+  DONE = 0;
+  requestAnimationFrame(function(){ intro.classList.add("go"); run(); });
+  intro.querySelector(".skip").addEventListener("click", function(){ clear(); });
+}
+function run(){
+var rows=q(".row"),SPEED=22,GAP=260;
+  var cur=document.createElement("i");cur.className="cur";
+  var t=0;
+  rows.forEach(function(r){
+    var txt=r.getAttribute("data-t"),i=0;
+    at(t,function(){ r.appendChild(cur);
+      var iv=setInterval(function(){
+        if(i>=txt.length){clearInterval(iv);return;}
+        r.insertBefore(document.createTextNode(txt[i++]),cur);
+      },SPEED); timers.push(iv); intervals.push(iv);
+    });
+    t += txt.length*SPEED + GAP;
+  });
+  at(t,function(){intro.classList.add("done");});
+  DONE=t+1300;
+  // the preview loops, so the whole thing can be judged without reloading
+  at(DONE, function(){ play(); });
+}
+var START_HTML = intro.innerHTML;
+play();
+</script>
+</body></html>

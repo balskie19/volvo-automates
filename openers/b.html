@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Opener B · Headline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --field:#212A6B; --pop:#F5D547; --paper:#F2F1EA; --ink:#0B0E1C; --muted:#5C6070;
+  --f-disp:"Gabarito",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--field);font-family:var(--f-body);overflow:hidden}
+.intro{position:fixed;inset:0;display:grid;place-content:center;justify-items:start;
+  padding:clamp(16px,3vw,30px);background:var(--field)}
+.eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:20px}
+.go .eyebrow{opacity:.85;transform:none}
+.skip{position:fixed;right:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);background:none;
+  border:0;padding:9px 12px;cursor:pointer;opacity:0;transition:opacity .4s var(--ease-out) .8s,color .2s}
+.go .skip{opacity:1}
+.skip:hover{color:var(--pop)}
+.replay{position:fixed;left:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:var(--pop);
+  border:2px solid var(--ink);border-radius:99px;padding:8px 15px;cursor:pointer;z-index:9}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms !important;transition-duration:1ms !important;
+    animation-delay:0ms !important;transition-delay:0ms !important;animation-iteration-count:1 !important}
+}
+.head{font-family:var(--f-disp);font-weight:900;letter-spacing:-.035em;line-height:1.02;
+  color:var(--paper);font-size:clamp(34px,8.4vw,92px);max-width:14ch}
+.head .fixed{opacity:0;transform:translateY(16px);
+  transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);display:block}
+.go .head .fixed{opacity:1;transform:none}
+/* the swapping word rides a mask, so each one is cut off cleanly rather than
+   crossfading into the next - a crossfade here reads as a glitch */
+.slot{display:block;position:relative;height:1.06em;overflow:hidden;color:var(--pop)}
+.slot span{position:absolute;inset:0;opacity:0;transform:translateY(96%);
+  transition:opacity .34s var(--ease-out),transform .46s var(--ease-out);white-space:nowrap}
+.slot span.on{opacity:1;transform:none}
+.slot span.out{opacity:0;transform:translateY(-96%)}
+.rule{margin-top:clamp(16px,2.4vw,26px);height:5px;width:0;background:var(--pop);border-radius:3px;
+  transition:width .8s var(--ease-out)}
+.done .rule{width:min(420px,72vw)}
+.sub{margin-top:14px;font-family:var(--f-mono);font-size:clamp(10px,1.4vw,13px);letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(242,241,234,.62);opacity:0;transition:opacity .5s var(--ease-out)}
+.done .sub{opacity:1}
+/* A phone on its side is 390px TALL, and 8.4vw of an 844px width is a 71px
+   headline - three lines of it do not fit in 390. Height is the constraint
+   here, never width, so the cap is on height and the measure widens to keep
+   the line count down. */
+@media(max-height:560px){
+  .head{font-size:clamp(22px,4.2vw,38px);max-width:22ch}
+  .rule{margin-top:10px;height:4px}
+  .sub{margin-top:9px}
+}
+</style></head>
+<body>
+<div class="intro" id="intro">
+  <span class="eyebrow">Volvo Ebal &middot; Automation &amp; AI systems</span>
+  <h1 class="head"><span class="fixed">I build the system that runs your</span>
+    <span class="slot">
+      <span>follow-up.</span><span>quoting.</span><span>reactivation.</span>
+      <span>onboarding.</span><span>whole back office.</span>
+    </span></h1>
+  <span class="rule"></span>
+  <span class="sub">GoHighLevel &middot; n8n &middot; Claude Code</span>
+  <button class="skip" type="button">Skip &rsaquo;</button>
+</div>
+<button class="replay" type="button" onclick="play()">Replay</button>
+<script>
+var intro=document.getElementById("intro"),timers=[],intervals=[],DONE=0;
+function q(s){return [].slice.call(intro.querySelectorAll(s));}
+function at(ms,fn){timers.push(setTimeout(fn,ms));}
+function clear(){timers.forEach(clearTimeout);intervals.forEach(clearInterval);timers=[];intervals=[];}
+function play(){
+  clear();
+  // rebuild from the pristine markup so a replay is identical to a first run
+  intro.innerHTML = START_HTML;
+  intro.className = "intro";
+  DONE = 0;
+  requestAnimationFrame(function(){ intro.classList.add("go"); run(); });
+  intro.querySelector(".skip").addEventListener("click", function(){ clear(); });
+}
+function run(){
+var words=q(".slot span"),HOLD=620,k=0;
+  at(520,function(){words[0].classList.add("on")});
+  for(var i=1;i<words.length;i++)(function(i){
+    at(520+i*HOLD,function(){
+      words[i-1].classList.remove("on");words[i-1].classList.add("out");
+      words[i].classList.add("on");});
+  })(i);
+  var settled=520+(words.length-1)*HOLD+400;
+  at(settled,function(){intro.classList.add("done")});
+  DONE=settled+1400;
+  // the preview loops, so the whole thing can be judged without reloading
+  at(DONE, function(){ play(); });
+}
+var START_HTML = intro.innerHTML;
+play();
+</script>
+</body></html>

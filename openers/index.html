@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Four openers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --field:#212A6B; --pop:#F5D547; --paper:#F2F1EA; --ink:#0B0E1C; --muted:#5C6070;
+  --f-disp:"Gabarito",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--field);font-family:var(--f-body);overflow:hidden}
+.intro{position:fixed;inset:0;display:grid;place-content:center;justify-items:start;
+  padding:clamp(16px,3vw,30px);background:var(--field)}
+.eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:20px}
+.go .eyebrow{opacity:.85;transform:none}
+.skip{position:fixed;right:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);background:none;
+  border:0;padding:9px 12px;cursor:pointer;opacity:0;transition:opacity .4s var(--ease-out) .8s,color .2s}
+.go .skip{opacity:1}
+.skip:hover{color:var(--pop)}
+.replay{position:fixed;left:16px;bottom:14px;font-family:var(--f-mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:var(--pop);
+  border:2px solid var(--ink);border-radius:99px;padding:8px 15px;cursor:pointer;z-index:9}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:1ms !important;transition-duration:1ms !important;
+    animation-delay:0ms !important;transition-delay:0ms !important;animation-iteration-count:1 !important}
+}
+body{overflow:auto;background:var(--paper);color:var(--ink)}
+.wrap{max-width:900px;margin:0 auto;padding:clamp(22px,5vw,58px) clamp(16px,4vw,28px)}
+h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;
+  font-size:clamp(28px,6vw,52px);margin:0 0 10px}
+.lede{font-family:var(--f-body);font-size:clamp(15px,2vw,18px);line-height:1.6;
+  color:var(--muted);margin:0 0 30px;max-width:62ch}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.pick{display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
+  background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:5px 5px 0 0 var(--ink);
+  padding:20px;transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out)}
+.pick:hover{transform:translateY(-4px);box-shadow:7px 9px 0 0 var(--ink)}
+.tag{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:3px 10px;align-self:flex-start}
+.pick h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;font-size:25px;margin:2px 0 0}
+.pick p{margin:0;font-size:15px;line-height:1.55;color:var(--muted)}
+.meta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-top:4px}
+.sec{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;
+  font-size:22px;margin:34px 0 14px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.sec span{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);font-weight:400}
+.note{margin-top:30px;font-size:14px;line-height:1.6;color:var(--muted);
+  border-left:3px solid var(--pop);padding-left:14px;max-width:62ch}
+</style></head>
+<body><div class="wrap">
+<h1>Four openers. Pick one.</h1>
+<p class="lede">Each is a different mechanic, not a restyle of the same idea. Every one is
+in your palette, fills the screen, works on a phone, is skippable by button, key or tap,
+and is never shown to anyone who has asked for reduced motion. Click to watch it full
+screen; each preview loops, and Replay is bottom left.</p>
+<h2 class="sec">Plain English <span>read-level grade 1 to 1.5</span></h2>
+<div class="grid">
+  <a class="pick" href="e1.html">
+    <span class="tag">Option E1</span>
+    <h2>Plain · Night</h2>
+    <p>Grade 1.0. Tells the story of one night: someone asks, nobody is there, they go elsewhere.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="e2.html">
+    <span class="tag">Option E2</span>
+    <h2>Plain · Chores</h2>
+    <p>Grade 1.0. Three small jobs nobody should be doing by hand. The least dramatic and the most familiar.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="e3.html">
+    <span class="tag">Option E3</span>
+    <h2>Plain · Sleep</h2>
+    <p>CHOSEN. Grade 1.5. The stamp answers the three lines back, which turns a list into an argument.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+</div>
+<h2 class="sec">The earlier wording <span>grade 2.4 to 3.5</span></h2>
+<div class="grid">
+  <a class="pick" href="d1.html">
+    <span class="tag">Option D1</span>
+    <h2>Stamp · Plain</h2>
+    <p>The three failures stated flatly, in the site's own words. The least styled and the easiest to believe.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="d2.html">
+    <span class="tag">Option D2</span>
+    <h2>Stamp · Clocked</h2>
+    <p>Numbers carry it. The gap between 9:02pm and 9:14am does the arguing, the way the ledger's timestamps do.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="d3.html">
+    <span class="tag">Option D3</span>
+    <h2>Stamp · Pointed</h2>
+    <p>Named as things a reader will recognise from their own week. Sharpest, and still blames nobody.</p>
+    <span class="meta">5.4s &middot; opens full screen</span>
+  </a>
+</div>
+<h2 class="sec">Other mechanics <span>not the stamp</span></h2>
+<div class="grid">
+  <a class="pick" href="a.html">
+    <span class="tag">Option A</span>
+    <h2>Ledger</h2>
+    <p>A log that writes itself while nobody is there. The timestamps moving from 9:02 to 9:04 are the argument.</p>
+    <span class="meta">4.5s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="b.html">
+    <span class="tag">Option B</span>
+    <h2>Headline</h2>
+    <p>One enormous sentence. Only the last word changes, and the list of what it changes to IS the service list.</p>
+    <span class="meta">4.2s &middot; opens full screen</span>
+  </a>
+  <a class="pick" href="c.html">
+    <span class="tag">Option C</span>
+    <h2>Terminal</h2>
+    <p>A session typing itself out. Already in his world: the site's questions room is an objection terminal.</p>
+    <span class="meta">5.0s &middot; opens full screen</span>
+  </a>
+</div>
+<p class="note">Option A is what is live right now, so it is the one to beat rather than the
+default. If none of them is right, the useful thing to tell me is which part is wrong: the
+mechanic, the words, or the pace.</p>
+</div></body></html>

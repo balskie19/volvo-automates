@@ -215,68 +215,93 @@
 #vo-site .ch:active{transform:translate3d(0,1px,0)}
 
 /* ── the opening sequence ─────────────────────────────────────────────────
-   Third cut. The first was an abstract dot and said nothing. The second said
-   the right thing in the WRONG LANGUAGE: nodes joined by wires with a packet
-   running along them is the reference's signature, and borrowing a mechanic is
-   borrowing an identity. It also left most of a 1440px screen empty, because a
-   row of 56px cards is a diagram, not a title sequence.
+   Fourth and chosen cut. The road here is worth a line, because each rejection
+   named a different mistake: an abstract falling dot said nothing; a node graph
+   said the right thing in the reference's own visual language, which is
+   borrowing an identity rather than a technique; a ledger said it in ours but
+   sized itself on width alone, so it floated in the middle of a tall screen.
 
-   So the diagram is gone and the mechanic is now a LOG THAT WRITES ITSELF.
-   That is what automation actually looks like from the outside: you were not
-   there, and the work had already happened. Each line stamps its own time, the
-   times move while nobody is awake, and the last line is the point.
+   This one states the problem three times and then answers it. The three cards
+   are a lead being lost, in order. The stamp is the reply. The closing line is
+   Volvo's own words.
 
-   The type does the work. Lines are set in the display face at up to 40px and
-   the closing statement at up to 58px, so the screen is filled by the words
-   rather than by a diagram floating in the middle of it.
+   Deliberately written for a reader in a hurry: Flesch-Kincaid grade 0.5. Most
+   of that came from deleting three words - inquiry, workflow, record - which
+   sound ordinary only to people who say them daily.
 
-   Still a state machine rather than a keyframe timeline - one BEAT constant
-   sets the pace, and any line can be retimed without touching the others. */
+   Sized on min(vw, vh), so it grows with whichever axis is actually scarce.
+   Sizing on width alone is why the previous one occupied 47% of a 1080px-tall
+   screen while passing every fit check that existed.
+
+   Still a state machine, still one BEAT, and the PAUSE before the stamp is
+   load bearing: without it the stamp is just the fourth item in a list.
+
+   EVERY SELECTOR HERE IS SCOPED UNDER .intro, and that is not tidiness. The
+   site already owns .card - twenty-four of them - so an unscoped .card rule in
+   this block collides with the page's own content cards. Whichever rule sits
+   later simply wins, and the loser is either this overlay or every card on the
+   site. Nothing would have errored. */
 #vo-site .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
-  justify-items:start;padding:24px;background:var(--field);
+  justify-items:start;padding:clamp(16px,3vw,30px);background:var(--field);
   transition:opacity .5s var(--ease-out),visibility .5s}
 #vo-site .intro.gone{opacity:0;visibility:hidden;pointer-events:none}
 #vo-site.seen-intro .intro{display:none}
 
-#vo-site .intro-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;
-  text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
-  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:22px}
+#vo-site .intro-eyebrow{font-family:var(--f-mono);font-size:clamp(10px,min(.85vw,1.4vh),14px);
+  letter-spacing:.22em;text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);
+  margin-bottom:clamp(16px,min(1.6vw,2.6vh),30px)}
 #vo-site .intro.go .intro-eyebrow{opacity:.85;transform:none}
 
-#vo-site .log{display:flex;flex-direction:column;gap:11px;width:min(760px,100%)}
+#vo-site .intro .deck{position:relative;width:min(1180px,90vw)}
+#vo-site .intro .card{display:flex;align-items:center;gap:clamp(12px,min(1.5vw,2.4vh),22px);
+  background:var(--paper);border:3px solid var(--ink);
+  border-radius:clamp(14px,min(1.3vw,2vh),22px);box-shadow:6px 6px 0 0 var(--ink);
+  padding:clamp(12px,min(1.9vw,3.2vh),34px) clamp(16px,min(2.3vw,3.8vh),38px);
+  font-family:var(--f-disp);font-weight:800;letter-spacing:-.025em;color:var(--ink);
+  font-size:clamp(17px,min(3.2vw,5.4vh),58px);line-height:1.12;
+  margin-bottom:clamp(10px,min(1.2vw,2vh),24px);opacity:0;
+  transition:opacity .46s var(--ease-out),transform .52s var(--ease-out)}
+#vo-site .intro .card:nth-child(1){transform:translateY(-26px) rotate(-1.5deg)}
+#vo-site .intro .card:nth-child(2){transform:translateY(-26px) rotate(.9deg)}
+#vo-site .intro .card:nth-child(3){transform:translateY(-26px) rotate(-.7deg)}
+#vo-site .intro .card.in{opacity:1}
+#vo-site .intro .card.in:nth-child(1){transform:rotate(-1.5deg)}
+#vo-site .intro .card.in:nth-child(2){transform:rotate(.9deg)}
+#vo-site .intro .card.in:nth-child(3){transform:rotate(-.7deg)}
+#vo-site .intro .card i{flex:none;width:clamp(10px,min(.9vw,1.5vh),16px);height:clamp(10px,min(.9vw,1.5vh),16px);
+  border-radius:50%;background:#C8452F;border:2px solid var(--ink);
+  transition:background-color .4s var(--ease-out) .12s}
+#vo-site .intro.done .card i{background:#2E9E5B}
 
-/* A line of the log. It writes itself in from the left, which is the direction
-   text arrives from - a line that fades in place reads as decoration, a line
-   that arrives reads as something that just happened. */
-#vo-site .ln{display:flex;align-items:center;gap:clamp(14px,2.2vw,22px);
-  background:var(--paper);border:3px solid var(--ink);border-radius:16px;
-  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(12px,1.6vw,17px) clamp(14px,2vw,22px);
-  opacity:0;transform:translateX(-26px);
-  transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),
-             background-color .32s var(--ease-out)}
-#vo-site .ln.in{opacity:1;transform:none}
+/* The stamp straddles the stack's BOTTOM EDGE, never the middle of it.
+   Centred, it landed squarely across the second sentence: a stamp may cover a
+   card, it may not cover the words it exists to answer.
 
-#vo-site .ln .ic{flex:none;width:clamp(52px,6.4vw,68px);height:clamp(52px,6.4vw,68px);
-  border-radius:14px;background:var(--field);border:3px solid var(--ink);
-  display:grid;place-items:center}
-#vo-site .ln .ic svg{width:clamp(26px,3.2vw,34px);height:clamp(26px,3.2vw,34px);
-  stroke:var(--pop);stroke-width:2.1;fill:none;stroke-linecap:round;stroke-linejoin:round}
-#vo-site .ln .txt{flex:1 1 auto;font-family:var(--f-disp);font-weight:800;letter-spacing:-.02em;
-  font-size:clamp(19px,3vw,32px);line-height:1.15;color:var(--ink)}
-#vo-site .ln .at{flex:none;font-family:var(--f-mono);font-size:clamp(11px,1.3vw,14px);
-  letter-spacing:.08em;color:var(--muted)}
+   It is anchored with top:100% and pulled back by a fixed margin, NOT with a
+   bottom offset. A bottom offset is a guess about how far the text reaches,
+   and the text length changes with the viewport - measured clean at 1600px
+   wide and 30% of the last line covered at 1440px, which is the sort of bug
+   that passes whichever width you happened to test. Anchored to the edge, only
+   a fixed 15px of the stamp ever overlaps the last card, and the card's own
+   bottom padding is wider than that at every size, so no glyph is ever touched.
 
-/* The last line is the outcome, so it is the only one that changes colour. */
-#vo-site .ln.win{background:var(--pop)}
-#vo-site .ln.win .ic{background:var(--ink)}
-#vo-site .ln.win .at{color:var(--ink);opacity:.62}
+   It arrives oversized and rotated and snaps down - a stamp that fades in is a
+   sticker, a stamp that lands has weight. */
+#vo-site .intro .stamp{position:absolute;right:-1%;top:100%;margin-top:-15px;
+  font-family:var(--f-mono);font-weight:700;
+  font-size:clamp(17px,min(3.4vw,5.6vh),56px);letter-spacing:.14em;
+  color:var(--pop);border:5px solid var(--pop);border-radius:12px;
+  padding:clamp(7px,min(.9vw,1.5vh),15px) clamp(14px,min(2vw,3.4vh),34px);
+  text-transform:uppercase;background:rgba(33,42,107,.9);
+  opacity:0;transform:rotate(-14deg) scale(2.5);
+  transition:opacity .18s linear,transform .42s cubic-bezier(.3,.9,.2,1)}
+#vo-site .intro.done .stamp{opacity:1;transform:rotate(-7deg) scale(1)}
 
-/* The closing statement is the largest thing on the screen, because it is the
-   whole pitch: the work happened and nobody was there. */
-#vo-site .intro-kicker{margin-top:clamp(18px,3vw,30px);font-family:var(--f-disp);font-weight:900;
-  letter-spacing:-.03em;font-size:clamp(26px,5.4vw,58px);line-height:1.05;color:var(--paper);
-  opacity:0;transform:translateY(14px);
-  transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+#vo-site .intro-kicker{margin-top:clamp(28px,min(4vw,6.6vh),72px);font-family:var(--f-disp);font-weight:900;
+  letter-spacing:-.035em;line-height:1.04;font-size:clamp(21px,min(5vw,8.4vh),88px);
+  color:var(--paper);opacity:0;transform:translateY(14px);
+  transition:opacity .55s var(--ease-out) .5s,transform .55s var(--ease-out) .5s}
 #vo-site .intro.done .intro-kicker{opacity:1;transform:none}
 #vo-site .intro-kicker b{color:var(--pop);font-weight:900}
 
@@ -288,31 +313,20 @@
 #vo-site .intro-skip:hover,
 #vo-site .intro-skip:focus-visible{color:var(--pop)}
 
-/* A phone turned sideways is 390px TALL, and place-content:center clips at
-   BOTH ends - measured -75 to 465 in a 390 viewport, which loses the first
-   line and the closing statement, the two that matter most. Height, not
-   width, is the constraint here, so the query is on height. Everything
-   shrinks together and the kicker drops to one line. */
-@media(max-height:560px){
-  #vo-site .intro{padding:14px}
-  #vo-site .intro-eyebrow{margin-bottom:10px;font-size:9px}
-  #vo-site .log{gap:7px;width:min(680px,100%)}
-  #vo-site .ln{padding:7px 12px;gap:12px;border-radius:12px;box-shadow:3px 3px 0 0 var(--ink)}
-  #vo-site .ln .ic{width:42px;height:42px;border-radius:10px}
-  #vo-site .ln .ic svg{width:22px;height:22px}
-  #vo-site .ln .txt{font-size:17px}
-  #vo-site .ln .at{font-size:10px}
-  #vo-site .intro-kicker{margin-top:12px;font-size:clamp(19px,3.4vw,30px)}
-  #vo-site .intro-kicker br{display:none}
-}
-
 @media(max-width:560px){
-  /* the timestamp is the first thing to go: the times are the point, but on a
-     narrow screen the sentence matters more than the column it sits in */
-  #vo-site .intro{justify-items:stretch;padding:18px}
-  #vo-site .ln{gap:13px;border-radius:14px;box-shadow:4px 4px 0 0 var(--ink)}
-  #vo-site .ln .at{display:none}
-  #vo-site .ln .txt{font-size:clamp(17px,4.6vw,22px)}
+  /* A narrow tall screen makes the WIDTH term bind, so min(vw,vh) held the type
+     at its floor and the whole thing occupied 31% of a phone - correct by the
+     rule and wrong on the screen. Here the type sizes against width alone and
+     is allowed to WRAP: two lines at 25px fill a tall screen far better than
+     one line at 17px, and wrapping costs nothing.
+     The stamp also drops lower here. A short third line leaves the right half
+     of the card empty, so a wide stamp word lands on the sentence instead of
+     past it - measured at 18% of the glyphs before this. */
+  #vo-site .intro .card{font-size:clamp(22px,6.4vw,34px);line-height:1.2;
+    padding:16px 18px;margin-bottom:14px;gap:14px;border-radius:15px}
+  #vo-site .intro .card i{width:11px;height:11px}
+  #vo-site .intro-kicker{font-size:clamp(27px,8.6vw,44px);margin-top:34px}
+  #vo-site .intro .stamp{right:-2%;top:100%;margin-top:-11px;font-size:clamp(15px,4.8vw,22px);padding:7px 13px}
 }
 #vo-site .room > header{margin-bottom:18px}
 #vo-site .room > header h2{font-size:clamp(24px,3.2vw,38px)}

@@ -130,10 +130,16 @@ let markup = bodyM[1]
    page. Inside someone's funnel it is a guest, and a fixed full-viewport
    overlay would black out the host's header and anything above the embed for
    a second and a half. An embed must never take the whole screen. */
-const introBefore = /<div class="intro"[\s\S]*?<\/div>\s*/;
+/* Cut on the SENTINEL, never on the first closing tag. The old pattern ran
+   from <div class="intro"> to the first </div>, which only worked while the
+   block happened to contain no nested div - a property of the markup that
+   nothing enforced and the next rewrite would quietly break, silently
+   shipping half an overlay into someone funnel page. */
+const introBefore = /<!--\s*The opening sequence[\s\S]*?<!--\s*\/intro\s*-->\s*/;
 const hadIntro = introBefore.test(markup);
 markup = markup.replace(introBefore, "");
-if (hadIntro && introBefore.test(markup)) throw new Error("intro markup not fully removed");
+if (!hadIntro) throw new Error("intro block not found - has the sentinel comment been removed?");
+if (/class="intro/.test(markup)) throw new Error("intro markup survived the strip");
 
 /* ── 1 · assets ───────────────────────────────────────────────────────────
    Two builds, because the right answer depends on a thing I cannot see: how

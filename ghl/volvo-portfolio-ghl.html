@@ -214,91 +214,70 @@
 #vo-site .ch:active{transform:translate3d(0,1px,0)}
 
 /* ── the opening sequence ─────────────────────────────────────────────────
-   The first version was a dot falling into a socket: 1.6s of decoration that
-   said nothing. This one does the job an opener should do, which is to tell a
-   visitor what the work IS before they have read a word - a lead arrives at
-   nine at night, gets routed, gets answered, and turns into a booked call,
-   with nobody awake. That is the whole practice in one sentence, animated.
+   Third cut. The first was an abstract dot and said nothing. The second said
+   the right thing in the WRONG LANGUAGE: nodes joined by wires with a packet
+   running along them is the reference's signature, and borrowing a mechanic is
+   borrowing an identity. It also left most of a 1440px screen empty, because a
+   row of 56px cards is a diagram, not a title sequence.
 
-   Built as a STATE MACHINE, not a keyframe timeline: a class lands on each
-   step and CSS transitions carry the change. A timeline forces every property
-   onto one clock and has to be re-tuned end to end whenever a beat moves; a
-   state machine lets each beat own its timing, which is what makes a sequence
-   this long stay adjustable. Timings all derive from --beat, so the whole
-   thing is retimed by changing one number.
+   So the diagram is gone and the mechanic is now a LOG THAT WRITES ITSELF.
+   That is what automation actually looks like from the outside: you were not
+   there, and the work had already happened. Each line stamps its own time, the
+   times move while nobody is awake, and the last line is the point.
 
-   It is also SKIPPABLE and it only plays once a session. A four second opener
-   that a visitor cannot dismiss is an obstacle, however good it looks. */
+   The type does the work. Lines are set in the display face at up to 40px and
+   the closing statement at up to 58px, so the screen is filled by the words
+   rather than by a diagram floating in the middle of it.
+
+   Still a state machine rather than a keyframe timeline - one BEAT constant
+   sets the pace, and any line can be retimed without touching the others. */
 #vo-site .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
-  justify-items:center;background:var(--field);--beat:.72s;
+  justify-items:start;padding:24px;background:var(--field);
   transition:opacity .5s var(--ease-out),visibility .5s}
 #vo-site .intro.gone{opacity:0;visibility:hidden;pointer-events:none}
 #vo-site.seen-intro .intro{display:none}
 
 #vo-site .intro-eyebrow{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;
   text-transform:uppercase;color:var(--pop);opacity:0;transform:translateY(6px);
-  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+  transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);margin-bottom:22px}
 #vo-site .intro.go .intro-eyebrow{opacity:.85;transform:none}
 
-/* the pipeline. A row on a desktop, a column on a phone, because four cards
-   across a 390px screen is a diagram nobody can read. The wire rotates with
-   it, so one set of rules serves both. */
-#vo-site .pipe{display:flex;align-items:flex-start;justify-content:center;
-  margin:26px 0 22px;padding:0 18px;max-width:100%}
-#vo-site .step{display:flex;flex-direction:column;align-items:center;gap:9px;width:84px;flex:none}
-#vo-site .step .card{position:relative;width:56px;height:56px;border-radius:15px;
-  background:var(--paper);border:3px solid var(--ink);box-shadow:4px 4px 0 0 var(--ink);
-  display:grid;place-items:center;
-  opacity:0;transform:translateY(10px) scale(.92);
+#vo-site .log{display:flex;flex-direction:column;gap:11px;width:min(760px,100%)}
+
+/* A line of the log. It writes itself in from the left, which is the direction
+   text arrives from - a line that fades in place reads as decoration, a line
+   that arrives reads as something that just happened. */
+#vo-site .ln{display:flex;align-items:center;gap:clamp(14px,2.2vw,22px);
+  background:var(--paper);border:3px solid var(--ink);border-radius:16px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(12px,1.6vw,17px) clamp(14px,2vw,22px);
+  opacity:0;transform:translateX(-26px);
   transition:opacity .42s var(--ease-out),transform .42s var(--ease-out),
-             background-color .3s var(--ease-out)}
-#vo-site .intro.go .step .card{opacity:1;transform:none}
-#vo-site .step svg{width:26px;height:26px;stroke:var(--ink);stroke-width:2.1;fill:none;
-  stroke-linecap:round;stroke-linejoin:round}
-#vo-site .step .lbl{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;
-  text-transform:uppercase;color:rgba(242,241,234,.62);text-align:center;line-height:1.45;
-  opacity:0;transition:opacity .42s var(--ease-out),color .3s var(--ease-out)}
-#vo-site .intro.go .step .lbl{opacity:1}
+             background-color .32s var(--ease-out)}
+#vo-site .ln.in{opacity:1;transform:none}
 
-/* The tick wants to LAND rather than merely switch on, and the first cut
-   bought that with an overshoot curve - which is a bounce, and a bounce reads
-   as dated however small it is. The same authority comes from the decelerating
-   --ease-out that every other transition on this site already uses: fast off
-   the mark, settling hard. One curve for the whole page, one less magic
-   number, and nothing about the beat changes. */
-#vo-site .step .tick{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;
-  background:var(--pop);border:3px solid var(--ink);display:grid;place-items:center;
-  transform:scale(0);transition:transform .3s var(--ease-out)}
-#vo-site .step .tick svg{width:11px;height:11px;stroke:var(--ink);stroke-width:3.4}
-#vo-site .step.done .tick{transform:scale(1)}
-#vo-site .step.done .card{background:var(--pop)}
-#vo-site .step.done .lbl{color:var(--paper)}
+#vo-site .ln .ic{flex:none;width:clamp(52px,6.4vw,68px);height:clamp(52px,6.4vw,68px);
+  border-radius:14px;background:var(--field);border:3px solid var(--ink);
+  display:grid;place-items:center}
+#vo-site .ln .ic svg{width:clamp(26px,3.2vw,34px);height:clamp(26px,3.2vw,34px);
+  stroke:var(--pop);stroke-width:2.1;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#vo-site .ln .txt{flex:1 1 auto;font-family:var(--f-disp);font-weight:800;letter-spacing:-.02em;
+  font-size:clamp(19px,3vw,32px);line-height:1.15;color:var(--ink)}
+#vo-site .ln .at{flex:none;font-family:var(--f-mono);font-size:clamp(11px,1.3vw,14px);
+  letter-spacing:.08em;color:var(--muted)}
 
-/* the wire, and the packet that runs along it */
-#vo-site .wire{position:relative;flex:1 1 auto;min-width:26px;max-width:92px;height:3px;
-  background:rgba(242,241,234,.22);border-radius:2px;margin-top:29px}
-#vo-site .wire .fill{position:absolute;inset:0;background:var(--pop);border-radius:2px;
-  transform:scaleX(0);transform-origin:left center;
-  transition:transform calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1)}
-#vo-site .wire.run .fill{transform:scaleX(1)}
-#vo-site .wire .pk{position:absolute;top:50%;left:0;width:13px;height:13px;margin:-6.5px 0 0 -6.5px;
-  border-radius:50%;background:var(--pop);border:2.5px solid var(--ink);opacity:0;
-  transition:left calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
-#vo-site .wire.run .pk{left:100%;opacity:1}
-#vo-site .wire.spent .pk{opacity:0;transition:opacity .2s linear}
+/* The last line is the outcome, so it is the only one that changes colour. */
+#vo-site .ln.win{background:var(--pop)}
+#vo-site .ln.win .ic{background:var(--ink)}
+#vo-site .ln.win .at{color:var(--ink);opacity:.62}
 
-/* the status line is the narration, and it must CHANGE - a label that reads
-   the same at the start and the end has not told anyone anything */
-#vo-site .intro-status{display:flex;align-items:center;gap:9px;font-family:var(--f-mono);
-  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(242,241,234,.6);min-height:16px}
-#vo-site .intro-status i{width:7px;height:7px;border-radius:50%;background:var(--pop);
-  animation:ping 1.5s var(--ease-out) infinite}
-#vo-site .intro-status .s2{display:none}
-#vo-site .intro.done .intro-status .s1{display:none}
-#vo-site .intro.done .intro-status .s2{display:inline}
-#vo-site .intro.done .intro-status{color:var(--pop)}
-#vo-site .intro.done .intro-status i{animation:none}
+/* The closing statement is the largest thing on the screen, because it is the
+   whole pitch: the work happened and nobody was there. */
+#vo-site .intro-kicker{margin-top:clamp(18px,3vw,30px);font-family:var(--f-disp);font-weight:900;
+  letter-spacing:-.03em;font-size:clamp(26px,5.4vw,58px);line-height:1.05;color:var(--paper);
+  opacity:0;transform:translateY(14px);
+  transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+#vo-site .intro.done .intro-kicker{opacity:1;transform:none}
+#vo-site .intro-kicker b{color:var(--pop);font-weight:900}
 
 #vo-site .intro-skip{position:fixed;right:18px;bottom:16px;font-family:var(--f-mono);font-size:10px;
   letter-spacing:.16em;text-transform:uppercase;color:rgba(242,241,234,.5);
@@ -308,18 +287,31 @@
 #vo-site .intro-skip:hover,
 #vo-site .intro-skip:focus-visible{color:var(--pop)}
 
-@media(max-width:620px){
-  /* stacked, so four labelled steps still read on a phone */
-  #vo-site .pipe{flex-direction:column;align-items:center;margin:20px 0 18px}
-  #vo-site .step{flex-direction:row;width:auto;min-width:210px;gap:13px;justify-content:flex-start}
-  #vo-site .step .lbl{text-align:left;font-size:10px}
-  #vo-site .wire{width:3px;height:26px;min-width:0;max-width:none;flex:none;
-    margin:0 0 0 -112px;align-self:center}
-  #vo-site .wire .fill{transform-origin:top center;transform:scaleY(0)}
-  #vo-site .wire.run .fill{transform:scaleY(1)}
-  #vo-site .wire .pk{top:0;left:50%;margin:-6.5px 0 0 -6.5px;
-    transition:top calc(var(--beat) * 1.05) cubic-bezier(.45,.05,.25,1),opacity .18s linear}
-  #vo-site .wire.run .pk{top:100%;left:50%}
+/* A phone turned sideways is 390px TALL, and place-content:center clips at
+   BOTH ends - measured -75 to 465 in a 390 viewport, which loses the first
+   line and the closing statement, the two that matter most. Height, not
+   width, is the constraint here, so the query is on height. Everything
+   shrinks together and the kicker drops to one line. */
+@media(max-height:560px){
+  #vo-site .intro{padding:14px}
+  #vo-site .intro-eyebrow{margin-bottom:10px;font-size:9px}
+  #vo-site .log{gap:7px;width:min(680px,100%)}
+  #vo-site .ln{padding:7px 12px;gap:12px;border-radius:12px;box-shadow:3px 3px 0 0 var(--ink)}
+  #vo-site .ln .ic{width:42px;height:42px;border-radius:10px}
+  #vo-site .ln .ic svg{width:22px;height:22px}
+  #vo-site .ln .txt{font-size:17px}
+  #vo-site .ln .at{font-size:10px}
+  #vo-site .intro-kicker{margin-top:12px;font-size:clamp(19px,3.4vw,30px)}
+  #vo-site .intro-kicker br{display:none}
+}
+
+@media(max-width:560px){
+  /* the timestamp is the first thing to go: the times are the point, but on a
+     narrow screen the sentence matters more than the column it sits in */
+  #vo-site .intro{justify-items:stretch;padding:18px}
+  #vo-site .ln{gap:13px;border-radius:14px;box-shadow:4px 4px 0 0 var(--ink)}
+  #vo-site .ln .at{display:none}
+  #vo-site .ln .txt{font-size:clamp(17px,4.6vw,22px)}
 }
 #vo-site .room > header{margin-bottom:18px}
 #vo-site .room > header h2{font-size:clamp(24px,3.2vw,38px)}
@@ -494,10 +486,6 @@
 
 </style>
 
-<!-- The opening sequence. It states the practice before a word is read:
-     a lead lands at 9pm and leaves as a booked call with nobody awake.
-     aria-hidden, because a screen reader should be handed the page, not a
-     title card - and every word here is said again inside the site. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
   <symbol id="i-node" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.6"/><circle cx="5" cy="18" r="2.6"/><circle cx="19" cy="12" r="2.6"/><path d="M7.5 7.2 16.6 11M7.5 16.8 16.6 13"/></symbol>

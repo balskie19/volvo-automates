@@ -35,9 +35,13 @@ const collect = (rootSel, props) => {
   // <style> and <script> render nothing and sit in different places in the two
   // builds, so counting them would fail the comparison for no visual reason.
   const SKIP = { STYLE: 1, SCRIPT: 1, LINK: 1, META: 1, TITLE: 1 };
+  // The opening sequence is deliberately absent from the embed (an embed must
+  // not take the whole viewport), so it is excluded from BOTH sides rather
+  // than counted as a difference.
   const out = [];
   const walk = el => {
     if (SKIP[el.tagName]) return;
+    if (el.classList && el.classList.contains("intro")) return;
     const c = getComputedStyle(el);
     const rec = { tag: el.tagName.toLowerCase(), cls: (el.className || "").toString().slice(0, 40) };
     for (const p of props) rec[p] = c[p];

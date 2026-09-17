@@ -104,8 +104,18 @@ function scopeCss(css) {
 const styleM = /<style>([\s\S]*?)<\/style>/.exec(src);
 if (!styleM) throw new Error("no <style> block found");
 const ldM = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(src);
-const scriptM = /<script>([\s\S]*?)<\/script>\s*<\/body>/.exec(src) || /<script>([\s\S]*?)<\/script>/g && [...src.matchAll(/<script>([\s\S]*?)<\/script>/g)].pop();
+/* Take the LAST plain <script>, which is the router.
+   This used to be `/<script>([\s\S]*?)<\/script>\s*<\/body>/`, and the day a
+   second script was added at the top of the body that pattern began matching
+   from the FIRST script all the way to the last one - swallowing the entire
+   page markup into `js`. The emitted <script> then ended early at the first
+   inner </script> and the browser rendered the remainder as a SECOND copy of
+   the site. Nothing threw; the file was simply twice the size. */
+const allScripts = [...src.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+const scriptM = allScripts[allScripts.length - 1];
 if (!scriptM) throw new Error("no router <script> found");
+if (/<div|<section|id="room-/.test(scriptM[1]))
+  throw new Error("the router extract contains markup, so the script boundaries are wrong");
 const fontM = /<link rel="stylesheet" href="(https:\/\/fonts\.googleapis\.com[^"]+)">/.exec(src);
 const bodyM = /<body[^>]*>([\s\S]*)<\/body>/.exec(src);
 if (!bodyM) throw new Error("no <body> found");
@@ -114,6 +124,16 @@ let markup = bodyM[1]
   .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, "")
   .replace(/<script>[\s\S]*?<\/script>/g, "")
   .trim();
+
+/* ── 0 · the opening sequence does not travel ─────────────────────────────
+   On his own site the intro owns the viewport, which is correct: it IS the
+   page. Inside someone's funnel it is a guest, and a fixed full-viewport
+   overlay would black out the host's header and anything above the embed for
+   a second and a half. An embed must never take the whole screen. */
+const introBefore = /<div class="intro"[\s\S]*?<\/div>\s*/;
+const hadIntro = introBefore.test(markup);
+markup = markup.replace(introBefore, "");
+if (hadIntro && introBefore.test(markup)) throw new Error("intro markup not fully removed");
 
 /* ── 1 · assets ───────────────────────────────────────────────────────────
    Two builds, because the right answer depends on a thing I cannot see: how
@@ -228,6 +248,17 @@ const out = assemble(markupFull,
   "Self-contained. No external file, no relative path, nothing to upload.\n     Every image is embedded. The only network call is the Google Fonts import.");
 const outLight = assemble(markupLight,
   "The four site screenshots load from " + LIVE + ".\n     The portrait is embedded. Use this one if the editor struggles with the\n     self-contained version; use the other if you ever retire that domain.");
+
+/* One copy of the site, not two. A duplicated build still renders, still
+   passes a glance, and is simply twice the weight - so it is asserted. */
+for (const [name, html] of [["full", out], ["light", outLight]]) {
+  const homes = (html.match(/id="room-home"/g) || []).length;
+  const wraps = (html.match(/id="vo-site"/g) || []).length;
+  if (homes !== 1 || wraps !== 1)
+    throw new Error(name + " build holds " + homes + " copies of the page and " + wraps + " wrappers; expected 1 and 1");
+  if (html.includes("class=\"intro\""))
+    throw new Error(name + " build still carries the full-viewport intro");
+}
 
 mkdirSync(join(ROOT, "ghl"), { recursive: true });
 const dest = join(ROOT, "ghl", "volvo-portfolio-ghl.html");

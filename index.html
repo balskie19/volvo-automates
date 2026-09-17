@@ -50,6 +50,12 @@
   --shadow:4px 4px 0 0 var(--ink);
   --shadow-lift:7px 9px 0 0 var(--ink);
   --ease:cubic-bezier(.2,.8,.3,1);
+  /* one motion scale, so nothing is timed by guess. --ease-out is the
+     decelerating curve everything enters on; --ease-drop accelerates, which
+     is the only place gravity should be implied. */
+  --dur-1:.14s; --dur-2:.24s; --dur-3:.4s;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-drop:cubic-bezier(.55,0,1,.45);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -147,8 +153,103 @@ a{color:inherit}
 /* ── the rooms ──────────────────────────────────────────────────────────── */
 .room{display:none;margin-top:18px}
 .room:focus{outline:none}
-.room.on{display:block;animation:in .34s var(--ease) both}
-@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.room.on{display:block}
+
+/* ── motion ───────────────────────────────────────────────────────────────
+   Mobile first, and deliberately CSS only. Everything here animates transform
+   and opacity and nothing else, so the compositor runs it on the GPU and no
+   frame ever touches layout - which is what keeps it honest on a mid-range
+   phone. translate3d puts each item on its own layer.
+
+   There is NO IntersectionObserver and no scroll listener. Rooms are shown and
+   hidden, so a room opening IS the trigger; an observer watching elements that
+   are display:none never fires, and that is precisely how a page ends up blank
+   while every asset returns 200.
+
+   The room used to arrive as one slab. Now the heading leads and the grid items
+   follow in sequence, which tells the eye where to start. Delays are capped at
+   six steps and shortened again on small screens: past that a stagger stops
+   reading as choreography and starts reading as lag. */
+@keyframes rise{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+
+.room.on > header{animation:rise var(--dur-3) var(--ease-out) both}
+.room.on > *:not(header):not(.bento):not(.cards):not(.bays):not(.reach):not(.split){
+  animation:rise var(--dur-3) var(--ease-out) both;animation-delay:.05s}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > *{
+  animation:rise var(--dur-3) var(--ease-out) both}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(2){animation-delay:.06s}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(3){animation-delay:.11s}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(4){animation-delay:.15s}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(5){animation-delay:.19s}
+.room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+6){animation-delay:.22s}
+@media(max-width:720px){
+  /* one column means the stagger is read as a queue, so it has to be quicker */
+  .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+3){animation-delay:.1s}
+  .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+5){animation-delay:.13s}
+}
+
+/* the status light. It says "available", so it should look live rather than
+   printed - one slow ping, well under the threshold where it nags. */
+.me .open i{position:relative}
+.me .open i::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:var(--pop);animation:ping 2.6s var(--ease-out) infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.5}70%,100%{transform:scale(2.9);opacity:0}}
+
+/* a press should register on a touch screen, where there is no hover to give
+   the feedback a mouse gets for free */
+.tile:active,.card:active,.btn:active,.ch:active{transform:translate3d(0,1px,0)}
+
+/* ── the opening sequence ─────────────────────────────────────────────────
+   Their opener is a coffee drop, because their brand is coffee. Copying the
+   drop would be borrowing someone else's meaning, so this one is the site's
+   own thesis: the lemon dot falls, and snaps into the socket that was waiting
+   for it. That is the whole pitch - the piece between the tools that nobody
+   owns - said in one and a third seconds.
+
+   It is PURE CSS and self-removing, so a visitor with JavaScript off sees it
+   play and clear rather than being left under a permanent indigo sheet.
+   JavaScript's only job is to skip it on later navigations in the same session.
+   Nobody should watch an intro twice. */
+.intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
+  justify-items:center;gap:0;background:var(--field);
+  animation:intro-out .42s var(--ease-out) 1.16s both}
+html.seen-intro .intro{display:none}
+.intro-stage{position:relative;width:132px;height:132px;display:grid;place-items:center}
+.intro-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.intro-ring circle{fill:none;stroke:var(--pop);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:214;stroke-dashoffset:214;opacity:.85;
+  animation:intro-draw .62s var(--ease-out) .34s both}
+.intro-socket{position:absolute;width:30px;height:30px;border-radius:50%;
+  border:3px solid rgba(242,241,234,.34);opacity:0;
+  animation:intro-socket .3s var(--ease-out) .1s both}
+.intro-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--pop);
+  animation:intro-drop .62s both}
+.intro-flash{position:absolute;width:30px;height:30px;border-radius:50%;
+  border:2px solid var(--pop);opacity:0;
+  animation:intro-flash .46s var(--ease-out) .52s both}
+.intro-word{margin-top:22px;font-family:var(--f-disp);font-weight:900;color:var(--paper);
+  font-size:clamp(21px,5vw,28px);animation:intro-word .5s var(--ease-out) .58s both}
+.intro-tag{margin-top:7px;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;
+  color:var(--pop);animation:intro-tag .44s var(--ease-out) .76s both}
+
+/* falls from above the fold, accelerating, then squashes on contact - the
+   squash is what sells the impact, and it is two keyframes */
+@keyframes intro-drop{
+  0%{opacity:0;transform:translate3d(0,-62vh,0) scale(1)}
+  18%{opacity:1}
+  72%{transform:translate3d(0,0,0) scale(1);animation-timing-function:var(--ease-out)}
+  82%{transform:translate3d(0,2px,0) scale(1.42,.62)}
+  100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes intro-flash{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.5)}}
+@keyframes intro-draw{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
+@keyframes intro-socket{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+/* the letter-spacing settling as it rises is the detail that makes a wordmark
+   feel placed rather than faded in */
+@keyframes intro-word{from{opacity:0;transform:translate3d(0,12px,0);letter-spacing:.18em}
+  to{opacity:1;transform:none;letter-spacing:-.02em}}
+@keyframes intro-tag{from{opacity:0;transform:translate3d(0,6px,0);letter-spacing:.22em}
+  to{opacity:.75;transform:none;letter-spacing:.16em}}
+@keyframes intro-out{to{opacity:0;visibility:hidden;pointer-events:none}}
 .room > header{margin-bottom:18px}
 .room > header h2{font-size:clamp(24px,3.2vw,38px)}
 .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
@@ -286,7 +387,15 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:1ms !important;transition-duration:1ms !important}
+  /* Durations alone are not enough. An element animating with `both` sits at
+     its 0% frame - opacity 0 - for the whole DELAY, so cutting duration to 1ms
+     and leaving a 220ms delay still hides content from the person who asked
+     not to be moved. Iteration count matters for the same reason: the status
+     ping would otherwise keep firing forever, 1ms at a time. */
+  *,*::before,*::after{animation-duration:1ms !important;transition-duration:1ms !important;
+    animation-delay:0ms !important;transition-delay:0ms !important;
+    animation-iteration-count:1 !important}
+  .intro{display:none}
 }
 
 /* the plug pointer, kept from the deck. One pointer for the whole site:
@@ -299,6 +408,25 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://volvo-automates.pages.dev/#volvo","name":"Volvo Ebal","jobTitle":"AI systems and automation specialist","email":"mailto:volvo.ebal8@gmail.com","url":"https://volvo-automates.pages.dev","sameAs":["https://www.linkedin.com/in/volvo-ebal/","https://github.com/balskie19"],"address":{"@type":"PostalAddress","addressCountry":"PH"},"knowsAbout":["GoHighLevel","n8n","Claude Code","Marketing automation","CRM automation","Workflow automation","AI voice agents","Make.com","Zapier","HubSpot","Lead reactivation"],"worksFor":{"@id":"https://volvo-automates.pages.dev/#practice"}},{"@type":"ProfessionalService","@id":"https://volvo-automates.pages.dev/#practice","name":"Volvo Automates","description":"Automation for agencies and service businesses: GoHighLevel CRM builds, n8n workflow automation, and custom applications built with Claude Code.","url":"https://volvo-automates.pages.dev","founder":{"@id":"https://volvo-automates.pages.dev/#volvo"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Philippines"}],"availableLanguage":"en","serviceType":["CRM automation","Workflow automation","AI voice and chat agents","Custom application development"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"What I am hired for","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"GoHighLevel CRM builds and repairs"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"n8n workflow automation and integration"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Custom applications built with Claude Code"}}]}},{"@type":"WebSite","@id":"https://volvo-automates.pages.dev/#site","url":"https://volvo-automates.pages.dev","name":"Volvo Automates","publisher":{"@id":"https://volvo-automates.pages.dev/#volvo"},"inLanguage":"en"},{"@type":"FAQPage","@id":"https://volvo-automates.pages.dev/#faq","mainEntity":[{"@type":"Question","name":"We tried automation before and it broke.","acceptedAnswer":{"@type":"Answer","text":"Usually it did not break, it stopped being watched. Anything I build reports to a channel you already read, and says so when it fails. A silent automation is worse than none, which is why failure is a feature I build on purpose."}},{"@type":"Question","name":"Our setup is complicated.","acceptedAnswer":{"@type":"Answer","text":"Good. Simple setups rarely need me. I start by wiring ONE process end to end rather than mapping everything, so you see it working in week one instead of reading a discovery document in month three."}},{"@type":"Question","name":"We already know the problem, we need someone to fix it.","acceptedAnswer":{"@type":"Answer","text":"Then we skip the audit. Send me the process, I will tell you on the call whether it is worth automating, and I will tell you when it is not."}},{"@type":"Question","name":"Why you and not an agency?","acceptedAnswer":{"@type":"Answer","text":"An agency sells you a retainer and a project manager. You get the person who builds it. And every build I have shipped is on this site with the part that went wrong, which is not a thing a brochure can fake."}},{"@type":"Question","name":"We do not have budget for this.","acceptedAnswer":{"@type":"Answer","text":"Then the honest answer may be no. If the process does not cost you real hours or real leads, automating it is a hobby. Bring the one that hurts and we will size it in twenty minutes."}},{"@type":"Question","name":"Can you work with the tools we already have?","acceptedAnswer":{"@type":"Answer","text":"That is the whole job. GoHighLevel, HubSpot, n8n, Make, Zapier, Apify, Slack, OpenPhone, Intercom, Monday. If it has an API or a webhook, it can be wired in. If it does not, I build the missing piece."}}]}]}</script>
 </head>
 <body>
+<!-- The opening sequence. aria-hidden because it repeats the sidebar's own
+     words, and a screen reader should be given the page, not a title card. -->
+<div class="intro" aria-hidden="true">
+  <span class="intro-stage">
+    <svg class="intro-ring" viewBox="0 0 76 76"><circle cx="38" cy="38" r="34"/></svg>
+    <span class="intro-socket"></span>
+    <span class="intro-flash"></span>
+    <span class="intro-dot"></span>
+  </span>
+  <span class="intro-word">Volvo Ebal</span>
+  <span class="intro-tag">Automation &amp; AI systems</span>
+</div>
+<script>
+/* Runs before the stylesheet paints the overlay, so a second visit in the same
+   session never flashes it. sessionStorage, not localStorage: it should return
+   for a genuinely new visit, just not on every click within one. */
+try{ if(sessionStorage.getItem("vo-intro")) document.documentElement.className += " seen-intro";
+     else sessionStorage.setItem("vo-intro","1"); }catch(e){}
+</script>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
   <symbol id="i-node" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.6"/><circle cx="5" cy="18" r="2.6"/><circle cx="19" cy="12" r="2.6"/><path d="M7.5 7.2 16.6 11M7.5 16.8 16.6 13"/></symbol>

@@ -54,6 +54,12 @@
   --shadow:4px 4px 0 0 var(--ink);
   --shadow-lift:7px 9px 0 0 var(--ink);
   --ease:cubic-bezier(.2,.8,.3,1);
+  /* one motion scale, so nothing is timed by guess. --ease-out is the
+     decelerating curve everything enters on; --ease-drop accelerates, which
+     is the only place gravity should be implied. */
+  --dur-1:.14s; --dur-2:.24s; --dur-3:.4s;
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-drop:cubic-bezier(.55,0,1,.45);
 }
 #vo-site,
 #vo-site *,
@@ -159,8 +165,106 @@
 /* ── the rooms ──────────────────────────────────────────────────────────── */
 #vo-site .room{display:none;margin-top:18px}
 #vo-site .room:focus{outline:none}
-#vo-site .room.on{display:block;animation:in .34s var(--ease) both}
-@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#vo-site .room.on{display:block}
+
+/* ── motion ───────────────────────────────────────────────────────────────
+   Mobile first, and deliberately CSS only. Everything here animates transform
+   and opacity and nothing else, so the compositor runs it on the GPU and no
+   frame ever touches layout - which is what keeps it honest on a mid-range
+   phone. translate3d puts each item on its own layer.
+
+   There is NO IntersectionObserver and no scroll listener. Rooms are shown and
+   hidden, so a room opening IS the trigger; an observer watching elements that
+   are display:none never fires, and that is precisely how a page ends up blank
+   while every asset returns 200.
+
+   The room used to arrive as one slab. Now the heading leads and the grid items
+   follow in sequence, which tells the eye where to start. Delays are capped at
+   six steps and shortened again on small screens: past that a stagger stops
+   reading as choreography and starts reading as lag. */
+@keyframes rise{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+
+#vo-site .room.on > header{animation:rise var(--dur-3) var(--ease-out) both}
+#vo-site .room.on > *:not(header):not(.bento):not(.cards):not(.bays):not(.reach):not(.split){
+  animation:rise var(--dur-3) var(--ease-out) both;animation-delay:.05s}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > *{
+  animation:rise var(--dur-3) var(--ease-out) both}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(2){animation-delay:.06s}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(3){animation-delay:.11s}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(4){animation-delay:.15s}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(5){animation-delay:.19s}
+#vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+6){animation-delay:.22s}
+@media(max-width:720px){
+  /* one column means the stagger is read as a queue, so it has to be quicker */
+  #vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+3){animation-delay:.1s}
+  #vo-site .room.on :is(.bento,.cards,.bays,.reach,.split) > :nth-child(n+5){animation-delay:.13s}
+}
+
+/* the status light. It says "available", so it should look live rather than
+   printed - one slow ping, well under the threshold where it nags. */
+#vo-site .me .open i{position:relative}
+#vo-site .me .open i::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:var(--pop);animation:ping 2.6s var(--ease-out) infinite}
+@keyframes ping{0%{transform:scale(1);opacity:.5}70%,100%{transform:scale(2.9);opacity:0}}
+
+/* a press should register on a touch screen, where there is no hover to give
+   the feedback a mouse gets for free */
+#vo-site .tile:active,
+#vo-site .card:active,
+#vo-site .btn:active,
+#vo-site .ch:active{transform:translate3d(0,1px,0)}
+
+/* ── the opening sequence ─────────────────────────────────────────────────
+   Their opener is a coffee drop, because their brand is coffee. Copying the
+   drop would be borrowing someone else's meaning, so this one is the site's
+   own thesis: the lemon dot falls, and snaps into the socket that was waiting
+   for it. That is the whole pitch - the piece between the tools that nobody
+   owns - said in one and a third seconds.
+
+   It is PURE CSS and self-removing, so a visitor with JavaScript off sees it
+   play and clear rather than being left under a permanent indigo sheet.
+   JavaScript's only job is to skip it on later navigations in the same session.
+   Nobody should watch an intro twice. */
+#vo-site .intro{position:fixed;inset:0;z-index:200;display:grid;place-content:center;
+  justify-items:center;gap:0;background:var(--field);
+  animation:intro-out .42s var(--ease-out) 1.16s both}
+#vo-site.seen-intro .intro{display:none}
+#vo-site .intro-stage{position:relative;width:132px;height:132px;display:grid;place-items:center}
+#vo-site .intro-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+#vo-site .intro-ring circle{fill:none;stroke:var(--pop);stroke-width:3;stroke-linecap:round;
+  stroke-dasharray:214;stroke-dashoffset:214;opacity:.85;
+  animation:intro-draw .62s var(--ease-out) .34s both}
+#vo-site .intro-socket{position:absolute;width:30px;height:30px;border-radius:50%;
+  border:3px solid rgba(242,241,234,.34);opacity:0;
+  animation:intro-socket .3s var(--ease-out) .1s both}
+#vo-site .intro-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--pop);
+  animation:intro-drop .62s both}
+#vo-site .intro-flash{position:absolute;width:30px;height:30px;border-radius:50%;
+  border:2px solid var(--pop);opacity:0;
+  animation:intro-flash .46s var(--ease-out) .52s both}
+#vo-site .intro-word{margin-top:22px;font-family:var(--f-disp);font-weight:900;color:var(--paper);
+  font-size:clamp(21px,5vw,28px);animation:intro-word .5s var(--ease-out) .58s both}
+#vo-site .intro-tag{margin-top:7px;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;
+  color:var(--pop);animation:intro-tag .44s var(--ease-out) .76s both}
+
+/* falls from above the fold, accelerating, then squashes on contact - the
+   squash is what sells the impact, and it is two keyframes */
+@keyframes intro-drop{
+  0%{opacity:0;transform:translate3d(0,-62vh,0) scale(1)}
+  18%{opacity:1}
+  72%{transform:translate3d(0,0,0) scale(1);animation-timing-function:var(--ease-out)}
+  82%{transform:translate3d(0,2px,0) scale(1.42,.62)}
+  100%{transform:translate3d(0,0,0) scale(1)}}
+@keyframes intro-flash{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.5)}}
+@keyframes intro-draw{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
+@keyframes intro-socket{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+/* the letter-spacing settling as it rises is the detail that makes a wordmark
+   feel placed rather than faded in */
+@keyframes intro-word{from{opacity:0;transform:translate3d(0,12px,0);letter-spacing:.18em}
+  to{opacity:1;transform:none;letter-spacing:-.02em}}
+@keyframes intro-tag{from{opacity:0;transform:translate3d(0,6px,0);letter-spacing:.22em}
+  to{opacity:.75;transform:none;letter-spacing:.16em}}
+@keyframes intro-out{to{opacity:0;visibility:hidden;pointer-events:none}}
 #vo-site .room > header{margin-bottom:18px}
 #vo-site .room > header h2{font-size:clamp(24px,3.2vw,38px)}
 #vo-site .back{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
@@ -299,10 +403,18 @@
 
 @media(prefers-reduced-motion:reduce){
   #vo-site{scroll-behavior:auto}
+  /* Durations alone are not enough. An element animating with `both` sits at
+     its 0% frame - opacity 0 - for the whole DELAY, so cutting duration to 1ms
+     and leaving a 220ms delay still hides content from the person who asked
+     not to be moved. Iteration count matters for the same reason: the status
+     ping would otherwise keep firing forever, 1ms at a time. */
   #vo-site,
 #vo-site *,
 #vo-site *::before,
-#vo-site *::after{animation-duration:1ms !important;transition-duration:1ms !important}
+#vo-site *::after{animation-duration:1ms !important;transition-duration:1ms !important;
+    animation-delay:0ms !important;transition-delay:0ms !important;
+    animation-iteration-count:1 !important}
+  #vo-site .intro{display:none}
 }
 
 /* the plug pointer, kept from the deck. One pointer for the whole site:
@@ -326,6 +438,8 @@
 
 </style>
 
+<!-- The opening sequence. aria-hidden because it repeats the sidebar's own
+     words, and a screen reader should be given the page, not a title card. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-funnel" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
   <symbol id="i-node" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.6"/><circle cx="5" cy="18" r="2.6"/><circle cx="19" cy="12" r="2.6"/><path d="M7.5 7.2 16.6 11M7.5 16.8 16.6 13"/></symbol>

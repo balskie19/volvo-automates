@@ -34,7 +34,7 @@ try {
 // --- stage exactly what should be public
 rmSync(DIST, { recursive: true, force: true });
 mkdirSync(join(DIST, "cv"), { recursive: true });
-const FILES = ["index.html", "cv/index.html", "robots.txt", "sitemap.xml", "llms.txt", "404.html", "og.png"];
+const FILES = ["index.html", "cv/index.html", "cv/Volvo-Ebal-CV.pdf", "robots.txt", "sitemap.xml", "llms.txt", "404.html", "og.png"];
 // The websites slide ships screenshots, and a directory is not a file:
 // staging only the named files would publish a slide of four broken tiles.
 const DIRS = ["shots", "img", "explainers"];

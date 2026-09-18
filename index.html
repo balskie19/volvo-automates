@@ -142,7 +142,12 @@ a{color:inherit}
 .tools ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
 .tools li{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;white-space:nowrap}
 .tools .mk{width:17px;height:17px;fill:currentColor;flex:none}
-.tools .mk-in{width:17px;height:17px;flex:none;display:grid;place-items:center;border:2px solid currentColor;
+.tools /* A real mark, in the brand's own colours. Sized to match the drawn .mk
+   glyphs exactly so a row of mixed sources still reads as one list. */
+.mk-img{width:18px;height:18px;flex:none;object-fit:contain;border-radius:3px}
+.tools .mk-img{width:17px;height:17px}
+.bays li i{font-style:normal;color:var(--muted);font-size:.86em;letter-spacing:.02em}
+.mk-in{width:17px;height:17px;flex:none;display:grid;place-items:center;border:2px solid currentColor;
   border-radius:5px;font-family:var(--f-mono);font-size:7px;font-weight:700;line-height:1}
 .mk-n8n{color:#EA4B71} .mk-make{color:#A260D8} .mk-zapier{color:#FF4F00}
 .mk-claude{color:#D97757} .mk-nodedotjs{color:#5FA04E} .mk-supabase{color:#3FCF8E}
@@ -418,6 +423,10 @@ dl.facts dd{margin:0;font-size:15px;line-height:1.55}
   color:var(--field)}
 
 .bays{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:18px}
+/* A 1fr track will not shrink under its content's min-content width, so one
+   long label drops a whole column. These two lines let it wrap instead. */
+.bay{min-width:0}
+.bays li{flex-wrap:wrap}
 .bay h4{font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--field);margin:0 0 10px}
 .bay ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
@@ -501,11 +510,18 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
 .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* A letterform, not a logo. Three of these six have no mark I hold, and a
-   redrawn-from-memory logo is wrong in a way the reader can feel. */
+/* The vendor's real mark, fetched from the vendor - or, where a brand
+   publishes no square glyph anywhere, from its own app-store icon - and kept as
+   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
+   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
+   do not use it, and a letterform is the honest fallback when it cannot be
+   found at all. */
 .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
-  border-radius:11px;background:var(--field);color:var(--pop);
-  font-family:var(--f-disp);font-weight:900;font-size:16px;letter-spacing:-.02em}
+  border-radius:11px;background:var(--card)}
+.tcm img{display:block;width:26px;height:26px;object-fit:contain}
+.tcw{font-family:var(--f-mono);font-style:normal;font-weight:400;font-size:.46em;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);vertical-align:.34em;
+  white-space:nowrap}
 .tcn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
   font-variant-numeric:tabular-nums}
 .tcn i{font-style:normal;opacity:.45}
@@ -740,7 +756,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
       <span class="lbl">Daily<b>drivers</b></span>
       <ul>
         <li><svg class="mk mk-n8n" aria-hidden="true"><use href="#b-n8n"/></svg>n8n</li>
-        <li><span class="mk-in" aria-hidden="true">GH</span>GoHighLevel</li>
+        <li><img class="mk mk-img" src="img/logos/gohighlevel.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">GoHighLevel</li>
         <li><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg>Claude Code</li>
         <li><svg class="mk mk-make" aria-hidden="true"><use href="#b-make"/></svg>Make.com</li>
         <li><svg class="mk mk-zapier" aria-hidden="true"><use href="#b-zapier"/></svg>Zapier</li>
@@ -1084,22 +1100,22 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
           <li><svg class="mk mk-n8n" aria-hidden="true"><use href="#b-n8n"/></svg>n8n</li>
           <li><svg class="mk mk-make" aria-hidden="true"><use href="#b-make"/></svg>Make.com</li>
           <li><svg class="mk mk-zapier" aria-hidden="true"><use href="#b-zapier"/></svg>Zapier</li>
-          <li><span class="mk-in" aria-hidden="true">AP</span>Apify</li>
+          <li><img class="mk mk-img" src="img/logos/apify.svg" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Apify</li>
           <li><svg class="mk mk-rapid" aria-hidden="true"><use href="#b-rapid"/></svg>RapidAPI</li>
         </ul></div>
         <div class="bay"><h4>CRM and sales</h4><ul>
-          <li><span class="mk-in" aria-hidden="true">GH</span>GoHighLevel</li>
+          <li><img class="mk mk-img" src="img/logos/gohighlevel.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">GoHighLevel</li>
           <li><svg class="mk mk-hubspot" aria-hidden="true"><use href="#b-hubspot"/></svg>HubSpot</li>
-          <li><span class="mk-in" aria-hidden="true">AO</span>Apollo</li>
-          <li><span class="mk-in" aria-hidden="true">SN</span>Sales Navigator</li>
+          <li><img class="mk mk-img" src="img/logos/apollo.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Apollo</li>
+          <li><img class="mk mk-img" src="img/logos/linkedin.svg" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Sales Navigator</li>
           <li><svg class="mk mk-intercom" aria-hidden="true"><use href="#b-intercom"/></svg>Intercom</li>
         </ul></div>
         <div class="bay"><h4>AI</h4><ul>
           <li><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg>Claude Code</li>
           <li><svg class="mk mk-claude" aria-hidden="true"><use href="#b-claude"/></svg>Claude</li>
-          <li><span class="mk-in" aria-hidden="true">RT</span>Retell AI</li>
+          <li><img class="mk mk-img" src="img/logos/retell.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Retell AI</li>
           <li><svg class="mk mk-googlegemini" aria-hidden="true"><use href="#b-googlegemini"/></svg>Gemini</li>
-          <li><span class="mk-in" aria-hidden="true">GK</span>Grok</li>
+          <li><img class="mk mk-img" src="img/logos/grok.svg" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Grok</li>
         </ul></div>
         <div class="bay"><h4>Build and ship</h4><ul>
           <li><svg class="mk mk-nodedotjs" aria-hidden="true"><use href="#b-nodedotjs"/></svg>Node</li>
@@ -1109,9 +1125,9 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
           <li><svg class="mk mk-supabase" aria-hidden="true"><use href="#b-supabase"/></svg>Supabase</li>
         </ul></div>
         <div class="bay"><h4>Voice and comms</h4><ul>
-          <li><span class="mk-in" aria-hidden="true">OP</span>OpenPhone</li>
-          <li><span class="mk-in" aria-hidden="true">SL</span>Slack</li>
-          <li><span class="mk-in" aria-hidden="true">MO</span>Monday.com</li>
+          <li><img class="mk mk-img" src="img/logos/quo.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">OpenPhone <i>now Quo</i></li>
+          <li><img class="mk mk-img" src="img/logos/slack.svg" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Slack</li>
+          <li><img class="mk mk-img" src="img/logos/monday.png" alt="" aria-hidden="true" width="18" height="18" loading="lazy">Monday.com</li>
           <li><svg class="mk mk-dropbox" aria-hidden="true"><use href="#b-dropbox"/></svg>Dropbox</li>
         </ul></div>
       </div>
@@ -1134,7 +1150,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
     <div class="tgrid">
   <a class="tc" href="explainers/ghl.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">GH</span>
+      <span class="tcm"><img src="img/logos/gohighlevel.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">01 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">GoHighLevel</h3>
@@ -1149,7 +1165,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </a>
   <a class="tc" href="explainers/make.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">MK</span>
+      <span class="tcm"><img src="img/logos/make.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">02 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Make.com</h3>
@@ -1164,7 +1180,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </a>
   <a class="tc" href="explainers/n8n.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">N8</span>
+      <span class="tcm"><img src="img/logos/n8n.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">03 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">n8n</h3>
@@ -1179,7 +1195,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </a>
   <a class="tc" href="explainers/retell-agent.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">RT</span>
+      <span class="tcm"><img src="img/logos/retell.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">04 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Retell AI</h3>
@@ -1194,7 +1210,7 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </a>
   <a class="tc" href="explainers/website-chat.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">IC</span>
+      <span class="tcm"><img src="img/logos/intercom.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">05 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Intercom</h3>
@@ -1209,10 +1225,10 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   </a>
   <a class="tc" href="explainers/call-routing.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">OP</span>
+      <span class="tcm"><img src="img/logos/quo.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">06 <i>/</i> 06</span>
     </div>
-    <h3 class="tcti">OpenPhone</h3>
+    <h3 class="tcti">OpenPhone <i class="tcw">now Quo</i></h3>
     <p class="tct">What happens when the phone rings.</p>
     <span class="tcb">Open and shut</span>
     <ul class="tcl">

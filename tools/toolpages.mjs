@@ -15,11 +15,14 @@
 // reader picks one: they arrive wondering "can he make something happen when a
 // form is filled in", not wondering which node came first.
 //
-// The index is the card grid from the reference he sent. Two things are his
-// branding rather than the reference's: the cards are paper on ink with a hard
-// offset shadow instead of dark glass, and the tool marks are LETTERFORMS, not
-// vendor logos. Redrawing someone else's logo from memory gets it subtly wrong,
-// and three of these six have no mark I hold at all.
+// The index is the card grid from the reference he sent, in his branding: paper
+// on ink with a hard offset shadow rather than dark glass. The marks are each
+// vendor's REAL logo, fetched from that vendor and kept in img/logos/.
+//
+// OpenPhone now trades as Quo - its App Store listing reads "Quo (formerly
+// OpenPhone)" - so its mark is a Q. The card keeps the name he worked under and
+// carries the rename beside it, because a Q with no explanation reads as the
+// wrong logo.
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { page } from "./lib/pagekit.mjs";
@@ -123,22 +126,22 @@ document.querySelectorAll(".fb").forEach(function(b){
 
 /* ── the index: one card per tool ───────────────────────────────────────── */
 const CARDS = [
-  ...TOOLS.map(t => ({ file: t.file, mark: t.mark, name: t.name, tagline: t.tagline,
+  ...TOOLS.map(t => ({ file: t.file, logo: t.logo, note: t.note, name: t.name, tagline: t.tagline,
     badge: t.badge, bullets: t.bullets,
     meta: "See them run" })),
-  ...DEEP.map(d => ({ file: d.file, mark: d.mark, name: d.name, tagline: d.tagline,
+  ...DEEP.map(d => ({ file: d.file, logo: d.logo, note: d.note, name: d.name, tagline: d.tagline,
     badge: d.badge, bullets: d.bullets, meta: "walk it through" }))
 ];
 
 /* The counter is a position in a set, and it is only honest because the set is
    closed and shown whole: six cards, all on screen, numbered 01 to 06. It would
    be decoration on a list that scrolled or filtered. */
-const card = (base = "") => (c, i) => `  <a class="tc" href="${base}${c.file}">
+const card = (base = "", logoBase = "") => (c, i) => `  <a class="tc" href="${base}${c.file}">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">${esc(c.mark)}</span>
+      <span class="tcm"><img src="${logoBase}img/logos/${c.logo}" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">${String(i + 1).padStart(2, "0")} <i>/</i> ${String(CARDS.length).padStart(2, "0")}</span>
     </div>
-    <h3 class="tcti">${esc(c.name)}</h3>
+    <h3 class="tcti">${esc(c.name)}${c.note ? ` <i class="tcw">${esc(c.note)}</i>` : ""}</h3>
     <p class="tct">${esc(c.tagline)}</p>
     <span class="tcb">${esc(c.badge)}</span>
     <ul class="tcl">
@@ -164,11 +167,18 @@ const GRID_CSS = `
 .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* A letterform, not a logo. Three of these six have no mark I hold, and a
-   redrawn-from-memory logo is wrong in a way the reader can feel. */
+/* The vendor's real mark, fetched from the vendor - or, where a brand
+   publishes no square glyph anywhere, from its own app-store icon - and kept as
+   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
+   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
+   do not use it, and a letterform is the honest fallback when it cannot be
+   found at all. */
 .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
-  border-radius:11px;background:var(--field);color:var(--pop);
-  font-family:var(--f-disp);font-weight:900;font-size:16px;letter-spacing:-.02em}
+  border-radius:11px;background:var(--card)}
+.tcm img{display:block;width:26px;height:26px;object-fit:contain}
+.tcw{font-family:var(--f-mono);font-style:normal;font-weight:400;font-size:.46em;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);vertical-align:.34em;
+  white-space:nowrap}
 .tcn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
   font-variant-numeric:tabular-nums}
 .tcn i{font-style:normal;opacity:.45}
@@ -204,7 +214,7 @@ than the one I happened to know. Open a tool to watch its builds run, step by st
 that sets them off to the thing they leave behind.</p>
 
 <div class="tgrid">
-${CARDS.map(card()).join("\n")}
+${CARDS.map(card("", "../")).join("\n")}
 </div>
 
 <p class="lede" style="margin-top:26px">Read from the build files themselves. Client names are

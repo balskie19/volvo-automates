@@ -66,11 +66,18 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* A letterform, not a logo. Three of these six have no mark I hold, and a
-   redrawn-from-memory logo is wrong in a way the reader can feel. */
+/* The vendor's real mark, fetched from the vendor - or, where a brand
+   publishes no square glyph anywhere, from its own app-store icon - and kept as
+   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
+   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
+   do not use it, and a letterform is the honest fallback when it cannot be
+   found at all. */
 .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
-  border-radius:11px;background:var(--field);color:var(--pop);
-  font-family:var(--f-disp);font-weight:900;font-size:16px;letter-spacing:-.02em}
+  border-radius:11px;background:var(--card)}
+.tcm img{display:block;width:26px;height:26px;object-fit:contain}
+.tcw{font-family:var(--f-mono);font-style:normal;font-weight:400;font-size:.46em;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);vertical-align:.34em;
+  white-space:nowrap}
 .tcn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
   font-variant-numeric:tabular-nums}
 .tcn i{font-style:normal;opacity:.45}
@@ -107,7 +114,7 @@ that sets them off to the thing they leave behind.</p>
 <div class="tgrid">
   <a class="tc" href="ghl.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">GH</span>
+      <span class="tcm"><img src="../img/logos/gohighlevel.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">01 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">GoHighLevel</h3>
@@ -122,7 +129,7 @@ that sets them off to the thing they leave behind.</p>
   </a>
   <a class="tc" href="make.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">MK</span>
+      <span class="tcm"><img src="../img/logos/make.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">02 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Make.com</h3>
@@ -137,7 +144,7 @@ that sets them off to the thing they leave behind.</p>
   </a>
   <a class="tc" href="n8n.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">N8</span>
+      <span class="tcm"><img src="../img/logos/n8n.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">03 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">n8n</h3>
@@ -152,7 +159,7 @@ that sets them off to the thing they leave behind.</p>
   </a>
   <a class="tc" href="retell-agent.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">RT</span>
+      <span class="tcm"><img src="../img/logos/retell.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">04 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Retell AI</h3>
@@ -167,7 +174,7 @@ that sets them off to the thing they leave behind.</p>
   </a>
   <a class="tc" href="website-chat.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">IC</span>
+      <span class="tcm"><img src="../img/logos/intercom.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">05 <i>/</i> 06</span>
     </div>
     <h3 class="tcti">Intercom</h3>
@@ -182,10 +189,10 @@ that sets them off to the thing they leave behind.</p>
   </a>
   <a class="tc" href="call-routing.html">
     <div class="tch">
-      <span class="tcm" aria-hidden="true">OP</span>
+      <span class="tcm"><img src="../img/logos/quo.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">06 <i>/</i> 06</span>
     </div>
-    <h3 class="tcti">OpenPhone</h3>
+    <h3 class="tcti">OpenPhone <i class="tcw">now Quo</i></h3>
     <p class="tct">What happens when the phone rings.</p>
     <span class="tcb">Open and shut</span>
     <ul class="tcl">

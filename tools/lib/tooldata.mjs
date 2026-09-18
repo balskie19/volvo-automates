@@ -455,7 +455,7 @@ const M = {
 
 export const TOOLS = [
   {
-    key: "ghl", file: "ghl.html", name: "GoHighLevel", mark: "GH",
+    key: "ghl", file: "ghl.html", name: "GoHighLevel", logo: "gohighlevel.png",
     tagline: "Follow-up that runs on its own.",
     badge: "11 systems", count: 11, countNote: "systems",
     bullets: ["Leads move without anyone pushing", "Nobody is chased after they say yes", "Every conversation has an exit"],
@@ -522,7 +522,7 @@ export const TOOLS = [
   },
 
   {
-    key: "make", file: "make.html", name: "Make.com", mark: "MK",
+    key: "make", file: "make.html", name: "Make.com", logo: "make.svg",
     tagline: "The wiring between everything else.",
     badge: "19 scenarios", count: 19, countNote: "scenarios",
     bullets: ["Tools that do not talk, made to", "Nothing is done twice", "It posts, files and writes while you sleep"],
@@ -604,7 +604,7 @@ export const TOOLS = [
   },
 
   {
-    key: "n8n", file: "n8n.html", name: "n8n", mark: "N8",
+    key: "n8n", file: "n8n.html", name: "n8n", logo: "n8n.svg",
     tagline: "The jobs that have to wait, retry or loop.",
     badge: "9 builds", count: 9, countNote: "builds",
     bullets: ["Waits for a render to finish", "Never calls at three in the morning", "Fetches a long list without repeats"],
@@ -660,15 +660,15 @@ export const TOOLS = [
 /* The three single-build tools already have their own deep pages, built by
    tools/explainers.mjs. They appear on the index as cards like the rest. */
 export const DEEP = [
-  { key: "retell", file: "retell-agent.html", name: "Retell AI", mark: "RT",
+  { key: "retell", file: "retell-agent.html", name: "Retell AI", logo: "retell.png",
     tagline: "An AI that phones people for you.",
     badge: "10 stops, 13 notes",
     bullets: ["No two calls take the same route", "It writes down what it learns", "It hands over, it never closes"] },
-  { key: "intercom", file: "website-chat.html", name: "Intercom", mark: "IC",
+  { key: "intercom", file: "website-chat.html", name: "Intercom", logo: "intercom.svg",
     tagline: "The chat that books without a person.",
     badge: "144 chats, 11 booked",
     bullets: ["Four ways in, eight packages", "Answers from the company's own words", "Real numbers, including the plain ones"] },
-  { key: "openphone", file: "call-routing.html", name: "OpenPhone", mark: "OP",
+  { key: "openphone", file: "call-routing.html", name: "OpenPhone", note: "now Quo", logo: "quo.png",
     tagline: "What happens when the phone rings.",
     badge: "Open and shut",
     bullets: ["Everyone rings at once, for fifteen seconds", "After hours it answers instantly", "It takes a message, it never sells"] }

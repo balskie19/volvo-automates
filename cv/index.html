@@ -108,8 +108,19 @@ body{margin:0;background:var(--paper-2);color:var(--ink);font-family:var(--f-bod
 .contact .todo{border-style:dashed;opacity:.72}
 
 .idrow{display:flex;align-items:flex-end;gap:16px;margin-bottom:18px}
-.cv-vo{width:86px;height:auto;flex:none;--sk:#F2F1EA;--sh:#F5D547}
+.cv-vo{width:86px;height:86px;flex:none;object-fit:cover;object-position:50% 22%;
+  border:3px solid var(--ink);border-radius:14px;background:var(--pop);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
 .mark{margin-bottom:0 !important}
+/* A link to the printed copy, on the page that prints. It hides itself in the
+   PDF, where it would be a button pointing at the thing you are holding. */
+.dl{display:inline-block;margin-left:10px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:var(--pop);
+  border:2px solid var(--ink);border-radius:99px;padding:5px 12px;text-decoration:none;
+  vertical-align:2px;transition:transform .14s cubic-bezier(.22,1,.36,1)}
+.dl:hover{transform:translateY(-1px)}
+.dl:active{transform:translateY(1px)}
+.dl:focus-visible{outline:3px solid var(--pop);outline-offset:3px}
 
 /* ── layout ── */
 .cols{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(24px,3.4vw,48px)}
@@ -204,11 +215,16 @@ a:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
   @page{size:A4;margin:12mm}
   body{background:#fff}
   .page{box-shadow:none;max-width:none}
-  .note,.contact .todo,.ch.todo-ch{display:none}
+  .note,.contact .todo,.ch.todo-ch,.dl{display:none}
   .top{background:var(--field) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .offer article,.side .box{box-shadow:none;break-inside:avoid}
   .job,.build,blockquote.t{break-inside:avoid}
-  .sec{break-inside:avoid-page}
+  /* A section taller than a page cannot be kept on one, so asking for it only
+     wastes the bottom of the page before it. Keep the small things whole and
+     let a long section flow. */
+  .sec{break-inside:auto}
+  h2,h3{break-after:avoid-page}
+  .sec > h2{break-before:auto}
   .cols{grid-template-columns:1.5fr 1fr}
 }
 </style>
@@ -216,7 +232,7 @@ a:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
 <div class="page">
 
   <header class="top">
-    <div class="idrow"><svg class="cv-vo" viewBox="0 0 220 250" role="img" aria-label="Volvo Ebal, illustrated"><use href="#vo"/></svg><span class="mark">
+    <div class="idrow"><img class="cv-vo" src="../img/volvo.webp" width="480" height="480" alt="Volvo Ebal"><span class="mark">
       <svg viewBox="0 0 340 54" role="img" aria-label="Volvo Automates">
         <g transform="rotate(-2 170 27)">
           <text x="170" y="27" text-anchor="middle" dominant-baseline="middle" font-family="Gabarito, sans-serif"
@@ -225,7 +241,8 @@ a:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
         </g>
       </svg>
     </span></div>
-    <p class="role">Volvo Ebal &middot; AI systems and automation</p>
+    <p class="role">Volvo Ebal &middot; AI systems and automation
+      <a class="dl" href="Volvo-Ebal-CV.pdf" download>Download PDF</a></p>
     <h1>I build the system that runs the business after the lead comes in.</h1>
     <p class="pitch">Six businesses since 2023, across solar, electrical, lead generation, content and agency
       operations. I work in the tools a company already owns, I wire one process end to end before touching

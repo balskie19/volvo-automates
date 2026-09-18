@@ -127,55 +127,52 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 .deep:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
 @media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }
-/* A horizontal map is wide and short; panels beside it are narrow and tall, and
-   no column width reconciles those two. So the map spans the full width and its
-   two panels sit underneath. */
-.walk{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-.wside{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;align-items:start}
-@media(max-width:780px){ .wside{grid-template-columns:minmax(0,1fr)} }
-.wmap{border:3px solid var(--ink);border-radius:14px;background:var(--paper);padding:10px 0 0;
-  overflow:hidden;min-width:0}
-.wscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;
-  scrollbar-width:thin}
-.walk svg{height:auto;display:block}
+/* A vertical map is tall and narrow, so the panels sit beside it - which is
+   exactly why the Retell page is laid out this way, and why the horizontal
+   version could not be. */
+.walk{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;
+  margin-top:14px;align-items:start}
+@media(max-width:900px){ .walk{grid-template-columns:minmax(0,1fr)} }
+.wmap{background:var(--card);border:3px solid var(--ink);border-radius:15px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(12px,1.8vw,20px);min-width:0}
+.wmap svg{width:100%;height:auto;display:block;margin:0 auto}
+/* Narrow screens keep the map at its real size and scroll it, rather than
+   shrinking an 11.5px label to about 8px to make it fit. */
+@media(max-width:900px){
+  .wscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+  .wmap svg{min-width:var(--w)}
+}
 .wn{cursor:pointer}
 .wnb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
 .wn:hover .wnb{fill:#FDF7DA}
 .wn.on .wnb{fill:var(--pop)}
-.wnt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
+.wnt{font-family:var(--f-mono);font-size:11.5px;fill:var(--ink);pointer-events:none}
+.wns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
 .k-decision .wnb{fill:#EFEEE6}
 .k-decision.on .wnb,.k-fail.on .wnb{fill:var(--pop)}
 .k-fail .wnb{stroke:var(--bad)}
 .k-end .wnb{stroke-width:4.5}
-/* the trigger stays indigo the whole way through, so you can always see where
-   the thing starts without reading a word of it */
-.k-trigger .wnb,.k-trigger.on .wnb{fill:var(--field)}
-.k-trigger .wnt{fill:var(--paper)}
-.k-trigger.on .wnt{fill:var(--pop)}
-.wn:focus-visible .wnb{stroke:var(--field);stroke-width:4}
-.we{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.26;transition:opacity .2s,stroke .2s}
+.wn:focus-visible .wnb{stroke:var(--field);stroke-width:4.5}
+.we{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.26;
+  transition:opacity .2s var(--ease),stroke .2s var(--ease)}
 .we.lit{opacity:1;stroke:var(--field)}
 .we-l{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted)}
-.wbar{display:flex;align-items:center;gap:10px;padding:9px 12px 11px;flex-wrap:wrap;
-  border-top:2px dashed var(--hair);margin-top:8px}
-.wplay{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  background:var(--pop);border:2.5px solid var(--ink);border-radius:99px;padding:7px 15px;
-  cursor:pointer;box-shadow:3px 3px 0 0 var(--ink)}
-.wplay:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
-.wplay:focus-visible{outline:3px solid var(--field);outline-offset:3px}
-.whint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);flex:1 1 170px}
-
-.wpanel{background:var(--card);border:3px solid var(--ink);border-radius:14px;
-  box-shadow:4px 4px 0 0 var(--ink);padding:14px 15px}
+.whint{font-family:var(--f-mono) !important;font-size:11px !important;color:var(--muted) !important;
+  margin:14px 0 0 !important;letter-spacing:.04em}
+.wside{display:flex;flex-direction:column;gap:12px;min-width:0;
+  position:sticky;top:14px}
+@media(max-width:900px){ .wside{position:static} }
+.wpanel{background:var(--card);border:3px solid var(--ink);border-radius:15px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:15px 16px}
 .wtag{display:inline-block;font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;
   text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
-  padding:3px 9px;margin-bottom:9px}
-.wtitle{font-family:var(--f-disp);font-weight:900;font-size:17px;letter-spacing:-.02em;
-  margin:0 0 6px;line-height:1.15}
-.wsays{margin:0 !important;font-size:13.5px;line-height:1.6;color:var(--muted)}
+  padding:3px 10px;margin-bottom:10px}
+.wtitle{font-family:var(--f-disp);font-weight:900;font-size:19px;letter-spacing:-.02em;
+  margin:0 0 7px;line-height:1.15}
+.wsays{margin:0 !important;font-size:14px !important;line-height:1.6 !important;color:var(--muted)}
 .wquote:empty{display:none}
 .wquote .says{background:var(--field);color:var(--paper);border-radius:11px;padding:11px 13px;
-  font-size:13px;line-height:1.5;margin-top:11px}
+  font-size:13px;line-height:1.5;margin-top:12px}
 .wquote .says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9px;
   letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px;font-weight:700}
 .wfields{display:flex;flex-wrap:wrap;gap:6px}
@@ -183,16 +180,19 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
   padding:4px 9px;color:var(--muted);transition:border-color .22s var(--ease),
   background .22s var(--ease),color .22s var(--ease)}
 .wf.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
-@media(prefers-reduced-motion:reduce){
-  .wnb,.we,.wf{transition:none}
-  .wplay{display:none}
-}</style></head>
+.wplay{display:block;width:100%;margin-top:14px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;background:var(--paper);border:2.5px solid var(--ink);
+  border-radius:99px;padding:9px 14px;cursor:pointer;transition:background .16s var(--ease)}
+.wplay:hover{background:var(--pop)}
+.wplay:active{transform:translateY(1px)}
+.wplay:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){ .wnb,.we,.wf,.wplay{transition:none} .wplay{display:none} }</style></head>
 <body><div class="wrap">
 <a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">GoHighLevel &middot; 11 systems</span>
 <h1>Follow-up that runs on its own.</h1>
 <p class="lede">The CRM is where the follow-up lives. These are the builds that decide who gets
-      messaged, who gets left alone, and who is worth interrupting you for. Each one is a map rather than a film: tap any step to read what it does and watch
+      messaged, who gets left alone, and who is worth interrupting you for. Each one is a map rather than a film: tap any box to read what it does and watch
       what it writes on the contact light up. That last part is the point - these builds are only
       worth anything because of what they leave on the record.</p>
 
@@ -214,64 +214,62 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>A purchase turns a lead into a customer</h3>
         <p>An order comes in. The old label comes off, the new one goes on, the deal moves down the pipeline, and the confirmation goes out.</p>
-        <div class="walk" data-walk='{"id":"w-purchase","nodes":{"t":{"label":"An order is placed","says":"The payment is what starts it. Nobody opens the CRM and nobody remembers to.","writes":["source"],"quote":null},"r":{"label":"They stop being a lead","says":"The lead label comes off first. This is the step everyone forgets, and it is the one that stops a paying customer receiving the emails written for people who have not bought.","writes":["lead"],"quote":null},"a":{"label":"They become a customer","says":"Now the new label goes on. Order matters: off, then on, so there is never a moment where they are both.","writes":["customer"],"quote":null},"o":{"label":"Move them down the pipeline","says":"The deal moves to the stage that means money has changed hands, so your board tells the truth without anyone dragging a card.","writes":["stage"],"quote":null},"w":{"label":"Wait","says":"A deliberate pause, so your confirmation does not arrive before the payment receipt and read as a mistake.","writes":[],"quote":null},"e":{"label":"Send the confirmation","says":"Confirmed, in their inbox, while they are still on the thank-you page.","writes":["email"],"quote":null}},"walk":["t","r","a","o","w","e"]}'>
+        <div class="walk" id="w-purchase" data-walk='{"nodes":{"t":{"label":"An order is placed","sub":"where it starts","says":"The payment is what starts it. Nobody opens the CRM, and nobody has to remember to.","writes":["source"],"quote":null},"r":{"label":"They stop being a lead","sub":"the label comes off","says":"The lead label comes off first. This is the step everyone forgets, and it is the one that stops a paying customer receiving the emails written for people who have not bought.","writes":["lead"],"quote":null},"a":{"label":"They become a customer","sub":"and the new one goes on","says":"Order matters here: off, then on, so there is never a moment where they carry both.","writes":["customer"],"quote":null},"o":{"label":"Move them down the pipeline","sub":"the board catches up","says":"The deal moves to the stage that means money has changed hands, so your board tells the truth without anyone dragging a card.","writes":["stage"],"quote":null},"w":{"label":"Wait","sub":"on purpose","says":"A deliberate pause, so your confirmation does not arrive before the payment receipt and read as a mistake.","writes":[],"quote":null},"e":{"label":"Send the confirmation","sub":"the only thing they see","says":"Confirmed, in their inbox, while they are still on the thank-you page.","writes":["email"],"quote":null}},"walk":["t","r","a","o","w","e"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 88" style="min-width:1286px" role="img" aria-label="purchase steps">
-            <path class="we" data-a="t" data-b="r" d="M182 44 C 207 44, 207 44, 232 44"/>
-        <path class="we" data-a="r" data-b="a" d="M400 44 C 425 44, 425 44, 450 44"/>
-        <path class="we" data-a="a" data-b="o" d="M618 44 C 643 44, 643 44, 668 44"/>
-        <path class="we" data-a="o" data-b="w" d="M836 44 C 861 44, 861 44, 886 44"/>
-        <path class="we" data-a="w" data-b="e" d="M1054 44 C 1079 44, 1079 44, 1104 44"/>
-            <g class="wn k-trigger" id="w-purchase-t" data-k="t" tabindex="0"
-          role="button" aria-label="An order is placed">
-          <rect class="wnb" x="14" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="48" text-anchor="middle">An order is placed</text>
-        </g>
-        <g class="wn k-action" id="w-purchase-r" data-k="r" tabindex="0"
-          role="button" aria-label="They stop being a lead">
-          <rect class="wnb" x="232" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="41" text-anchor="middle">They stop being a</text><text class="wnt" x="316" y="55" text-anchor="middle">lead</text>
-        </g>
-        <g class="wn k-action" id="w-purchase-a" data-k="a" tabindex="0"
-          role="button" aria-label="They become a customer">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="41" text-anchor="middle">They become a</text><text class="wnt" x="534" y="55" text-anchor="middle">customer</text>
-        </g>
-        <g class="wn k-action" id="w-purchase-o" data-k="o" tabindex="0"
-          role="button" aria-label="Move them down the pipeline">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="41" text-anchor="middle">Move them down the</text><text class="wnt" x="752" y="55" text-anchor="middle">pipeline</text>
-        </g>
-        <g class="wn k-wait" id="w-purchase-w" data-k="w" tabindex="0"
-          role="button" aria-label="Wait">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Wait</text>
-        </g>
-        <g class="wn k-end" id="w-purchase-e" data-k="e" tabindex="0"
-          role="button" aria-label="Send the confirmation">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">Send the confirmation</text>
-        </g>
+          <svg viewBox="0 0 232 696" style="max-width:232px;--w:232px" role="img" aria-label="purchase routes">
+            <path class="we" data-a="t" data-b="r" d="M116 80 C 116 108, 116 108, 116 136"/>
+            <path class="we" data-a="r" data-b="a" d="M116 200 C 116 228, 116 228, 116 256"/>
+            <path class="we" data-a="a" data-b="o" d="M116 320 C 116 348, 116 348, 116 376"/>
+            <path class="we" data-a="o" data-b="w" d="M116 440 C 116 468, 116 468, 116 496"/>
+            <path class="we" data-a="w" data-b="e" d="M116 560 C 116 588, 116 588, 116 616"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="An order is placed">
+              <rect class="wnb" x="16" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="43">An order is placed</text>
+              <text class="wns" x="29" y="67">where it starts</text>
+            </g>
+            <g class="wn k-action" data-k="r" tabindex="0" role="button" aria-label="They stop being a lead">
+              <rect class="wnb" x="16" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="163">They stop being a lead</text>
+              <text class="wns" x="29" y="187">the label comes off</text>
+            </g>
+            <g class="wn k-action" data-k="a" tabindex="0" role="button" aria-label="They become a customer">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">They become a customer</text>
+              <text class="wns" x="29" y="307">and the new one goes on</text>
+            </g>
+            <g class="wn k-action" data-k="o" tabindex="0" role="button" aria-label="Move them down the pipeline">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="397">Move them down the</text><text class="wnt" x="29" y="411">pipeline</text>
+              <text class="wns" x="29" y="427">the board catches up</text>
+            </g>
+            <g class="wn k-wait" data-k="w" tabindex="0" role="button" aria-label="Wait">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Wait</text>
+              <text class="wns" x="29" y="547">on purpose</text>
+            </g>
+            <g class="wn k-end" data-k="e" tabindex="0" role="button" aria-label="Send the confirmation">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Send the confirmation</text>
+              <text class="wns" x="29" y="667">the only thing they see</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">An order is placed</h4>
-          <p class="wsays">The payment is what starts it. Nobody opens the CRM and nobody remembers to.</p>
+          <p class="wsays">The payment is what starts it. Nobody opens the CRM, and nobody has to remember to.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="lead">Labelled: new lead</span><span class="wf" data-f="customer">Labelled: customer</span><span class="wf" data-f="stage">Moved down the pipeline</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="email">Email sent</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -281,64 +279,62 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>A form becomes a quote</h3>
         <p>Someone asks for a price. The numbers are worked out elsewhere and handed back, the contact is created, and the quote is emailed.</p>
-        <div class="walk" data-walk='{"id":"w-quote","nodes":{"t":{"label":"A quote is requested","says":"Someone asks what it costs. That question has a short shelf life.","writes":["source","want"],"quote":null},"m":{"label":"Hand it to the quote builder","says":"The numbers are worked out by a separate system and handed back. One job per tool, so neither becomes the thing nobody dares change.","writes":[],"quote":null},"g":{"label":"Label them","says":"Labelled as quoted, so every later build knows where this person is without asking.","writes":["quoted"],"quote":null},"c":{"label":"Create the contact","says":"The record is created from what they typed. Nobody retypes it, so nobody mistypes it.","writes":["want"],"quote":null},"w":{"label":"Wait","says":"A short pause, so it reads as considered rather than automatic.","writes":[],"quote":null},"e":{"label":"Send the quote","says":"A price in their inbox in minutes rather than tomorrow, which is usually the whole difference.","writes":["email"],"quote":null}},"walk":["t","m","g","c","w","e"]}'>
+        <div class="walk" id="w-quote" data-walk='{"nodes":{"t":{"label":"A quote is requested","sub":"where it starts","says":"Someone asks what it costs. That question has a very short shelf life.","writes":["source","want"],"quote":null},"m":{"label":"Hand it to the quote builder","sub":"the numbers happen elsewhere","says":"The pricing is worked out by a separate system and handed back. One job per tool, so neither becomes the thing nobody dares change.","writes":[],"quote":null},"g":{"label":"Label them","sub":"so later builds know","says":"Labelled as quoted, so every build after this one knows where the person is without asking.","writes":["quoted"],"quote":null},"c":{"label":"Create the contact","sub":"from what they typed","says":"The record is built from their own answers. Nobody retypes it, so nobody mistypes it.","writes":["want"],"quote":null},"w":{"label":"Wait","sub":"a considered pause","says":"A short pause, so it reads as considered rather than automatic.","writes":[],"quote":null},"e":{"label":"Send the quote","sub":"in minutes, not tomorrow","says":"A price in their inbox while they are still thinking about it, which is usually the whole difference.","writes":["email"],"quote":null}},"walk":["t","m","g","c","w","e"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 88" style="min-width:1286px" role="img" aria-label="quote steps">
-            <path class="we" data-a="t" data-b="m" d="M182 44 C 207 44, 207 44, 232 44"/>
-        <path class="we" data-a="m" data-b="g" d="M400 44 C 425 44, 425 44, 450 44"/>
-        <path class="we" data-a="g" data-b="c" d="M618 44 C 643 44, 643 44, 668 44"/>
-        <path class="we" data-a="c" data-b="w" d="M836 44 C 861 44, 861 44, 886 44"/>
-        <path class="we" data-a="w" data-b="e" d="M1054 44 C 1079 44, 1079 44, 1104 44"/>
-            <g class="wn k-trigger" id="w-quote-t" data-k="t" tabindex="0"
-          role="button" aria-label="A quote is requested">
-          <rect class="wnb" x="14" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="48" text-anchor="middle">A quote is requested</text>
-        </g>
-        <g class="wn k-action" id="w-quote-m" data-k="m" tabindex="0"
-          role="button" aria-label="Hand it to the quote builder">
-          <rect class="wnb" x="232" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="41" text-anchor="middle">Hand it to the quote</text><text class="wnt" x="316" y="55" text-anchor="middle">builder</text>
-        </g>
-        <g class="wn k-action" id="w-quote-g" data-k="g" tabindex="0"
-          role="button" aria-label="Label them">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="48" text-anchor="middle">Label them</text>
-        </g>
-        <g class="wn k-action" id="w-quote-c" data-k="c" tabindex="0"
-          role="button" aria-label="Create the contact">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="48" text-anchor="middle">Create the contact</text>
-        </g>
-        <g class="wn k-wait" id="w-quote-w" data-k="w" tabindex="0"
-          role="button" aria-label="Wait">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Wait</text>
-        </g>
-        <g class="wn k-end" id="w-quote-e" data-k="e" tabindex="0"
-          role="button" aria-label="Send the quote">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">Send the quote</text>
-        </g>
+          <svg viewBox="0 0 232 696" style="max-width:232px;--w:232px" role="img" aria-label="quote routes">
+            <path class="we" data-a="t" data-b="m" d="M116 80 C 116 108, 116 108, 116 136"/>
+            <path class="we" data-a="m" data-b="g" d="M116 200 C 116 228, 116 228, 116 256"/>
+            <path class="we" data-a="g" data-b="c" d="M116 320 C 116 348, 116 348, 116 376"/>
+            <path class="we" data-a="c" data-b="w" d="M116 440 C 116 468, 116 468, 116 496"/>
+            <path class="we" data-a="w" data-b="e" d="M116 560 C 116 588, 116 588, 116 616"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="A quote is requested">
+              <rect class="wnb" x="16" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="43">A quote is requested</text>
+              <text class="wns" x="29" y="67">where it starts</text>
+            </g>
+            <g class="wn k-action" data-k="m" tabindex="0" role="button" aria-label="Hand it to the quote builder">
+              <rect class="wnb" x="16" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="157">Hand it to the quote</text><text class="wnt" x="29" y="171">builder</text>
+              <text class="wns" x="29" y="187">the numbers happen elsewhere</text>
+            </g>
+            <g class="wn k-action" data-k="g" tabindex="0" role="button" aria-label="Label them">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">Label them</text>
+              <text class="wns" x="29" y="307">so later builds know</text>
+            </g>
+            <g class="wn k-action" data-k="c" tabindex="0" role="button" aria-label="Create the contact">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="403">Create the contact</text>
+              <text class="wns" x="29" y="427">from what they typed</text>
+            </g>
+            <g class="wn k-wait" data-k="w" tabindex="0" role="button" aria-label="Wait">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Wait</text>
+              <text class="wns" x="29" y="547">a considered pause</text>
+            </g>
+            <g class="wn k-end" data-k="e" tabindex="0" role="button" aria-label="Send the quote">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Send the quote</text>
+              <text class="wns" x="29" y="667">in minutes, not tomorrow</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">A quote is requested</h4>
-          <p class="wsays">Someone asks what it costs. That question has a short shelf life.</p>
+          <p class="wsays">Someone asks what it costs. That question has a very short shelf life.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="quoted">Labelled: sent a quote</span><span class="wf" data-f="want">What they asked for</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="email">Email sent</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -348,70 +344,68 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>Six emails, spaced out, then it stops</h3>
         <p>A new contact gets six emails days apart: hello, the story, the useful one, the offer, the proof, the objections.</p>
-        <div class="walk" data-walk='{"id":"w-nurture","nodes":{"t":{"label":"A form is filled in","says":"A new contact arrives, from anywhere.","writes":["source"],"quote":null},"g":{"label":"Label them","says":"Labelled as a new lead so the sequence knows who it is talking to.","writes":["lead"],"quote":null},"p":{"label":"Put them in the pipeline","says":"On the board at the first stage, visible rather than sitting in an inbox.","writes":["stage"],"quote":null},"e1":{"label":"Email one: hello","says":"Who you are and why they are hearing from you. Nothing is asked for yet.","writes":["email"],"quote":null},"w":{"label":"Wait","says":"Days, not minutes. The gap is the difference between a sequence and a blast.","writes":[],"quote":null},"e2":{"label":"Emails two to five","says":"The story, the useful one, the offer, the proof. Each one is a separate step, so any of them can be changed without touching the rest.","writes":["email"],"quote":null},"e6":{"label":"Email six: the objections","says":"It answers what people actually push back on, and then it STOPS. A sequence with no end is spam with a schedule.","writes":["email"],"quote":null}},"walk":["t","g","p","e1","w","e2","e6"]}'>
+        <div class="walk" id="w-nurture" data-walk='{"nodes":{"t":{"label":"A form is filled in","sub":"where it starts","says":"A new contact arrives, from anywhere.","writes":["source"],"quote":null},"g":{"label":"Label them","sub":"a new lead","says":"Labelled so the sequence knows who it is talking to.","writes":["lead"],"quote":null},"p":{"label":"Put them in the pipeline","sub":"visible, not buried","says":"On the board at the first stage, rather than sitting in an inbox.","writes":["stage"],"quote":null},"e1":{"label":"Email one: hello","sub":"nothing is asked for","says":"Who you are and why they are hearing from you. Nothing is asked for yet.","writes":["email"],"quote":null},"w":{"label":"Wait","sub":"days, not minutes","says":"The gap is the difference between a sequence and a blast.","writes":[],"quote":null},"e2":{"label":"Emails two to five","sub":"story, use, offer, proof","says":"Four more, each its own step, so any one of them can be rewritten without touching the rest.","writes":["email"],"quote":null},"e6":{"label":"Email six: the objections","sub":"and then it stops","says":"It answers what people actually push back on, and then it STOPS. A sequence with no end is spam with a schedule.","writes":["email"],"quote":null}},"walk":["t","g","p","e1","w","e2","e6"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1504 88" style="min-width:1504px" role="img" aria-label="nurture steps">
-            <path class="we" data-a="t" data-b="g" d="M182 44 C 207 44, 207 44, 232 44"/>
-        <path class="we" data-a="g" data-b="p" d="M400 44 C 425 44, 425 44, 450 44"/>
-        <path class="we" data-a="p" data-b="e1" d="M618 44 C 643 44, 643 44, 668 44"/>
-        <path class="we" data-a="e1" data-b="w" d="M836 44 C 861 44, 861 44, 886 44"/>
-        <path class="we" data-a="w" data-b="e2" d="M1054 44 C 1079 44, 1079 44, 1104 44"/>
-        <path class="we" data-a="e2" data-b="e6" d="M1272 44 C 1297 44, 1297 44, 1322 44"/>
-            <g class="wn k-trigger" id="w-nurture-t" data-k="t" tabindex="0"
-          role="button" aria-label="A form is filled in">
-          <rect class="wnb" x="14" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="48" text-anchor="middle">A form is filled in</text>
-        </g>
-        <g class="wn k-action" id="w-nurture-g" data-k="g" tabindex="0"
-          role="button" aria-label="Label them">
-          <rect class="wnb" x="232" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="48" text-anchor="middle">Label them</text>
-        </g>
-        <g class="wn k-action" id="w-nurture-p" data-k="p" tabindex="0"
-          role="button" aria-label="Put them in the pipeline">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="41" text-anchor="middle">Put them in the</text><text class="wnt" x="534" y="55" text-anchor="middle">pipeline</text>
-        </g>
-        <g class="wn k-action" id="w-nurture-e1" data-k="e1" tabindex="0"
-          role="button" aria-label="Email one: hello">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="48" text-anchor="middle">Email one: hello</text>
-        </g>
-        <g class="wn k-wait" id="w-nurture-w" data-k="w" tabindex="0"
-          role="button" aria-label="Wait">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Wait</text>
-        </g>
-        <g class="wn k-action" id="w-nurture-e2" data-k="e2" tabindex="0"
-          role="button" aria-label="Emails two to five">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">Emails two to five</text>
-        </g>
-        <g class="wn k-end" id="w-nurture-e6" data-k="e6" tabindex="0"
-          role="button" aria-label="Email six: the objections">
-          <rect class="wnb" x="1322" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1406" y="41" text-anchor="middle">Email six: the</text><text class="wnt" x="1406" y="55" text-anchor="middle">objections</text>
-        </g>
+          <svg viewBox="0 0 232 816" style="max-width:232px;--w:232px" role="img" aria-label="nurture routes">
+            <path class="we" data-a="t" data-b="g" d="M116 80 C 116 108, 116 108, 116 136"/>
+            <path class="we" data-a="g" data-b="p" d="M116 200 C 116 228, 116 228, 116 256"/>
+            <path class="we" data-a="p" data-b="e1" d="M116 320 C 116 348, 116 348, 116 376"/>
+            <path class="we" data-a="e1" data-b="w" d="M116 440 C 116 468, 116 468, 116 496"/>
+            <path class="we" data-a="w" data-b="e2" d="M116 560 C 116 588, 116 588, 116 616"/>
+            <path class="we" data-a="e2" data-b="e6" d="M116 680 C 116 708, 116 708, 116 736"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="A form is filled in">
+              <rect class="wnb" x="16" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="43">A form is filled in</text>
+              <text class="wns" x="29" y="67">where it starts</text>
+            </g>
+            <g class="wn k-action" data-k="g" tabindex="0" role="button" aria-label="Label them">
+              <rect class="wnb" x="16" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="163">Label them</text>
+              <text class="wns" x="29" y="187">a new lead</text>
+            </g>
+            <g class="wn k-action" data-k="p" tabindex="0" role="button" aria-label="Put them in the pipeline">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">Put them in the pipeline</text>
+              <text class="wns" x="29" y="307">visible, not buried</text>
+            </g>
+            <g class="wn k-action" data-k="e1" tabindex="0" role="button" aria-label="Email one: hello">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="403">Email one: hello</text>
+              <text class="wns" x="29" y="427">nothing is asked for</text>
+            </g>
+            <g class="wn k-wait" data-k="w" tabindex="0" role="button" aria-label="Wait">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Wait</text>
+              <text class="wns" x="29" y="547">days, not minutes</text>
+            </g>
+            <g class="wn k-action" data-k="e2" tabindex="0" role="button" aria-label="Emails two to five">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Emails two to five</text>
+              <text class="wns" x="29" y="667">story, use, offer, proof</text>
+            </g>
+            <g class="wn k-end" data-k="e6" tabindex="0" role="button" aria-label="Email six: the objections">
+              <rect class="wnb" x="16" y="736" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="757">Email six: the</text><text class="wnt" x="29" y="771">objections</text>
+              <text class="wns" x="29" y="787">and then it stops</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">A form is filled in</h4>
           <p class="wsays">A new contact arrives, from anywhere.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="lead">Labelled: new lead</span><span class="wf" data-f="stage">Moved down the pipeline</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="email">Email sent</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -428,76 +422,74 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>Booked, then reminded four times</h3>
         <p>A confirmed booking is labelled, moved down the pipeline, and reminded at three days, two days, the day before and on the day.</p>
-        <div class="walk" data-walk='{"id":"w-booked","nodes":{"t":{"label":"They book a call","says":"A real booking, in your calendar.","writes":["when"],"quote":null},"g":{"label":"Label the booking","says":"Labelled as booked, which is a different state from interested.","writes":["booked"],"quote":null},"o":{"label":"Move them down the pipeline","says":"The board shows a booked call rather than an open lead.","writes":["stage"],"quote":null},"x":{"label":"Take them out of the chase","says":"The most important step on this page. Without it the person who just booked keeps getting messages asking them to book, which is the fastest way to lose someone who already said yes.","writes":["removed"],"quote":null},"c":{"label":"Confirm it","says":"Confirmation with the time and what happens next.","writes":["email"],"quote":null},"r3":{"label":"Three days before","says":"The first reminder, far enough out to be useful.","writes":["sms"],"quote":null},"r2":{"label":"Two days before","says":"The second, when plans firm up.","writes":["sms"],"quote":null},"r1":{"label":"The day before","says":"The last one, the day before. Four touches, none of them sent by a person.","writes":["sms"],"quote":null}},"walk":["t","g","o","x","c","r3","r2","r1"]}'>
+        <div class="walk" id="w-booked" data-walk='{"nodes":{"t":{"label":"They book a call","sub":"where it starts","says":"A real booking, in your calendar.","writes":["when"],"quote":null},"g":{"label":"Label the booking","sub":"booked is not interested","says":"Booked is a different state from interested, and everything after this depends on the difference.","writes":["booked"],"quote":null},"o":{"label":"Move them down the pipeline","sub":"the board catches up","says":"The board shows a booked call rather than an open lead.","writes":["stage"],"quote":null},"x":{"label":"Take them out of the chase","sub":"the step that matters","says":"The most important step on this page. Without it, the person who just booked keeps getting messages asking them to book, which is the fastest way to lose someone who already said yes.","writes":["removed"],"quote":null},"c":{"label":"Confirm it","sub":"time and what happens next","says":"A confirmation with the time and what to expect.","writes":["email"],"quote":null},"r3":{"label":"Three days before","sub":"far enough out to move","says":"The first reminder, early enough that they can still rearrange.","writes":["sms"],"quote":null},"r2":{"label":"Two days before","sub":"when plans firm up","says":"The second, at the point people decide what their week looks like.","writes":["sms"],"quote":null},"r1":{"label":"The day before","sub":"the last one","says":"Four touches in total, none of them sent by a person.","writes":["sms"],"quote":null}},"walk":["t","g","o","x","c","r3","r2","r1"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1722 88" style="min-width:1722px" role="img" aria-label="booked steps">
-            <path class="we" data-a="t" data-b="g" d="M182 44 C 207 44, 207 44, 232 44"/>
-        <path class="we" data-a="g" data-b="o" d="M400 44 C 425 44, 425 44, 450 44"/>
-        <path class="we" data-a="o" data-b="x" d="M618 44 C 643 44, 643 44, 668 44"/>
-        <path class="we" data-a="x" data-b="c" d="M836 44 C 861 44, 861 44, 886 44"/>
-        <path class="we" data-a="c" data-b="r3" d="M1054 44 C 1079 44, 1079 44, 1104 44"/>
-        <path class="we" data-a="r3" data-b="r2" d="M1272 44 C 1297 44, 1297 44, 1322 44"/>
-        <path class="we" data-a="r2" data-b="r1" d="M1490 44 C 1515 44, 1515 44, 1540 44"/>
-            <g class="wn k-trigger" id="w-booked-t" data-k="t" tabindex="0"
-          role="button" aria-label="They book a call">
-          <rect class="wnb" x="14" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="48" text-anchor="middle">They book a call</text>
-        </g>
-        <g class="wn k-action" id="w-booked-g" data-k="g" tabindex="0"
-          role="button" aria-label="Label the booking">
-          <rect class="wnb" x="232" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="48" text-anchor="middle">Label the booking</text>
-        </g>
-        <g class="wn k-action" id="w-booked-o" data-k="o" tabindex="0"
-          role="button" aria-label="Move them down the pipeline">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="41" text-anchor="middle">Move them down the</text><text class="wnt" x="534" y="55" text-anchor="middle">pipeline</text>
-        </g>
-        <g class="wn k-decision" id="w-booked-x" data-k="x" tabindex="0"
-          role="button" aria-label="Take them out of the chase">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="41" text-anchor="middle">Take them out of the</text><text class="wnt" x="752" y="55" text-anchor="middle">chase</text>
-        </g>
-        <g class="wn k-action" id="w-booked-c" data-k="c" tabindex="0"
-          role="button" aria-label="Confirm it">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Confirm it</text>
-        </g>
-        <g class="wn k-action" id="w-booked-r3" data-k="r3" tabindex="0"
-          role="button" aria-label="Three days before">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">Three days before</text>
-        </g>
-        <g class="wn k-action" id="w-booked-r2" data-k="r2" tabindex="0"
-          role="button" aria-label="Two days before">
-          <rect class="wnb" x="1322" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1406" y="48" text-anchor="middle">Two days before</text>
-        </g>
-        <g class="wn k-end" id="w-booked-r1" data-k="r1" tabindex="0"
-          role="button" aria-label="The day before">
-          <rect class="wnb" x="1540" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1624" y="48" text-anchor="middle">The day before</text>
-        </g>
+          <svg viewBox="0 0 232 936" style="max-width:232px;--w:232px" role="img" aria-label="booked routes">
+            <path class="we" data-a="t" data-b="g" d="M116 80 C 116 108, 116 108, 116 136"/>
+            <path class="we" data-a="g" data-b="o" d="M116 200 C 116 228, 116 228, 116 256"/>
+            <path class="we" data-a="o" data-b="x" d="M116 320 C 116 348, 116 348, 116 376"/>
+            <path class="we" data-a="x" data-b="c" d="M116 440 C 116 468, 116 468, 116 496"/>
+            <path class="we" data-a="c" data-b="r3" d="M116 560 C 116 588, 116 588, 116 616"/>
+            <path class="we" data-a="r3" data-b="r2" d="M116 680 C 116 708, 116 708, 116 736"/>
+            <path class="we" data-a="r2" data-b="r1" d="M116 800 C 116 828, 116 828, 116 856"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="They book a call">
+              <rect class="wnb" x="16" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="43">They book a call</text>
+              <text class="wns" x="29" y="67">where it starts</text>
+            </g>
+            <g class="wn k-action" data-k="g" tabindex="0" role="button" aria-label="Label the booking">
+              <rect class="wnb" x="16" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="163">Label the booking</text>
+              <text class="wns" x="29" y="187">booked is not interested</text>
+            </g>
+            <g class="wn k-action" data-k="o" tabindex="0" role="button" aria-label="Move them down the pipeline">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="277">Move them down the</text><text class="wnt" x="29" y="291">pipeline</text>
+              <text class="wns" x="29" y="307">the board catches up</text>
+            </g>
+            <g class="wn k-decision" data-k="x" tabindex="0" role="button" aria-label="Take them out of the chase">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="397">Take them out of the</text><text class="wnt" x="29" y="411">chase</text>
+              <text class="wns" x="29" y="427">the step that matters</text>
+            </g>
+            <g class="wn k-action" data-k="c" tabindex="0" role="button" aria-label="Confirm it">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Confirm it</text>
+              <text class="wns" x="29" y="547">time and what happens next</text>
+            </g>
+            <g class="wn k-action" data-k="r3" tabindex="0" role="button" aria-label="Three days before">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Three days before</text>
+              <text class="wns" x="29" y="667">far enough out to move</text>
+            </g>
+            <g class="wn k-action" data-k="r2" tabindex="0" role="button" aria-label="Two days before">
+              <rect class="wnb" x="16" y="736" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="763">Two days before</text>
+              <text class="wns" x="29" y="787">when plans firm up</text>
+            </g>
+            <g class="wn k-end" data-k="r1" tabindex="0" role="button" aria-label="The day before">
+              <rect class="wnb" x="16" y="856" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="883">The day before</text>
+              <text class="wns" x="29" y="907">the last one</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">They book a call</h4>
           <p class="wsays">A real booking, in your calendar.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="booked">Labelled: booked a call</span><span class="wf" data-f="stage">Moved down the pipeline</span><span class="wf" data-f="removed">Taken out of the chase</span><span class="wf" data-f="when">When they want it</span><span class="wf" data-f="email">Email sent</span><span class="wf" data-f="sms">Text sent</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -514,70 +506,68 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>A comment becomes a conversation</h3>
         <p>Someone comments on a post. It waits, replies publicly, waits again, then opens a private message with a way to go further.</p>
-        <div class="walk" data-walk='{"id":"w-fb","nodes":{"t":{"label":"Someone comments","says":"A public comment on a post.","writes":["source"],"quote":null},"w":{"label":"Wait a moment","says":"A pause before replying. An instant answer to a comment reads as a robot, and waiting costs nothing.","writes":[],"quote":null},"r":{"label":"Reply in public","says":"Answered where everyone else can see it, because the answer is worth more to the people reading than to the person asking.","writes":[],"quote":null},"w2":{"label":"Wait again","says":"Another beat, so the private message does not land on top of the public reply.","writes":[],"quote":null},"m":{"label":"Message them privately","says":"Now privately, where the conversation can actually go somewhere.","writes":["sms"],"quote":null},"y":{"label":"They ask for the link","says":"They reply, and the conversation is a real one.","writes":["reply"],"quote":null},"n":{"label":"Nothing more","says":"Silence is allowed to be the end of it. No second message, no third.","writes":["nothing"],"quote":null}},"walk":["t","w","r","w2","m","y"]}'>
+        <div class="walk" id="w-fb" data-walk='{"nodes":{"t":{"label":"Someone comments","sub":"where it starts","says":"A public comment on a post.","writes":["source"],"quote":null},"w":{"label":"Wait a moment","sub":"so it is not a robot","says":"A pause before replying. An instant answer to a comment reads as a machine, and waiting costs nothing.","writes":[],"quote":null},"r":{"label":"Reply in public","sub":"where everyone reads it","says":"Answered where the rest of the thread can see it, because the answer is worth more to the people reading than to the person who asked.","writes":[],"quote":null},"w2":{"label":"Wait again","sub":"one beat more","says":"So the private message does not land on top of the public reply.","writes":[],"quote":null},"m":{"label":"Message them privately","sub":"where it can go somewhere","says":"Now privately, where the conversation has room to become a real one.","writes":["sms"],"quote":null},"y":{"label":"They ask for the link","sub":"a real conversation","says":"They reply, and there is something to actually answer.","writes":["reply"],"quote":null},"n":{"label":"Nothing more","sub":"silence is an answer","says":"Silence is allowed to be the end of it. No second message, no third.","writes":["nothing"],"quote":null}},"walk":["t","w","r","w2","m","y"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 168" style="min-width:1286px" role="img" aria-label="fb steps">
-            <path class="we" data-a="t" data-b="w" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="w" data-b="r" d="M400 84 C 425 84, 425 84, 450 84"/>
-        <path class="we" data-a="r" data-b="w2" d="M618 84 C 643 84, 643 84, 668 84"/>
-        <path class="we" data-a="w2" data-b="m" d="M836 84 C 861 84, 861 84, 886 84"/>
-        <path class="we" data-a="m" data-b="y" d="M1054 84 C 1079 84, 1079 44, 1104 44"/><text class="we-l" x="1079" y="57" text-anchor="middle">they reply</text>
-        <path class="we" data-a="m" data-b="n" d="M1054 84 C 1079 84, 1079 124, 1104 124"/><text class="we-l" x="1079" y="97" text-anchor="middle">silence</text>
-            <g class="wn k-trigger" id="w-fb-t" data-k="t" tabindex="0"
-          role="button" aria-label="Someone comments">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">Someone comments</text>
-        </g>
-        <g class="wn k-wait" id="w-fb-w" data-k="w" tabindex="0"
-          role="button" aria-label="Wait a moment">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Wait a moment</text>
-        </g>
-        <g class="wn k-action" id="w-fb-r" data-k="r" tabindex="0"
-          role="button" aria-label="Reply in public">
-          <rect class="wnb" x="450" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="88" text-anchor="middle">Reply in public</text>
-        </g>
-        <g class="wn k-wait" id="w-fb-w2" data-k="w2" tabindex="0"
-          role="button" aria-label="Wait again">
-          <rect class="wnb" x="668" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="88" text-anchor="middle">Wait again</text>
-        </g>
-        <g class="wn k-decision" id="w-fb-m" data-k="m" tabindex="0"
-          role="button" aria-label="Message them privately">
-          <rect class="wnb" x="886" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="81" text-anchor="middle">Message them</text><text class="wnt" x="970" y="95" text-anchor="middle">privately</text>
-        </g>
-        <g class="wn k-end" id="w-fb-y" data-k="y" tabindex="0"
-          role="button" aria-label="They ask for the link">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">They ask for the link</text>
-        </g>
-        <g class="wn k-fail" id="w-fb-n" data-k="n" tabindex="0"
-          role="button" aria-label="Nothing more">
-          <rect class="wnb" x="1104" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="128" text-anchor="middle">Nothing more</text>
-        </g>
+          <svg viewBox="0 0 458 696" style="max-width:458px;--w:458px" role="img" aria-label="fb routes">
+            <path class="we" data-a="t" data-b="w" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="w" data-b="r" d="M229 200 C 229 228, 229 228, 229 256"/>
+            <path class="we" data-a="r" data-b="w2" d="M229 320 C 229 348, 229 348, 229 376"/>
+            <path class="we" data-a="w2" data-b="m" d="M229 440 C 229 468, 229 468, 229 496"/>
+            <path class="we" data-a="m" data-b="y" d="M229 560 C 229 588, 116 588, 116 616"/><text class="we-l" x="172.5" y="592" text-anchor="middle">they reply</text>
+            <path class="we" data-a="m" data-b="n" d="M229 560 C 229 588, 342 588, 342 616"/><text class="we-l" x="285.5" y="592" text-anchor="middle">silence</text>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="Someone comments">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">Someone comments</text>
+              <text class="wns" x="142" y="67">where it starts</text>
+            </g>
+            <g class="wn k-wait" data-k="w" tabindex="0" role="button" aria-label="Wait a moment">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Wait a moment</text>
+              <text class="wns" x="142" y="187">so it is not a robot</text>
+            </g>
+            <g class="wn k-action" data-k="r" tabindex="0" role="button" aria-label="Reply in public">
+              <rect class="wnb" x="129" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="283">Reply in public</text>
+              <text class="wns" x="142" y="307">where everyone reads it</text>
+            </g>
+            <g class="wn k-wait" data-k="w2" tabindex="0" role="button" aria-label="Wait again">
+              <rect class="wnb" x="129" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="403">Wait again</text>
+              <text class="wns" x="142" y="427">one beat more</text>
+            </g>
+            <g class="wn k-decision" data-k="m" tabindex="0" role="button" aria-label="Message them privately">
+              <rect class="wnb" x="129" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="523">Message them privately</text>
+              <text class="wns" x="142" y="547">where it can go somewhere</text>
+            </g>
+            <g class="wn k-end" data-k="y" tabindex="0" role="button" aria-label="They ask for the link">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">They ask for the link</text>
+              <text class="wns" x="29" y="667">a real conversation</text>
+            </g>
+            <g class="wn k-fail" data-k="n" tabindex="0" role="button" aria-label="Nothing more">
+              <rect class="wnb" x="242" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="643">Nothing more</text>
+              <text class="wns" x="255" y="667">silence is an answer</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">Someone comments</h4>
           <p class="wsays">A public comment on a post.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="sms">Text sent</span><span class="wf" data-f="reply">Their reply, kept</span><span class="wf" data-f="nothing">Nothing written</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -587,71 +577,69 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>The same question, asked two ways</h3>
         <p>A comment and a direct message are the same intent arriving differently, so they get different handling and end in the same place.</p>
-        <div class="walk" data-walk='{"id":"w-ig","nodes":{"t":{"label":"Someone comments","says":"The same intent can arrive two ways.","writes":["source"],"quote":null},"d":{"label":"Comment or message?","says":"A public comment and a private message are the same question arriving differently, and they are answered differently on purpose.","writes":[],"quote":null},"c":{"label":"Answer the comment","says":"Answered in public and kept short. The reply is worth more to the people reading the thread than to the person who asked.","writes":[],"quote":null},"m":{"label":"Answer the message","says":"Answered in private, where there is room to actually deal with the question rather than perform an answer.","writes":[],"quote":null},"o":{"label":"Offer them a place","says":"Only now is anything offered.","writes":[],"quote":null},"y":{"label":"Count them in","says":"They are in, and the record says so.","writes":["qualified","reply"],"quote":null},"n":{"label":"Leave it there","says":"A no is a real answer and it is taken at face value, not answered with another offer.","writes":["nothing"],"quote":null}},"walk":["t","d","c","o","y"]}'>
+        <div class="walk" id="w-ig" data-walk='{"nodes":{"t":{"label":"Someone comments","sub":"where it starts","says":"The same question can arrive two different ways.","writes":["source"],"quote":null},"d":{"label":"Comment or message?","sub":"two doors, one question","says":"A public comment and a private message are the same intent arriving differently, and they are answered differently on purpose.","writes":[],"quote":null},"c":{"label":"Answer the comment","sub":"in public, briefly","says":"Answered in public and kept short. The reply is worth more to the people reading the thread than to the person who asked.","writes":[],"quote":null},"m":{"label":"Answer the message","sub":"in private, at length","says":"Answered in private, where there is room to actually deal with the question rather than perform an answer.","writes":[],"quote":null},"o":{"label":"Offer them a place","sub":"only now","says":"Nothing is offered until here.","writes":[],"quote":null},"y":{"label":"Count them in","sub":"and the record says so","says":"They are in, and it is written down rather than remembered.","writes":["qualified","reply"],"quote":null},"n":{"label":"Leave it there","sub":"a no is a real answer","says":"Taken at face value, not answered with another offer.","writes":["nothing"],"quote":null}},"walk":["t","d","c","o","y"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1068 168" style="min-width:1068px" role="img" aria-label="ig steps">
-            <path class="we" data-a="t" data-b="d" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="d" data-b="c" d="M400 84 C 425 84, 425 44, 450 44"/><text class="we-l" x="425" y="57" text-anchor="middle">comment</text>
-        <path class="we" data-a="d" data-b="m" d="M400 84 C 425 84, 425 124, 450 124"/><text class="we-l" x="425" y="97" text-anchor="middle">message</text>
-        <path class="we" data-a="c" data-b="o" d="M618 44 C 643 44, 643 84, 668 84"/>
-        <path class="we" data-a="m" data-b="o" d="M618 124 C 643 124, 643 84, 668 84"/>
-        <path class="we" data-a="o" data-b="y" d="M836 84 C 861 84, 861 44, 886 44"/><text class="we-l" x="861" y="57" text-anchor="middle">yes</text>
-        <path class="we" data-a="o" data-b="n" d="M836 84 C 861 84, 861 124, 886 124"/><text class="we-l" x="861" y="97" text-anchor="middle">not for me</text>
-            <g class="wn k-trigger" id="w-ig-t" data-k="t" tabindex="0"
-          role="button" aria-label="Someone comments">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">Someone comments</text>
-        </g>
-        <g class="wn k-decision" id="w-ig-d" data-k="d" tabindex="0"
-          role="button" aria-label="Comment or message?">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Comment or message?</text>
-        </g>
-        <g class="wn k-action" id="w-ig-c" data-k="c" tabindex="0"
-          role="button" aria-label="Answer the comment">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="48" text-anchor="middle">Answer the comment</text>
-        </g>
-        <g class="wn k-action" id="w-ig-m" data-k="m" tabindex="0"
-          role="button" aria-label="Answer the message">
-          <rect class="wnb" x="450" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="128" text-anchor="middle">Answer the message</text>
-        </g>
-        <g class="wn k-decision" id="w-ig-o" data-k="o" tabindex="0"
-          role="button" aria-label="Offer them a place">
-          <rect class="wnb" x="668" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="88" text-anchor="middle">Offer them a place</text>
-        </g>
-        <g class="wn k-end" id="w-ig-y" data-k="y" tabindex="0"
-          role="button" aria-label="Count them in">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Count them in</text>
-        </g>
-        <g class="wn k-fail" id="w-ig-n" data-k="n" tabindex="0"
-          role="button" aria-label="Leave it there">
-          <rect class="wnb" x="886" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="128" text-anchor="middle">Leave it there</text>
-        </g>
+          <svg viewBox="0 0 458 576" style="max-width:458px;--w:458px" role="img" aria-label="ig routes">
+            <path class="we" data-a="t" data-b="d" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="d" data-b="c" d="M229 200 C 229 228, 116 228, 116 256"/><text class="we-l" x="172.5" y="232" text-anchor="middle">comment</text>
+            <path class="we" data-a="d" data-b="m" d="M229 200 C 229 228, 342 228, 342 256"/><text class="we-l" x="285.5" y="232" text-anchor="middle">message</text>
+            <path class="we" data-a="c" data-b="o" d="M116 320 C 116 348, 229 348, 229 376"/>
+            <path class="we" data-a="m" data-b="o" d="M342 320 C 342 348, 229 348, 229 376"/>
+            <path class="we" data-a="o" data-b="y" d="M229 440 C 229 468, 116 468, 116 496"/><text class="we-l" x="172.5" y="472" text-anchor="middle">yes</text>
+            <path class="we" data-a="o" data-b="n" d="M229 440 C 229 468, 342 468, 342 496"/><text class="we-l" x="285.5" y="472" text-anchor="middle">not for me</text>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="Someone comments">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">Someone comments</text>
+              <text class="wns" x="142" y="67">where it starts</text>
+            </g>
+            <g class="wn k-decision" data-k="d" tabindex="0" role="button" aria-label="Comment or message?">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Comment or message?</text>
+              <text class="wns" x="142" y="187">two doors, one question</text>
+            </g>
+            <g class="wn k-action" data-k="c" tabindex="0" role="button" aria-label="Answer the comment">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">Answer the comment</text>
+              <text class="wns" x="29" y="307">in public, briefly</text>
+            </g>
+            <g class="wn k-action" data-k="m" tabindex="0" role="button" aria-label="Answer the message">
+              <rect class="wnb" x="242" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="283">Answer the message</text>
+              <text class="wns" x="255" y="307">in private, at length</text>
+            </g>
+            <g class="wn k-decision" data-k="o" tabindex="0" role="button" aria-label="Offer them a place">
+              <rect class="wnb" x="129" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="403">Offer them a place</text>
+              <text class="wns" x="142" y="427">only now</text>
+            </g>
+            <g class="wn k-end" data-k="y" tabindex="0" role="button" aria-label="Count them in">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Count them in</text>
+              <text class="wns" x="29" y="547">and the record says so</text>
+            </g>
+            <g class="wn k-fail" data-k="n" tabindex="0" role="button" aria-label="Leave it there">
+              <rect class="wnb" x="242" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="523">Leave it there</text>
+              <text class="wns" x="255" y="547">a no is a real answer</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">where it starts</span>
           <h4 class="wtitle">Someone comments</h4>
-          <p class="wsays">The same intent can arrive two ways.</p>
+          <p class="wsays">The same question can arrive two different ways.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="qualified">Labelled: qualified</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="reply">Their reply, kept</span><span class="wf" data-f="nothing">Nothing written</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -668,71 +656,69 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>Speed to Lead: answer before they cool</h3>
         <p>A brand new lead gets a message within moments, then up to five stages of conversation, and a human takes over the second it is worth a human.</p>
-        <div class="walk" data-walk='{"id":"w-speed","nodes":{"t":{"label":"A new lead lands","says":"The clock that matters starts here, and it is measured in minutes.","writes":["lead","source"],"quote":null},"c1":{"label":"Opening message","says":"A text within moments of the lead arriving, while they still remember filling the form in.","writes":["sms"],"quote":"Hi {name}, saw you were looking at {thing} - still after that, or has it sorted itself out?"},"r":{"label":"Do they reply?","says":"Everything after this point depends on a human answering. Nothing is assumed.","writes":["reply"],"quote":null},"c2":{"label":"Conversations two to five","says":"Five stages of real back-and-forth, each one its own workflow, so a stage can be rewritten without disturbing the others.","writes":["sms","reply"],"quote":null},"q":{"label":"Qualified?","says":"The gate. It decides whether a person is worth a person.","writes":["qualified"],"quote":null},"h":{"label":"Hand to a human","says":"It never tries to close. Its whole job is to reach someone who is still interested and hand them over warm.","writes":["notify","qualified"],"quote":null},"s":{"label":"Stop, quietly","says":"No reply, or not a fit. It stops rather than sending the sixth message.","writes":["nothing"],"quote":null}},"walk":["t","c1","r","c2","q","h"]}'>
+        <div class="walk" id="w-speed" data-walk='{"nodes":{"t":{"label":"A new lead lands","sub":"the clock starts","says":"The clock that matters starts here, and it is measured in minutes.","writes":["lead","source"],"quote":null},"c1":{"label":"Opening message","sub":"within moments","says":"A text while they still remember filling the form in.","writes":["sms"],"quote":"Hi {name}, saw you were looking at {thing} - still after that, or has it sorted itself out?"},"r":{"label":"Do they reply?","sub":"nothing is assumed","says":"Everything past this point depends on a human answering.","writes":["reply"],"quote":null},"c2":{"label":"Conversations two to five","sub":"five stages, five builds","says":"Real back-and-forth, each stage its own workflow, so one can be rewritten without disturbing the others.","writes":["sms","reply"],"quote":null},"q":{"label":"Qualified?","sub":"the gate","says":"It decides whether a person is worth a person.","writes":["qualified"],"quote":null},"h":{"label":"Hand to a human","sub":"it never closes","says":"Its whole job is to reach someone still interested and hand them over warm.","writes":["notify","qualified"],"quote":null},"s":{"label":"Stop, quietly","sub":"no sixth message","says":"No reply, or not a fit. It stops rather than sending one more.","writes":["nothing"],"quote":null}},"walk":["t","c1","r","c2","q","h"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 168" style="min-width:1286px" role="img" aria-label="speed steps">
-            <path class="we" data-a="t" data-b="c1" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="c1" data-b="r" d="M400 84 C 425 84, 425 84, 450 84"/>
-        <path class="we" data-a="r" data-b="c2" d="M618 84 C 643 84, 643 84, 668 84"/><text class="we-l" x="643" y="77" text-anchor="middle">yes</text>
-        <path class="we" data-a="r" data-b="s" d="M618 84 C 861 84, 861 124, 1104 124"/><text class="we-l" x="861" y="97" text-anchor="middle">no reply</text>
-        <path class="we" data-a="c2" data-b="q" d="M836 84 C 861 84, 861 84, 886 84"/>
-        <path class="we" data-a="q" data-b="h" d="M1054 84 C 1079 84, 1079 44, 1104 44"/><text class="we-l" x="1079" y="57" text-anchor="middle">yes</text>
-        <path class="we" data-a="q" data-b="s" d="M1054 84 C 1079 84, 1079 124, 1104 124"/><text class="we-l" x="1079" y="97" text-anchor="middle">no</text>
-            <g class="wn k-trigger" id="w-speed-t" data-k="t" tabindex="0"
-          role="button" aria-label="A new lead lands">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">A new lead lands</text>
-        </g>
-        <g class="wn k-action" id="w-speed-c1" data-k="c1" tabindex="0"
-          role="button" aria-label="Opening message">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Opening message</text>
-        </g>
-        <g class="wn k-decision" id="w-speed-r" data-k="r" tabindex="0"
-          role="button" aria-label="Do they reply?">
-          <rect class="wnb" x="450" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="88" text-anchor="middle">Do they reply?</text>
-        </g>
-        <g class="wn k-action" id="w-speed-c2" data-k="c2" tabindex="0"
-          role="button" aria-label="Conversations two to five">
-          <rect class="wnb" x="668" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="81" text-anchor="middle">Conversations two to</text><text class="wnt" x="752" y="95" text-anchor="middle">five</text>
-        </g>
-        <g class="wn k-decision" id="w-speed-q" data-k="q" tabindex="0"
-          role="button" aria-label="Qualified?">
-          <rect class="wnb" x="886" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="88" text-anchor="middle">Qualified?</text>
-        </g>
-        <g class="wn k-end" id="w-speed-h" data-k="h" tabindex="0"
-          role="button" aria-label="Hand to a human">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="48" text-anchor="middle">Hand to a human</text>
-        </g>
-        <g class="wn k-fail" id="w-speed-s" data-k="s" tabindex="0"
-          role="button" aria-label="Stop, quietly">
-          <rect class="wnb" x="1104" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="128" text-anchor="middle">Stop, quietly</text>
-        </g>
+          <svg viewBox="0 0 458 696" style="max-width:458px;--w:458px" role="img" aria-label="speed routes">
+            <path class="we" data-a="t" data-b="c1" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="c1" data-b="r" d="M229 200 C 229 228, 229 228, 229 256"/>
+            <path class="we" data-a="r" data-b="c2" d="M229 320 C 229 348, 229 348, 229 376"/><text class="we-l" x="229" y="352" text-anchor="middle">yes</text>
+            <path class="we" data-a="r" data-b="s" d="M229 320 C 229 468, 342 468, 342 616"/><text class="we-l" x="285.5" y="472" text-anchor="middle">no reply</text>
+            <path class="we" data-a="c2" data-b="q" d="M229 440 C 229 468, 229 468, 229 496"/>
+            <path class="we" data-a="q" data-b="h" d="M229 560 C 229 588, 116 588, 116 616"/><text class="we-l" x="172.5" y="592" text-anchor="middle">yes</text>
+            <path class="we" data-a="q" data-b="s" d="M229 560 C 229 588, 342 588, 342 616"/><text class="we-l" x="285.5" y="592" text-anchor="middle">no</text>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="A new lead lands">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">A new lead lands</text>
+              <text class="wns" x="142" y="67">the clock starts</text>
+            </g>
+            <g class="wn k-action" data-k="c1" tabindex="0" role="button" aria-label="Opening message">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Opening message</text>
+              <text class="wns" x="142" y="187">within moments</text>
+            </g>
+            <g class="wn k-decision" data-k="r" tabindex="0" role="button" aria-label="Do they reply?">
+              <rect class="wnb" x="129" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="283">Do they reply?</text>
+              <text class="wns" x="142" y="307">nothing is assumed</text>
+            </g>
+            <g class="wn k-action" data-k="c2" tabindex="0" role="button" aria-label="Conversations two to five">
+              <rect class="wnb" x="129" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="397">Conversations two to</text><text class="wnt" x="142" y="411">five</text>
+              <text class="wns" x="142" y="427">five stages, five builds</text>
+            </g>
+            <g class="wn k-decision" data-k="q" tabindex="0" role="button" aria-label="Qualified?">
+              <rect class="wnb" x="129" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="523">Qualified?</text>
+              <text class="wns" x="142" y="547">the gate</text>
+            </g>
+            <g class="wn k-end" data-k="h" tabindex="0" role="button" aria-label="Hand to a human">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Hand to a human</text>
+              <text class="wns" x="29" y="667">it never closes</text>
+            </g>
+            <g class="wn k-fail" data-k="s" tabindex="0" role="button" aria-label="Stop, quietly">
+              <rect class="wnb" x="242" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="643">Stop, quietly</text>
+              <text class="wns" x="255" y="667">no sixth message</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">the clock starts</span>
           <h4 class="wtitle">A new lead lands</h4>
           <p class="wsays">The clock that matters starts here, and it is measured in minutes.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="lead">Labelled: new lead</span><span class="wf" data-f="qualified">Labelled: qualified</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="sms">Text sent</span><span class="wf" data-f="reply">Their reply, kept</span><span class="wf" data-f="notify">Your team told</span><span class="wf" data-f="nothing">Nothing written</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -742,71 +728,69 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>Waking up leads everyone gave up on</h3>
         <p>Old leads nobody has time to call twice get re-opened by text, qualified over five stages, and only then handed a calendar link.</p>
-        <div class="walk" data-walk='{"id":"w-defib","nodes":{"t":{"label":"An old lead is picked","says":"Someone who went cold months ago and that nobody has time to ring twice.","writes":["source"],"quote":null},"c1":{"label":"Opening message","says":"It opens by admitting the gap rather than pretending there was not one.","writes":["sms"],"quote":"Hi {name} - we spoke a while back about {thing}. Probably long sorted, but thought I would check."},"r":{"label":"Any answer?","says":"Most will not answer, and that is the expected case.","writes":["reply"],"quote":null},"c2":{"label":"Conversations two to five","says":"The same five-stage structure as the other engine, aimed at a colder audience.","writes":["sms","reply"],"quote":null},"l":{"label":"Send the calendar link","says":"The link is GATED. Sent to everyone, a booking page becomes a spam complaint.","writes":[],"quote":null},"n":{"label":"Tell you they qualified","says":"You hear about it once it is worth hearing about, and not before.","writes":["notify","qualified"],"quote":null},"s":{"label":"Let them be","says":"Back to dormant, with nothing sent that anyone would resent.","writes":["nothing"],"quote":null}},"walk":["t","c1","r","c2","l","n"]}'>
+        <div class="walk" id="w-defib" data-walk='{"nodes":{"t":{"label":"An old lead is picked","sub":"cold, months old","says":"Someone who went quiet months ago, and that nobody has time to ring twice.","writes":["source"],"quote":null},"c1":{"label":"Opening message","sub":"it admits the gap","says":"It opens by admitting the silence rather than pretending there was not one.","writes":["sms"],"quote":"Hi {name} - we spoke a while back about {thing}. Probably long sorted, but thought I would check."},"r":{"label":"Any answer?","sub":"most will not","says":"Silence is the expected case here, not the failure case.","writes":["reply"],"quote":null},"c2":{"label":"Conversations two to five","sub":"same five stages","says":"The same structure as the other engine, aimed at a colder audience.","writes":["sms","reply"],"quote":null},"l":{"label":"Send the calendar link","sub":"gated, on purpose","says":"Sent to everyone, a booking page becomes a spam complaint. It goes only to people who qualify.","writes":[],"quote":null},"n":{"label":"Tell you they qualified","sub":"worth hearing about","says":"You hear about it once it is worth hearing about, and not before.","writes":["notify","qualified"],"quote":null},"s":{"label":"Let them be","sub":"back to dormant","says":"Nothing sent that anyone would resent.","writes":["nothing"],"quote":null}},"walk":["t","c1","r","c2","l","n"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 168" style="min-width:1286px" role="img" aria-label="defib steps">
-            <path class="we" data-a="t" data-b="c1" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="c1" data-b="r" d="M400 84 C 425 84, 425 84, 450 84"/>
-        <path class="we" data-a="r" data-b="c2" d="M618 84 C 643 84, 643 84, 668 84"/><text class="we-l" x="643" y="77" text-anchor="middle">yes</text>
-        <path class="we" data-a="r" data-b="s" d="M618 84 C 861 84, 861 124, 1104 124"/><text class="we-l" x="861" y="97" text-anchor="middle">nothing</text>
-        <path class="we" data-a="c2" data-b="l" d="M836 84 C 861 84, 861 84, 886 84"/>
-        <path class="we" data-a="l" data-b="n" d="M1054 84 C 1079 84, 1079 44, 1104 44"/><text class="we-l" x="1079" y="57" text-anchor="middle">they qualify</text>
-        <path class="we" data-a="l" data-b="s" d="M1054 84 C 1079 84, 1079 124, 1104 124"/><text class="we-l" x="1079" y="97" text-anchor="middle">they do not</text>
-            <g class="wn k-trigger" id="w-defib-t" data-k="t" tabindex="0"
-          role="button" aria-label="An old lead is picked">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">An old lead is picked</text>
-        </g>
-        <g class="wn k-action" id="w-defib-c1" data-k="c1" tabindex="0"
-          role="button" aria-label="Opening message">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Opening message</text>
-        </g>
-        <g class="wn k-decision" id="w-defib-r" data-k="r" tabindex="0"
-          role="button" aria-label="Any answer?">
-          <rect class="wnb" x="450" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="88" text-anchor="middle">Any answer?</text>
-        </g>
-        <g class="wn k-action" id="w-defib-c2" data-k="c2" tabindex="0"
-          role="button" aria-label="Conversations two to five">
-          <rect class="wnb" x="668" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="81" text-anchor="middle">Conversations two to</text><text class="wnt" x="752" y="95" text-anchor="middle">five</text>
-        </g>
-        <g class="wn k-decision" id="w-defib-l" data-k="l" tabindex="0"
-          role="button" aria-label="Send the calendar link">
-          <rect class="wnb" x="886" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="81" text-anchor="middle">Send the calendar</text><text class="wnt" x="970" y="95" text-anchor="middle">link</text>
-        </g>
-        <g class="wn k-end" id="w-defib-n" data-k="n" tabindex="0"
-          role="button" aria-label="Tell you they qualified">
-          <rect class="wnb" x="1104" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="41" text-anchor="middle">Tell you they</text><text class="wnt" x="1188" y="55" text-anchor="middle">qualified</text>
-        </g>
-        <g class="wn k-fail" id="w-defib-s" data-k="s" tabindex="0"
-          role="button" aria-label="Let them be">
-          <rect class="wnb" x="1104" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="128" text-anchor="middle">Let them be</text>
-        </g>
+          <svg viewBox="0 0 458 696" style="max-width:458px;--w:458px" role="img" aria-label="defib routes">
+            <path class="we" data-a="t" data-b="c1" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="c1" data-b="r" d="M229 200 C 229 228, 229 228, 229 256"/>
+            <path class="we" data-a="r" data-b="c2" d="M229 320 C 229 348, 229 348, 229 376"/><text class="we-l" x="229" y="352" text-anchor="middle">yes</text>
+            <path class="we" data-a="r" data-b="s" d="M229 320 C 229 468, 342 468, 342 616"/><text class="we-l" x="285.5" y="472" text-anchor="middle">nothing</text>
+            <path class="we" data-a="c2" data-b="l" d="M229 440 C 229 468, 229 468, 229 496"/>
+            <path class="we" data-a="l" data-b="n" d="M229 560 C 229 588, 116 588, 116 616"/><text class="we-l" x="172.5" y="592" text-anchor="middle">they qualify</text>
+            <path class="we" data-a="l" data-b="s" d="M229 560 C 229 588, 342 588, 342 616"/><text class="we-l" x="285.5" y="592" text-anchor="middle">they do not</text>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="An old lead is picked">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">An old lead is picked</text>
+              <text class="wns" x="142" y="67">cold, months old</text>
+            </g>
+            <g class="wn k-action" data-k="c1" tabindex="0" role="button" aria-label="Opening message">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Opening message</text>
+              <text class="wns" x="142" y="187">it admits the gap</text>
+            </g>
+            <g class="wn k-decision" data-k="r" tabindex="0" role="button" aria-label="Any answer?">
+              <rect class="wnb" x="129" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="283">Any answer?</text>
+              <text class="wns" x="142" y="307">most will not</text>
+            </g>
+            <g class="wn k-action" data-k="c2" tabindex="0" role="button" aria-label="Conversations two to five">
+              <rect class="wnb" x="129" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="397">Conversations two to</text><text class="wnt" x="142" y="411">five</text>
+              <text class="wns" x="142" y="427">same five stages</text>
+            </g>
+            <g class="wn k-decision" data-k="l" tabindex="0" role="button" aria-label="Send the calendar link">
+              <rect class="wnb" x="129" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="523">Send the calendar link</text>
+              <text class="wns" x="142" y="547">gated, on purpose</text>
+            </g>
+            <g class="wn k-end" data-k="n" tabindex="0" role="button" aria-label="Tell you they qualified">
+              <rect class="wnb" x="16" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="643">Tell you they qualified</text>
+              <text class="wns" x="29" y="667">worth hearing about</text>
+            </g>
+            <g class="wn k-fail" data-k="s" tabindex="0" role="button" aria-label="Let them be">
+              <rect class="wnb" x="242" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="643">Let them be</text>
+              <text class="wns" x="255" y="667">back to dormant</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">cold, months old</span>
           <h4 class="wtitle">An old lead is picked</h4>
-          <p class="wsays">Someone who went cold months ago and that nobody has time to ring twice.</p>
+          <p class="wsays">Someone who went quiet months ago, and that nobody has time to ring twice.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="qualified">Labelled: qualified</span><span class="wf" data-f="source">Where they came from</span><span class="wf" data-f="sms">Text sent</span><span class="wf" data-f="reply">Their reply, kept</span><span class="wf" data-f="notify">Your team told</span><span class="wf" data-f="nothing">Nothing written</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -816,58 +800,56 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>One word, and everything stops</h3>
         <p>The customer replies quit. Messages stop, and they are removed from all five stages at once.</p>
-        <div class="walk" data-walk='{"id":"w-quit","nodes":{"t":{"label":"They reply: quit","says":"Three separate triggers watch for Quit, QUIT and quit, because a person who wants out will not check their capital letters first.","writes":["optout"],"quote":null},"d":{"label":"Stop all messages","says":"Everything stops before anything else runs. No goodbye message, no last offer.","writes":["removed"],"quote":null},"r1":{"label":"Out of stage one","says":"Removed from the first conversation.","writes":["removed"],"quote":null},"r2":{"label":"Out of stages two to four","says":"And the middle three, each removed on its own. A person left in one of five conversations is worse off than one who was never in any of them.","writes":["removed"],"quote":null},"r5":{"label":"Out of stage five","says":"Nothing left running. This exists twice, once for each conversation engine, because a half-removed person is worse than one who was never in.","writes":["removed"],"quote":null}},"walk":["t","d","r1","r2","r5"]}'>
+        <div class="walk" id="w-quit" data-walk='{"nodes":{"t":{"label":"They reply: quit","sub":"three triggers, one word","says":"Quit, QUIT and quit each have their own trigger, because a person who wants out will not check their capital letters first.","writes":["optout"],"quote":null},"d":{"label":"Stop all messages","sub":"before anything else","says":"Everything stops first. No goodbye message, no last offer.","writes":["removed"],"quote":null},"r1":{"label":"Out of stage one","sub":"removed, not paused","says":"Taken out of the first conversation entirely.","writes":["removed"],"quote":null},"r2":{"label":"Out of stages two to four","sub":"each on its own","says":"The middle three, removed separately. A person left in one of five conversations is worse off than one who was never in any.","writes":["removed"],"quote":null},"r5":{"label":"Out of stage five","sub":"nothing left running","says":"This build exists twice, once per conversation engine, because a half-removed person is the worst outcome available.","writes":["removed"],"quote":null}},"walk":["t","d","r1","r2","r5"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1068 88" style="min-width:1068px" role="img" aria-label="quit steps">
-            <path class="we" data-a="t" data-b="d" d="M182 44 C 207 44, 207 44, 232 44"/>
-        <path class="we" data-a="d" data-b="r1" d="M400 44 C 425 44, 425 44, 450 44"/>
-        <path class="we" data-a="r1" data-b="r2" d="M618 44 C 643 44, 643 44, 668 44"/>
-        <path class="we" data-a="r2" data-b="r5" d="M836 44 C 861 44, 861 44, 886 44"/>
-            <g class="wn k-trigger" id="w-quit-t" data-k="t" tabindex="0"
-          role="button" aria-label="They reply: quit">
-          <rect class="wnb" x="14" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="48" text-anchor="middle">They reply: quit</text>
-        </g>
-        <g class="wn k-action" id="w-quit-d" data-k="d" tabindex="0"
-          role="button" aria-label="Stop all messages">
-          <rect class="wnb" x="232" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="48" text-anchor="middle">Stop all messages</text>
-        </g>
-        <g class="wn k-action" id="w-quit-r1" data-k="r1" tabindex="0"
-          role="button" aria-label="Out of stage one">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="48" text-anchor="middle">Out of stage one</text>
-        </g>
-        <g class="wn k-action" id="w-quit-r2" data-k="r2" tabindex="0"
-          role="button" aria-label="Out of stages two to four">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="41" text-anchor="middle">Out of stages two to</text><text class="wnt" x="752" y="55" text-anchor="middle">four</text>
-        </g>
-        <g class="wn k-end" id="w-quit-r5" data-k="r5" tabindex="0"
-          role="button" aria-label="Out of stage five">
-          <rect class="wnb" x="886" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="48" text-anchor="middle">Out of stage five</text>
-        </g>
+          <svg viewBox="0 0 232 576" style="max-width:232px;--w:232px" role="img" aria-label="quit routes">
+            <path class="we" data-a="t" data-b="d" d="M116 80 C 116 108, 116 108, 116 136"/>
+            <path class="we" data-a="d" data-b="r1" d="M116 200 C 116 228, 116 228, 116 256"/>
+            <path class="we" data-a="r1" data-b="r2" d="M116 320 C 116 348, 116 348, 116 376"/>
+            <path class="we" data-a="r2" data-b="r5" d="M116 440 C 116 468, 116 468, 116 496"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="They reply: quit">
+              <rect class="wnb" x="16" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="43">They reply: quit</text>
+              <text class="wns" x="29" y="67">three triggers, one word</text>
+            </g>
+            <g class="wn k-action" data-k="d" tabindex="0" role="button" aria-label="Stop all messages">
+              <rect class="wnb" x="16" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="163">Stop all messages</text>
+              <text class="wns" x="29" y="187">before anything else</text>
+            </g>
+            <g class="wn k-action" data-k="r1" tabindex="0" role="button" aria-label="Out of stage one">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">Out of stage one</text>
+              <text class="wns" x="29" y="307">removed, not paused</text>
+            </g>
+            <g class="wn k-action" data-k="r2" tabindex="0" role="button" aria-label="Out of stages two to four">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="397">Out of stages two to</text><text class="wnt" x="29" y="411">four</text>
+              <text class="wns" x="29" y="427">each on its own</text>
+            </g>
+            <g class="wn k-end" data-k="r5" tabindex="0" role="button" aria-label="Out of stage five">
+              <rect class="wnb" x="16" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="523">Out of stage five</text>
+              <text class="wns" x="29" y="547">nothing left running</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">three triggers, one word</span>
           <h4 class="wtitle">They reply: quit</h4>
-          <p class="wsays">Three separate triggers watch for Quit, QUIT and quit, because a person who wants out will not check their capital letters first.</p>
+          <p class="wsays">Quit, QUIT and quit each have their own trigger, because a person who wants out will not check their capital letters first.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="optout">Labelled: asked to stop</span><span class="wf" data-f="removed">Taken out of the chase</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -884,70 +866,68 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>Only tell me when they actually qualify</h3>
         <p>A record changes. If the person genuinely qualifies they are labelled, their intent is noted, the deal moves, and you are told. Otherwise nothing happens.</p>
-        <div class="walk" data-walk='{"id":"w-qualify","nodes":{"t":{"label":"Their record changes","says":"Any change at all. Most of them will turn out not to matter.","writes":[],"quote":null},"q":{"label":"Do they qualify?","says":"The gate, and everything past it is worth your attention.","writes":[],"quote":null},"g":{"label":"Label them","says":"Labelled as qualified, so the board can be filtered on it.","writes":["qualified"],"quote":null},"f":{"label":"Note what they want","says":"Written down in their own terms, so whoever picks up the call is not starting from nothing.","writes":["want"],"quote":null},"o":{"label":"Move them down the pipeline","says":"On to the stage that means a person should call.","writes":["stage"],"quote":null},"n":{"label":"Tell you","says":"You are interrupted here, and only here.","writes":["notify"],"quote":null},"x":{"label":"Say nothing","says":"The correct outcome most of the time. A notification for every change is a notification nobody reads.","writes":["nothing"],"quote":null}},"walk":["t","q","g","f","o","n"]}'>
+        <div class="walk" id="w-qualify" data-walk='{"nodes":{"t":{"label":"Their record changes","sub":"anything at all","says":"Any change. Most of them will turn out not to matter.","writes":[],"quote":null},"q":{"label":"Do they qualify?","sub":"the gate","says":"Everything past this point is worth your attention. Everything before it is noise.","writes":[],"quote":null},"g":{"label":"Label them","sub":"so the board can filter","says":"Labelled as qualified, which is what makes the board useful.","writes":["qualified"],"quote":null},"f":{"label":"Note what they want","sub":"in their own words","says":"Written down as they said it, so whoever picks up the call is not starting from nothing.","writes":["want"],"quote":null},"o":{"label":"Move them down the pipeline","sub":"a person should call","says":"On to the stage that means somebody rings them.","writes":["stage"],"quote":null},"n":{"label":"Tell you","sub":"here, and only here","says":"You are interrupted at this point and at no other.","writes":["notify"],"quote":null},"x":{"label":"Say nothing","sub":"the usual outcome","says":"Correct most of the time. A notification for every change is a notification nobody reads.","writes":["nothing"],"quote":null}},"walk":["t","q","g","f","o","n"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 1286 168" style="min-width:1286px" role="img" aria-label="qualify steps">
-            <path class="we" data-a="t" data-b="q" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="q" data-b="g" d="M400 84 C 425 84, 425 44, 450 44"/><text class="we-l" x="425" y="57" text-anchor="middle">yes</text>
-        <path class="we" data-a="q" data-b="x" d="M400 84 C 425 84, 425 124, 450 124"/><text class="we-l" x="425" y="97" text-anchor="middle">no</text>
-        <path class="we" data-a="g" data-b="f" d="M618 44 C 643 44, 643 84, 668 84"/>
-        <path class="we" data-a="f" data-b="o" d="M836 84 C 861 84, 861 84, 886 84"/>
-        <path class="we" data-a="o" data-b="n" d="M1054 84 C 1079 84, 1079 84, 1104 84"/>
-            <g class="wn k-trigger" id="w-qualify-t" data-k="t" tabindex="0"
-          role="button" aria-label="Their record changes">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">Their record changes</text>
-        </g>
-        <g class="wn k-decision" id="w-qualify-q" data-k="q" tabindex="0"
-          role="button" aria-label="Do they qualify?">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Do they qualify?</text>
-        </g>
-        <g class="wn k-action" id="w-qualify-g" data-k="g" tabindex="0"
-          role="button" aria-label="Label them">
-          <rect class="wnb" x="450" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="48" text-anchor="middle">Label them</text>
-        </g>
-        <g class="wn k-action" id="w-qualify-f" data-k="f" tabindex="0"
-          role="button" aria-label="Note what they want">
-          <rect class="wnb" x="668" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="88" text-anchor="middle">Note what they want</text>
-        </g>
-        <g class="wn k-action" id="w-qualify-o" data-k="o" tabindex="0"
-          role="button" aria-label="Move them down the pipeline">
-          <rect class="wnb" x="886" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="970" y="81" text-anchor="middle">Move them down the</text><text class="wnt" x="970" y="95" text-anchor="middle">pipeline</text>
-        </g>
-        <g class="wn k-end" id="w-qualify-n" data-k="n" tabindex="0"
-          role="button" aria-label="Tell you">
-          <rect class="wnb" x="1104" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="1188" y="88" text-anchor="middle">Tell you</text>
-        </g>
-        <g class="wn k-fail" id="w-qualify-x" data-k="x" tabindex="0"
-          role="button" aria-label="Say nothing">
-          <rect class="wnb" x="450" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="128" text-anchor="middle">Say nothing</text>
-        </g>
+          <svg viewBox="0 0 458 696" style="max-width:458px;--w:458px" role="img" aria-label="qualify routes">
+            <path class="we" data-a="t" data-b="q" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="q" data-b="g" d="M229 200 C 229 228, 116 228, 116 256"/><text class="we-l" x="172.5" y="232" text-anchor="middle">yes</text>
+            <path class="we" data-a="q" data-b="x" d="M229 200 C 229 228, 342 228, 342 256"/><text class="we-l" x="285.5" y="232" text-anchor="middle">no</text>
+            <path class="we" data-a="g" data-b="f" d="M116 320 C 116 348, 229 348, 229 376"/>
+            <path class="we" data-a="f" data-b="o" d="M229 440 C 229 468, 229 468, 229 496"/>
+            <path class="we" data-a="o" data-b="n" d="M229 560 C 229 588, 229 588, 229 616"/>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="Their record changes">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">Their record changes</text>
+              <text class="wns" x="142" y="67">anything at all</text>
+            </g>
+            <g class="wn k-decision" data-k="q" tabindex="0" role="button" aria-label="Do they qualify?">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Do they qualify?</text>
+              <text class="wns" x="142" y="187">the gate</text>
+            </g>
+            <g class="wn k-action" data-k="g" tabindex="0" role="button" aria-label="Label them">
+              <rect class="wnb" x="16" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="283">Label them</text>
+              <text class="wns" x="29" y="307">so the board can filter</text>
+            </g>
+            <g class="wn k-action" data-k="f" tabindex="0" role="button" aria-label="Note what they want">
+              <rect class="wnb" x="129" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="403">Note what they want</text>
+              <text class="wns" x="142" y="427">in their own words</text>
+            </g>
+            <g class="wn k-action" data-k="o" tabindex="0" role="button" aria-label="Move them down the pipeline">
+              <rect class="wnb" x="129" y="496" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="517">Move them down the</text><text class="wnt" x="142" y="531">pipeline</text>
+              <text class="wns" x="142" y="547">a person should call</text>
+            </g>
+            <g class="wn k-end" data-k="n" tabindex="0" role="button" aria-label="Tell you">
+              <rect class="wnb" x="129" y="616" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="643">Tell you</text>
+              <text class="wns" x="142" y="667">here, and only here</text>
+            </g>
+            <g class="wn k-fail" data-k="x" tabindex="0" role="button" aria-label="Say nothing">
+              <rect class="wnb" x="242" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="283">Say nothing</text>
+              <text class="wns" x="255" y="307">the usual outcome</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">anything at all</span>
           <h4 class="wtitle">Their record changes</h4>
-          <p class="wsays">Any change at all. Most of them will turn out not to matter.</p>
+          <p class="wsays">Any change. Most of them will turn out not to matter.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="qualified">Labelled: qualified</span><span class="wf" data-f="stage">Moved down the pipeline</span><span class="wf" data-f="want">What they asked for</span><span class="wf" data-f="notify">Your team told</span><span class="wf" data-f="nothing">Nothing written</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -957,58 +937,56 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       <article class="wf">
         <h3>An email campaign that ends in a phone call</h3>
         <p>Emails go out, and the people who engage are queued for a call rather than another email.</p>
-        <div class="walk" data-walk='{"id":"w-emailcall","nodes":{"t":{"label":"A campaign starts","says":"A list, and a reason to contact it.","writes":[],"quote":null},"e":{"label":"Emails go out","says":"The cheap step, sent to everyone.","writes":["email"],"quote":null},"o":{"label":"Did they open it?","says":"Interest decides who gets a human. This is the whole idea.","writes":["reply"],"quote":null},"c":{"label":"Queue a call","says":"A call, only to people who showed up, so nobody spends the day ringing people who never opened anything.","writes":["notify","stage"],"quote":null},"r":{"label":"Keep emailing","says":"The rest stay on the cheap route until they do something.","writes":["email"],"quote":null}},"walk":["t","e","o","c"]}'>
+        <div class="walk" id="w-emailcall" data-walk='{"nodes":{"t":{"label":"A campaign starts","sub":"a list and a reason","says":"A list, and something worth saying to it.","writes":[],"quote":null},"e":{"label":"Emails go out","sub":"the cheap step","says":"Sent to everyone, because email costs nothing.","writes":["email"],"quote":null},"o":{"label":"Did they open it?","sub":"interest decides","says":"This is the whole idea: interest decides who gets a human.","writes":["reply"],"quote":null},"c":{"label":"Queue a call","sub":"only the engaged","says":"A call, only to people who showed up, so nobody spends the day ringing people who never opened anything.","writes":["notify","stage"],"quote":null},"r":{"label":"Keep emailing","sub":"still on the cheap route","says":"The rest stay on email until they do something.","writes":["email"],"quote":null}},"walk":["t","e","o","c"]}'>
       <div class="wmap">
         <div class="wscroll">
-          <svg viewBox="0 0 850 168" style="min-width:850px" role="img" aria-label="emailcall steps">
-            <path class="we" data-a="t" data-b="e" d="M182 84 C 207 84, 207 84, 232 84"/>
-        <path class="we" data-a="e" data-b="o" d="M400 84 C 425 84, 425 84, 450 84"/>
-        <path class="we" data-a="o" data-b="c" d="M618 84 C 643 84, 643 44, 668 44"/><text class="we-l" x="643" y="57" text-anchor="middle">engaged</text>
-        <path class="we" data-a="o" data-b="r" d="M618 84 C 643 84, 643 124, 668 124"/><text class="we-l" x="643" y="97" text-anchor="middle">not yet</text>
-            <g class="wn k-trigger" id="w-emailcall-t" data-k="t" tabindex="0"
-          role="button" aria-label="A campaign starts">
-          <rect class="wnb" x="14" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="98" y="88" text-anchor="middle">A campaign starts</text>
-        </g>
-        <g class="wn k-action" id="w-emailcall-e" data-k="e" tabindex="0"
-          role="button" aria-label="Emails go out">
-          <rect class="wnb" x="232" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="316" y="88" text-anchor="middle">Emails go out</text>
-        </g>
-        <g class="wn k-decision" id="w-emailcall-o" data-k="o" tabindex="0"
-          role="button" aria-label="Did they open it?">
-          <rect class="wnb" x="450" y="54" width="168" height="60" rx="12"/>
-          <text class="wnt" x="534" y="88" text-anchor="middle">Did they open it?</text>
-        </g>
-        <g class="wn k-end" id="w-emailcall-c" data-k="c" tabindex="0"
-          role="button" aria-label="Queue a call">
-          <rect class="wnb" x="668" y="14" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="48" text-anchor="middle">Queue a call</text>
-        </g>
-        <g class="wn k-action" id="w-emailcall-r" data-k="r" tabindex="0"
-          role="button" aria-label="Keep emailing">
-          <rect class="wnb" x="668" y="94" width="168" height="60" rx="12"/>
-          <text class="wnt" x="752" y="128" text-anchor="middle">Keep emailing</text>
-        </g>
+          <svg viewBox="0 0 458 456" style="max-width:458px;--w:458px" role="img" aria-label="emailcall routes">
+            <path class="we" data-a="t" data-b="e" d="M229 80 C 229 108, 229 108, 229 136"/>
+            <path class="we" data-a="e" data-b="o" d="M229 200 C 229 228, 229 228, 229 256"/>
+            <path class="we" data-a="o" data-b="c" d="M229 320 C 229 348, 116 348, 116 376"/><text class="we-l" x="172.5" y="352" text-anchor="middle">engaged</text>
+            <path class="we" data-a="o" data-b="r" d="M229 320 C 229 348, 342 348, 342 376"/><text class="we-l" x="285.5" y="352" text-anchor="middle">not yet</text>
+            <g class="wn k-trigger" data-k="t" tabindex="0" role="button" aria-label="A campaign starts">
+              <rect class="wnb" x="129" y="16" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="43">A campaign starts</text>
+              <text class="wns" x="142" y="67">a list and a reason</text>
+            </g>
+            <g class="wn k-action" data-k="e" tabindex="0" role="button" aria-label="Emails go out">
+              <rect class="wnb" x="129" y="136" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="163">Emails go out</text>
+              <text class="wns" x="142" y="187">the cheap step</text>
+            </g>
+            <g class="wn k-decision" data-k="o" tabindex="0" role="button" aria-label="Did they open it?">
+              <rect class="wnb" x="129" y="256" width="200" height="64" rx="12"/>
+              <text class="wnt" x="142" y="283">Did they open it?</text>
+              <text class="wns" x="142" y="307">interest decides</text>
+            </g>
+            <g class="wn k-end" data-k="c" tabindex="0" role="button" aria-label="Queue a call">
+              <rect class="wnb" x="16" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="29" y="403">Queue a call</text>
+              <text class="wns" x="29" y="427">only the engaged</text>
+            </g>
+            <g class="wn k-action" data-k="r" tabindex="0" role="button" aria-label="Keep emailing">
+              <rect class="wnb" x="242" y="376" width="200" height="64" rx="12"/>
+              <text class="wnt" x="255" y="403">Keep emailing</text>
+              <text class="wns" x="255" y="427">still on the cheap route</text>
+            </g>
           </svg>
         </div>
-        <div class="wbar">
-          <button class="wplay" type="button">Walk it</button>
-          <span class="whint">Tap any step. What it writes lights up below.</span>
-        </div>
+        <p class="whint">Tap a box. The routes out of it light up.</p>
       </div>
       <div class="wside">
-        <div class="wpanel wdetail">
-          <span class="wtag">step</span>
+        <div class="wpanel">
+          <span class="wtag">a list and a reason</span>
           <h4 class="wtitle">A campaign starts</h4>
-          <p class="wsays">A list, and a reason to contact it.</p>
+          <p class="wsays">A list, and something worth saying to it.</p>
           <div class="wquote"></div>
         </div>
-        <div class="wpanel wrec">
+        <div class="wpanel">
           <span class="wtag">what it writes on the contact</span>
           <div class="wfields">
             <span class="wf" data-f="stage">Moved down the pipeline</span><span class="wf" data-f="email">Email sent</span><span class="wf" data-f="reply">Their reply, kept</span><span class="wf" data-f="notify">Your team told</span>
           </div>
+          <button class="wplay" type="button">Walk the whole thing</button>
         </div>
       </div>
     </div>
@@ -1023,37 +1001,22 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 <script>
 
 (function(){
-  var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   document.querySelectorAll(".walk").forEach(function(box){
     var cfg = JSON.parse(box.getAttribute("data-walk"));
     var svg = box.querySelector("svg");
-    var scroll = box.querySelector(".wscroll");
+    var tag = box.querySelector(".wtag");
     var title = box.querySelector(".wtitle"), says = box.querySelector(".wsays");
-    var quote = box.querySelector(".wquote"), tag = box.querySelector(".wtag");
+    var quote = box.querySelector(".wquote");
     var timers = [];
 
     function stop(){ timers.forEach(clearTimeout); timers = []; }
 
-    /* Keep the chosen step in view. The canvas is wider than a phone, and a
-       reader who has to drag to follow along will not follow along. */
-    function follow(g){
-      if (!g) return;
-      var r = g.getBBox();
-      var scale = svg.getBoundingClientRect().width / (svg.viewBox.baseVal.width || 1);
-      var want = (r.x + r.width / 2) * scale - scroll.clientWidth / 2;
-      want = Math.max(0, Math.min(scroll.scrollWidth - scroll.clientWidth, want));
-      if (Math.abs(want - scroll.scrollLeft) < 8) return;
-      try { scroll.scrollTo({ left: want, behavior: reduced ? "auto" : "smooth" }); }
-      catch (e) { scroll.scrollLeft = want; }
-    }
-
-    function show(k, move){
+    function show(k){
       var n = cfg.nodes[k];
       if (!n) return;
+      tag.textContent = n.sub;
       title.textContent = n.label;
       says.textContent = n.says;
-      tag.textContent = (n.writes && n.writes.length) ? "this step writes" : "this step writes nothing";
       quote.innerHTML = n.quote
         ? '<div class="says"><b>What it actually sends</b>' + n.quote + "</div>" : "";
       svg.querySelectorAll(".wn").forEach(function(g){ g.classList.toggle("on", g.getAttribute("data-k") === k); });
@@ -1061,26 +1024,23 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
       box.querySelectorAll(".wf").forEach(function(f){
         f.classList.toggle("hit", (n.writes || []).indexOf(f.getAttribute("data-f")) >= 0);
       });
-      if (move) follow(svg.querySelector('[data-k="' + k + '"]'));
     }
 
     svg.querySelectorAll(".wn").forEach(function(g){
       var k = g.getAttribute("data-k");
-      g.addEventListener("click", function(){ stop(); show(k, true); });
+      g.addEventListener("click", function(){ stop(); show(k); });
       g.addEventListener("keydown", function(e){
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); stop(); show(k, true); }
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); stop(); show(k); }
       });
     });
 
     var play = box.querySelector(".wplay");
     if (play) play.addEventListener("click", function(){
       stop();
-      cfg.walk.forEach(function(k, i){
-        timers.push(setTimeout(function(){ show(k, true); }, i * 1100));
-      });
+      cfg.walk.forEach(function(k, i){ timers.push(setTimeout(function(){ show(k); }, i * 1100)); });
     });
 
-    show(cfg.walk[0], false);
+    show(cfg.walk[0]);
   });
 })();
 document.querySelectorAll(".fb").forEach(function(b){

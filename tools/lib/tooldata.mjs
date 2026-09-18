@@ -461,7 +461,7 @@ export const TOOLS = [
     bullets: ["Leads move without anyone pushing", "Nobody is chased after they say yes", "Every conversation has an exit"],
     blurb: `The CRM is where the follow-up lives. These are the builds that decide who gets
       messaged, who gets left alone, and who is worth interrupting you for.`,
-    walkNote: `Each one is a map rather than a film: tap any step to read what it does and watch
+    walkNote: `Each one is a map rather than a film: tap any box to read what it does and watch
       what it writes on the contact light up. That last part is the point - these builds are only
       worth anything because of what they leave on the record.`,
     foot: `Two of these - the conversation engines - are five workflows each plus their own

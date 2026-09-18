@@ -25,66 +25,10 @@ const ROOT = resolve(import.meta.dirname, "..");
 const OUT = join(ROOT, "explainers");
 mkdirSync(OUT, { recursive: true });
 
-const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">`;
-
-const BASE = `:root{
-  --field:#212A6B;--pop:#F5D547;--paper:#F2F1EA;--ink:#0B0E1C;--card:#fff;
-  --muted:#5C6070;--hair:#E0DED4;--good:#2E9E5B;--bad:#C8452F;
-  --f-disp:"Gabarito",system-ui,sans-serif;--f-body:"Public Sans",system-ui,sans-serif;
-  --f-mono:"Azeret Mono",ui-monospace,monospace;
-  --ease:cubic-bezier(.22,1,.36,1);}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
-  -webkit-text-size-adjust:100%}
-.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,3.5vw,42px) clamp(14px,3vw,26px)}
-.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted)}
-h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;margin:6px 0 10px;
-  font-size:clamp(25px,4.6vw,44px);line-height:1.06}
-.lede{margin:0 0 22px;font-size:clamp(15px,1.8vw,17px);line-height:1.6;color:var(--muted);max-width:62ch}
-.split{display:grid;gap:18px;grid-template-columns:1fr}
-@media(min-width:900px){.split{grid-template-columns:1.25fr .9fr;align-items:start}}
-.panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;
-  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px)}
-.panel h2{font-family:var(--f-disp);font-weight:900;font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
-.panel p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--muted)}
-.tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
-  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
-  padding:3px 9px;margin-bottom:8px}
-.src{margin-top:16px;padding-top:12px;border-top:2px dashed var(--hair);
-  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7}
-svg .n{cursor:pointer}
-svg .nb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
-svg .n:hover .nb,svg .n:focus .nb{fill:#FDF7DA}
-svg .n.on .nb{fill:var(--pop)}
-svg .nt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
-svg .ns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
-svg .e{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.32;transition:opacity .2s,stroke .2s}
-svg .e.lit{opacity:1;stroke:var(--field)}
-svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
-.says{background:var(--field);color:var(--paper);border-radius:12px;padding:13px 15px;
-  font-size:14.5px;line-height:1.55;margin:10px 0}
-.says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9.5px;
-  letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:700}
-.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.f{font-family:var(--f-mono);font-size:10.5px;border:2px solid var(--hair);border-radius:99px;
-  padding:4px 9px;color:var(--muted);transition:all .25s var(--ease)}
-.f.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
-.rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
-  user-select:none;font-size:.92em}
-.hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
-.back{display:inline-flex;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
-.back:hover{color:var(--ink)}`;
-
-const page = (title, body, extraCss = "") => `<!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${title}</title>${FONTS}
-<style>${BASE}${extraCss}</style></head>
-<body><div class="wrap">${body}</div></body></html>`;
+// Fonts, tokens and the shared furniture come from one place now. Two
+// generators build these pages, and a second copy of a stylesheet is not a
+// stylesheet - it is two of them waiting to disagree.
+import { page } from "./lib/pagekit.mjs";
 
 /* ══ SAMPLE A · the outbound caller, as a map ══════════════════════════════
    Source: 001 RETELL AI VOICE AGENTS. Every stop, every route between them and
@@ -171,7 +115,7 @@ const edgeSvg = ([a, b], i) => {
 };
 
 const sampleA = page("How the cold-call agent decides", `
-<a class="back" href="index.html">&lsaquo; Both samples</a>
+<a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">Sample A &middot; a map you can walk</span>
 <h1>It is not a script. It is a map, and the call chooses the route.</h1>
 <p class="lede">An AI that phones people on a client's behalf. There are ten places the call can go, and it
@@ -242,7 +186,7 @@ show("intro");
    build turns on one question, and a reader learns more by flipping it than by
    looking at four boxes joined with arrows. */
 const sampleB = page("What happens when the phone rings", `
-<a class="back" href="index.html">&lsaquo; Both samples</a>
+<a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">Sample B &middot; one choice, so one switch</span>
 <h1>The same call, at two o'clock and at nine o'clock.</h1>
 <p class="lede">The same client, but calls coming in. The whole build turns on one question - is the office
@@ -342,7 +286,7 @@ const CHOICES = [
 ];
 
 const sampleC = page("What the website chat actually does", `
-<a class="back" href="index.html">&lsaquo; All four</a>
+<a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">Three &middot; the numbers, as they came out</span>
 <h1>Out of 144 people, eleven booked without speaking to anyone.</h1>
 <p class="lede">A chat window on a client's website. It offers four ways in, and one of them opens
@@ -418,7 +362,7 @@ writeFileSync(join(OUT, "website-chat.html"), sampleC);
    diagrammed because the point is felt, not read - you type the word and watch
    five things switch off. */
 const sampleD = page("The word that switches everything off", `
-<a class="back" href="index.html">&lsaquo; All four</a>
+<a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">Four &middot; try it, do not read it</span>
 <h1>One word from the customer, and the whole thing stops.</h1>
 <p class="lede">Two of the builds hold a five-stage conversation with people by text. Both of them
@@ -491,29 +435,10 @@ writeFileSync(join(OUT, "the-way-out.html"), sampleD);
 writeFileSync(join(OUT, "retell-agent.html"), sampleA);
 writeFileSync(join(OUT, "call-routing.html"), sampleB);
 
-const CARDS = [
-  ["retell-agent.html", "One", "The AI that phones people",
-   "Ten places a call can go, and thirteen things it writes down on the way. You walk it, because no two calls take the same route."],
-  ["call-routing.html", "Two", "When the phone rings",
-   "One question - is the office open? - with two answers. Move the clock and follow the call."],
-  ["website-chat.html", "Three", "The chat on the website",
-   "144 people opened it, 11 booked without speaking to anyone. The real numbers, including the unflattering ones."],
-  ["the-way-out.html", "Four", "The word that stops everything",
-   "Type quit and watch five conversations switch off. The part almost nobody builds."]
-];
-const index = page("How these systems work", `
-<span class="eyebrow">Batch one &middot; the front door</span>
-<h1>Three ways in. One way out.</h1>
-<p class="lede">Four builds for one client, shown the way each one actually behaves rather than as
-four drawings that look alike. Three of them are doors in: the phone rings, the phone gets rung,
-somebody lands on the website. The fourth is the door out, and it is the one that matters most.</p>
-<div class="split">
-${CARDS.map(c => '<a class="panel" href="' + c[0] + '" style="text-decoration:none;color:inherit;display:block">' +
-  '<span class="tag">' + c[1] + '</span><h2>' + c[2] + '</h2><p>' + c[3] + '</p></a>').join("\n")}
-</div>
-<p class="lede" style="margin-top:22px">Every line quoted on these pages is word for word from the
-live build. Client names are withheld throughout.</p>`);
-writeFileSync(join(OUT, "index.html"), index);
-
-console.log("wrote 5 files to " + OUT);
-for (const c of CARDS) console.log("  " + c[0].padEnd(22) + c[2]);
+// The index is no longer built here. tools/toolpages.mjs owns
+// explainers/index.html now, because that page is the card grid over ALL SIX
+// tools and these four pages are three of its cards - two generators writing
+// the same file would just mean whichever ran last wins.
+console.log("wrote 4 files to " + OUT);
+for (const f of ["retell-agent.html","call-routing.html","website-chat.html","the-way-out.html"])
+  console.log("  " + f);

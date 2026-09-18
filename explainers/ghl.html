@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoHighLevel builds</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>:root{
+  --field:#212A6B;--pop:#F5D547;--paper:#F2F1EA;--ink:#0B0E1C;--card:#fff;
+  --muted:#5C6070;--hair:#E0DED4;--good:#2E9E5B;--bad:#C8452F;
+  --f-disp:"Gabarito",system-ui,sans-serif;--f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,3.5vw,42px) clamp(14px,3vw,26px)}
+.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted)}
+h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;margin:6px 0 10px;
+  font-size:clamp(25px,4.6vw,44px);line-height:1.06}
+.lede{margin:0 0 22px;font-size:clamp(15px,1.8vw,17px);line-height:1.6;color:var(--muted);max-width:62ch}
+.split{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.split{grid-template-columns:1.25fr .9fr;align-items:start}}
+.panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px)}
+.panel h2{font-family:var(--f-disp);font-weight:900;font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
+.panel p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:3px 9px;margin-bottom:8px}
+.src{margin-top:16px;padding-top:12px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7}
+svg .n{cursor:pointer}
+svg .nb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
+svg .n:hover .nb,svg .n:focus .nb{fill:#FDF7DA}
+svg .n.on .nb{fill:var(--pop)}
+svg .nt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
+svg .ns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
+svg .e{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.32;transition:opacity .2s,stroke .2s}
+svg .e.lit{opacity:1;stroke:var(--field)}
+svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
+.says{background:var(--field);color:var(--paper);border-radius:12px;padding:13px 15px;
+  font-size:14.5px;line-height:1.55;margin:10px 0}
+.says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.f{font-family:var(--f-mono);font-size:10.5px;border:2px solid var(--hair);border-radius:99px;
+  padding:4px 9px;color:var(--muted);transition:all .25s var(--ease)}
+.f.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
+.rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
+  user-select:none;font-size:.92em}
+.hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
+.back{display:flex;width:fit-content;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
+.back:hover{color:var(--ink)}
+.flow{margin:14px 0 0;border:3px solid var(--ink);border-radius:14px;background:var(--paper);
+  padding:10px 0 0;overflow:hidden}
+.fscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;
+  scrollbar-width:thin}
+.flow svg{height:auto;display:block}
+.fnb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .22s var(--ease)}
+.fnt{font-family:var(--f-mono);font-size:11px;fill:var(--ink)}
+.fn.on .fnb{fill:var(--pop)}
+.fn.done .fnb{fill:#FBF3CE}
+.k-decision .fnb{fill:#EFEEE6}
+.k-decision.on .fnb,.k-fail.on .fnb{fill:var(--pop)}
+.k-fail .fnb{stroke:var(--bad)}
+.k-end .fnb{stroke-width:4.5}
+/* The trigger stays indigo the whole way through, so at a glance you can always
+   see where the thing starts without reading a word of it. */
+.k-trigger .fnb,.k-trigger.on .fnb,.k-trigger.done .fnb{fill:var(--field)}
+.k-trigger .fnt{fill:var(--paper)}
+.fe{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.28;transition:opacity .2s,stroke .2s}
+.fe.lit{opacity:1;stroke:var(--field)}
+.fe-l{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted)}
+.fp{fill:var(--pop);stroke:var(--ink);stroke-width:2.5;opacity:0;transition:opacity .15s}
+.fp.go{opacity:1}
+/* how far through the run you are, without a number to read */
+.frail{height:4px;background:var(--hair);margin:8px 10px 0;border-radius:3px;overflow:hidden}
+.frail i{display:block;height:100%;width:0;background:var(--field);transition:width .5s var(--ease)}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 10px 10px;flex-wrap:wrap}
+.fplay{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--pop);border:3px solid var(--ink);border-radius:99px;padding:7px 15px;
+  cursor:pointer;box-shadow:3px 3px 0 0 var(--ink)}
+.fplay:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fcap{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.04em;flex:1 1 180px}
+@media(prefers-reduced-motion:reduce){
+  /* Someone who asked not to be moved gets the finished state, not a
+     one-millisecond replay of it, and no canvas that scrolls itself. */
+  .fn .fnb{fill:#FBF3CE}
+  .k-trigger .fnb{fill:var(--field)}
+  .fe{opacity:1}
+  .fp,.fplay{display:none}
+  .frail i{width:100% !important}
+}
+.filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.fb{font-family:var(--f-mono);font-size:11.5px;background:var(--card);border:3px solid var(--ink);
+  border-radius:99px;padding:8px 14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--ink);
+  transition:background .16s var(--ease),transform .12s var(--ease)}
+.fb.on{background:var(--pop)}
+.fb:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fb:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+.grp{margin:0 0 34px}
+.ghd{margin:0 0 14px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
+.ghd h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0;
+  font-size:clamp(20px,2.8vw,28px)}
+.ghd p{margin:4px 0 0;font-size:14.5px;color:var(--muted);line-height:1.55;max-width:56ch}
+.cnt{position:absolute;right:0;top:2px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wf{background:var(--card);border:3px solid var(--ink);border-radius:15px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px);margin:0 0 14px}
+.wf h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;margin:0 0 6px;
+  font-size:clamp(17px,2.2vw,22px);line-height:1.2}
+.wf p{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.why{margin-top:12px !important;padding:10px 12px;background:rgba(245,213,71,.18);
+  border-left:4px solid var(--pop);border-radius:0 8px 8px 0;font-size:14px !important}
+.why b{color:var(--ink)}
+/* A few builds have a page of their own where you can drive them rather than
+   watch them. Those get a way through from here; the rest do not pretend to. */
+.deep{display:flex;width:fit-content;align-items:center;gap:8px;margin-top:12px;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--field);color:var(--paper);border-radius:99px;padding:8px 14px;
+  text-decoration:none;transition:transform .16s var(--ease)}
+.deep i{font-style:normal;transition:transform .16s var(--ease)}
+.deep:hover i{transform:translateX(4px)}
+.deep:active{transform:translateY(2px)}
+.deep:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
+@media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }</style></head>
+<body><div class="wrap">
+<a class="back" href="index.html">&lsaquo; All tools</a>
+<span class="eyebrow">GoHighLevel &middot; 11 systems</span>
+<h1>Follow-up that runs on its own.</h1>
+<p class="lede">The CRM is where the follow-up lives. These are the builds that decide who gets
+      messaged, who gets left alone, and who is worth interrupting you for. Each one plays from its trigger to its last step, the same shape as
+the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
+
+<div class="filt" role="group" aria-label="Filter by what starts it">
+  <button class="fb on" data-f="all" type="button">Everything</button>
+  <button class="fb" data-f="form" type="button">When someone fills in a form</button>
+  <button class="fb" data-f="book" type="button">When a call is booked</button>
+  <button class="fb" data-f="social" type="button">When someone comments</button>
+  <button class="fb" data-f="convo" type="button">The conversation engines</button>
+  <button class="fb" data-f="gate" type="button">When to interrupt a human</button>
+</div>
+
+    <section class="grp" data-g="form">
+      <header class="ghd">
+        <h2>When someone fills in a form</h2>
+        <p>The moment somebody asks for something, the record is already right.</p>
+        <span class="cnt">3 builds</span>
+      </header>
+      <article class="wf">
+        <h3>A purchase turns a lead into a customer</h3>
+        <p>An order comes in. The old label comes off, the new one goes on, the deal moves down the pipeline, and the confirmation goes out.</p>
+        <div class="flow" data-flow='{"id":"fl0","play":["t","r","a","o","w","e"],"caption":{"r":"The old label comes off before the new one goes on","w":"A beat, so the email does not beat the payment receipt","e":"Confirmed, without anyone opening the CRM"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="A purchase turns a lead into a customer workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="r" data-b="a" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="a" data-b="o" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="o" data-b="w" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="w" data-b="e" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl0-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">An order is placed</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="45" text-anchor="middle">They stop being a</text><text class="fnt" x="325" y="59" text-anchor="middle">lead</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-a" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">They become a</text><text class="fnt" x="549" y="59" text-anchor="middle">customer</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-o" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="45" text-anchor="middle">Move them down the</text><text class="fnt" x="773" y="59" text-anchor="middle">pipeline</text>
+      </g>
+      <g class="fn k-wait" id="fl0-n-w" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Wait</text>
+      </g>
+      <g class="fn k-end" id="fl0-n-e" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Send the confirmation</text>
+      </g>
+      <circle class="fp" id="fl0-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The lead label is removed BEFORE the customer label is added. Left on, a paying customer keeps getting the emails meant for people who have not bought.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>A form becomes a quote</h3>
+        <p>Someone asks for a price. The numbers are worked out elsewhere and handed back, the contact is created, and the quote is emailed.</p>
+        <div class="flow" data-flow='{"id":"fl1","play":["t","m","g","c","w","e"],"caption":{"m":"The numbers are worked out elsewhere and handed back","e":"A quote in their inbox in minutes, not tomorrow"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="A form becomes a quote workflow">
+      <path class="fe" data-a="t" data-b="m" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="m" data-b="g" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="g" data-b="c" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="c" data-b="w" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="w" data-b="e" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl1-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A quote is requested</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-m" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="45" text-anchor="middle">Hand it to the quote</text><text class="fnt" x="325" y="59" text-anchor="middle">builder</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-g" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Label them</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-c" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Create the contact</text>
+      </g>
+      <g class="fn k-wait" id="fl1-n-w" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Wait</text>
+      </g>
+      <g class="fn k-end" id="fl1-n-e" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Send the quote</text>
+      </g>
+      <circle class="fp" id="fl1-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The quote is built by a separate system and handed back. One job per tool, so neither becomes the thing nobody can safely change.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Six emails, spaced out, then it stops</h3>
+        <p>A new contact gets six emails days apart: hello, the story, the useful one, the offer, the proof, the objections.</p>
+        <div class="flow" data-flow='{"id":"fl2","play":["t","g","p","e1","w","e2","e6"],"caption":{"w":"Days apart, not minutes","e6":"Then it stops. A sequence that never ends is spam."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1546 96" style="min-width:1546px" role="img" aria-label="Six emails, spaced out, then it stops workflow">
+      <path class="fe" data-a="t" data-b="g" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="g" data-b="p" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="p" data-b="e1" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="e1" data-b="w" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="w" data-b="e2" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <path class="fe" data-a="e2" data-b="e6" d="M1306 48 C 1333 48, 1333 48, 1360 48"/>
+      <g class="fn k-trigger" id="fl2-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A form is filled in</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-g" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Label them</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-p" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Put them in the</text><text class="fnt" x="549" y="59" text-anchor="middle">pipeline</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-e1" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Email one: hello</text>
+      </g>
+      <g class="fn k-wait" id="fl2-n-w" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Wait</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-e2" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Emails two to five</text>
+      </g>
+      <g class="fn k-end" id="fl2-n-e6" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="45" text-anchor="middle">Email six: the</text><text class="fnt" x="1445" y="59" text-anchor="middle">objections</text>
+      </g>
+      <circle class="fp" id="fl2-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It ends. A sequence with no end is not nurture, it is spam with a schedule.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="book">
+      <header class="ghd">
+        <h2>When a call is booked</h2>
+        <p>Booked is a different state from interested, and it is treated as one.</p>
+        <span class="cnt">1 build</span>
+      </header>
+      <article class="wf">
+        <h3>Booked, then reminded four times</h3>
+        <p>A confirmed booking is labelled, moved down the pipeline, and reminded at three days, two days, the day before and on the day.</p>
+        <div class="flow" data-flow='{"id":"fl3","play":["t","g","o","x","c","r3","r2","r1"],"caption":{"x":"The most important step: stop chasing someone who already said yes","r1":"Four reminders, none of them sent by a person"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1770 96" style="min-width:1770px" role="img" aria-label="Booked, then reminded four times workflow">
+      <path class="fe" data-a="t" data-b="g" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="g" data-b="o" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="o" data-b="x" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="x" data-b="c" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="c" data-b="r3" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <path class="fe" data-a="r3" data-b="r2" d="M1306 48 C 1333 48, 1333 48, 1360 48"/>
+      <path class="fe" data-a="r2" data-b="r1" d="M1530 48 C 1557 48, 1557 48, 1584 48"/>
+      <g class="fn k-trigger" id="fl3-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">They book a call</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-g" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Label the booking</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-o" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Move them down the</text><text class="fnt" x="549" y="59" text-anchor="middle">pipeline</text>
+      </g>
+      <g class="fn k-decision" id="fl3-n-x" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="45" text-anchor="middle">Take them out of the</text><text class="fnt" x="773" y="59" text-anchor="middle">chase</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-c" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Confirm it</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-r3" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Three days before</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-r2" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="52" text-anchor="middle">Two days before</text>
+      </g>
+      <g class="fn k-end" id="fl3-n-r1" data-x="1584" data-w="170">
+        <rect class="fnb" x="1584" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1669" y="52" text-anchor="middle">The day before</text>
+      </g>
+      <circle class="fp" id="fl3-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The step that matters is the fourth one: it takes them OUT of the chase. Without it the person who just booked keeps receiving messages asking them to book.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="social">
+      <header class="ghd">
+        <h2>When someone comments</h2>
+        <p>A public comment answered in public, then continued in private.</p>
+        <span class="cnt">2 builds</span>
+      </header>
+      <article class="wf">
+        <h3>A comment becomes a conversation</h3>
+        <p>Someone comments on a post. It waits, replies publicly, waits again, then opens a private message with a way to go further.</p>
+        <div class="flow" data-flow='{"id":"fl4","play":["t","w","r","w2","m","y"],"caption":{"w":"A pause, so it does not read as a bot","r":"Answered where everyone can see it","m":"Then privately, where the conversation can go","n":"Silence is allowed to be the end of it"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="A comment becomes a conversation workflow">
+      <path class="fe" data-a="t" data-b="w" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="w" data-b="r" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="r" data-b="w2" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="w2" data-b="m" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="m" data-b="y" d="M1082 91 C 1109 91, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="62.5" text-anchor="middle">they reply</text>
+      <path class="fe" data-a="m" data-b="n" d="M1082 91 C 1109 91, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="105.5" text-anchor="middle">silence</text>
+      <g class="fn k-trigger" id="fl4-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Someone comments</text>
+      </g>
+      <g class="fn k-wait" id="fl4-n-w" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Wait a moment</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-r" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Reply in public</text>
+      </g>
+      <g class="fn k-wait" id="fl4-n-w2" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Wait again</text>
+      </g>
+      <g class="fn k-decision" id="fl4-n-m" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="88" text-anchor="middle">Message them</text><text class="fnt" x="997" y="102" text-anchor="middle">privately</text>
+      </g>
+      <g class="fn k-end" id="fl4-n-y" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">They ask for the link</text>
+      </g>
+      <g class="fn k-fail" id="fl4-n-n" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Nothing more</text>
+      </g>
+      <circle class="fp" id="fl4-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It pauses before replying. An instant answer to a comment reads as a robot, and the pause costs nothing.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>The same question, asked two ways</h3>
+        <p>A comment and a direct message are the same intent arriving differently, so they get different handling and end in the same place.</p>
+        <div class="flow" data-flow='{"id":"fl5","play":["t","d","c","o","y"],"caption":{"d":"The same question can arrive two ways, and they are answered differently","n":"A no is a real answer, and it is taken"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 182" style="min-width:1098px" role="img" aria-label="The same question, asked two ways workflow">
+      <path class="fe" data-a="t" data-b="d" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="d" data-b="c" d="M410 91 C 437 91, 437 48, 464 48"/><text class="fe-l" x="437" y="62.5" text-anchor="middle">comment</text>
+      <path class="fe" data-a="d" data-b="m" d="M410 91 C 437 91, 437 134, 464 134"/><text class="fe-l" x="437" y="105.5" text-anchor="middle">message</text>
+      <path class="fe" data-a="c" data-b="o" d="M634 48 C 661 48, 661 91, 688 91"/>
+      <path class="fe" data-a="m" data-b="o" d="M634 134 C 661 134, 661 91, 688 91"/>
+      <path class="fe" data-a="o" data-b="y" d="M858 91 C 885 91, 885 48, 912 48"/><text class="fe-l" x="885" y="62.5" text-anchor="middle">yes</text>
+      <path class="fe" data-a="o" data-b="n" d="M858 91 C 885 91, 885 134, 912 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">not for me</text>
+      <g class="fn k-trigger" id="fl5-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Someone comments</text>
+      </g>
+      <g class="fn k-decision" id="fl5-n-d" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Comment or message?</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-c" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Answer the comment</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-m" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="138" text-anchor="middle">Answer the message</text>
+      </g>
+      <g class="fn k-decision" id="fl5-n-o" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Offer them a place</text>
+      </g>
+      <g class="fn k-end" id="fl5-n-y" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Count them in</text>
+      </g>
+      <g class="fn k-fail" id="fl5-n-n" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="138" text-anchor="middle">Leave it there</text>
+      </g>
+      <circle class="fp" id="fl5-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> One of the endings is simply 'not for me', and it is taken at face value rather than answered with another offer.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="convo">
+      <header class="ghd">
+        <h2>The conversation engines</h2>
+        <p>Two systems that hold a real back-and-forth by text. Five stages each, and an exit each.</p>
+        <span class="cnt">3 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Speed to Lead: answer before they cool</h3>
+        <p>A brand new lead gets a message within moments, then up to five stages of conversation, and a human takes over the second it is worth a human.</p>
+        <div class="flow" data-flow='{"id":"fl6","play":["t","c1","r","c2","q","h"],"caption":{"c1":"Within moments of the lead arriving","c2":"Five stages, each one a separate build","h":"It never closes. It hands over."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="Speed to Lead: answer before they cool workflow">
+      <path class="fe" data-a="t" data-b="c1" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="c1" data-b="r" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="r" data-b="c2" d="M634 91 C 661 91, 661 91, 688 91"/><text class="fe-l" x="661" y="84" text-anchor="middle">yes</text>
+      <path class="fe" data-a="r" data-b="s" d="M634 91 C 885 91, 885 134, 1136 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">no reply</text>
+      <path class="fe" data-a="c2" data-b="q" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="q" data-b="h" d="M1082 91 C 1109 91, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="62.5" text-anchor="middle">yes</text>
+      <path class="fe" data-a="q" data-b="s" d="M1082 91 C 1109 91, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="105.5" text-anchor="middle">no</text>
+      <g class="fn k-trigger" id="fl6-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A new lead lands</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-c1" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Opening message</text>
+      </g>
+      <g class="fn k-decision" id="fl6-n-r" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Do they reply?</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-c2" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="88" text-anchor="middle">Conversations two to</text><text class="fnt" x="773" y="102" text-anchor="middle">five</text>
+      </g>
+      <g class="fn k-decision" id="fl6-n-q" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="95" text-anchor="middle">Qualified?</text>
+      </g>
+      <g class="fn k-end" id="fl6-n-h" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Hand to a human</text>
+      </g>
+      <g class="fn k-fail" id="fl6-n-s" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Stop, quietly</text>
+      </g>
+      <circle class="fp" id="fl6-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It never tries to close. Its whole job is to reach a person who is still interested and hand them over warm.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Waking up leads everyone gave up on</h3>
+        <p>Old leads nobody has time to call twice get re-opened by text, qualified over five stages, and only then handed a calendar link.</p>
+        <div class="flow" data-flow='{"id":"fl7","play":["t","c1","r","c2","l","n"],"caption":{"t":"Someone who went cold months ago","l":"The link only goes to people who actually qualify","n":"You hear about it once it is worth hearing about"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="Waking up leads everyone gave up on workflow">
+      <path class="fe" data-a="t" data-b="c1" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="c1" data-b="r" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="r" data-b="c2" d="M634 91 C 661 91, 661 91, 688 91"/><text class="fe-l" x="661" y="84" text-anchor="middle">yes</text>
+      <path class="fe" data-a="r" data-b="s" d="M634 91 C 885 91, 885 134, 1136 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">nothing</text>
+      <path class="fe" data-a="c2" data-b="l" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="l" data-b="n" d="M1082 91 C 1109 91, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="62.5" text-anchor="middle">they qualify</text>
+      <path class="fe" data-a="l" data-b="s" d="M1082 91 C 1109 91, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="105.5" text-anchor="middle">they do not</text>
+      <g class="fn k-trigger" id="fl7-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">An old lead is picked</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-c1" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Opening message</text>
+      </g>
+      <g class="fn k-decision" id="fl7-n-r" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Any answer?</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-c2" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="88" text-anchor="middle">Conversations two to</text><text class="fnt" x="773" y="102" text-anchor="middle">five</text>
+      </g>
+      <g class="fn k-decision" id="fl7-n-l" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="88" text-anchor="middle">Send the calendar</text><text class="fnt" x="997" y="102" text-anchor="middle">link</text>
+      </g>
+      <g class="fn k-end" id="fl7-n-n" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="45" text-anchor="middle">Tell you they</text><text class="fnt" x="1221" y="59" text-anchor="middle">qualified</text>
+      </g>
+      <g class="fn k-fail" id="fl7-n-s" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Let them be</text>
+      </g>
+      <circle class="fp" id="fl7-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The calendar link is gated. Sending it to everyone turns a booking page into a spam complaint.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>One word, and everything stops</h3>
+        <p>The customer replies quit. Messages stop, and they are removed from all five stages at once.</p>
+        <div class="flow" data-flow='{"id":"fl8","play":["t","d","r1","r2","r5"],"caption":{"t":"Quit, QUIT or quit - three separate triggers, because nobody checks their capitals","d":"Everything stops before anything else happens","r5":"Nothing left running. This exists twice, once per system."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 96" style="min-width:1098px" role="img" aria-label="One word, and everything stops workflow">
+      <path class="fe" data-a="t" data-b="d" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="d" data-b="r1" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="r1" data-b="r2" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="r2" data-b="r5" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <g class="fn k-trigger" id="fl8-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">They reply: quit</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-d" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Stop all messages</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-r1" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Out of stage one</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-r2" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="45" text-anchor="middle">Out of stages two to</text><text class="fnt" x="773" y="59" text-anchor="middle">four</text>
+      </g>
+      <g class="fn k-end" id="fl8-n-r5" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Out of stage five</text>
+      </g>
+      <circle class="fp" id="fl8-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Three separate triggers watch for Quit, QUIT and quit, because a person who wants out will not check their capital letters first. This ships with BOTH engines.</p>
+        <a class="deep" href="the-way-out.html">Type the word, watch five conversations switch off <i aria-hidden="true">&rarr;</i></a>
+      </article>
+    </section>
+    <section class="grp" data-g="gate">
+      <header class="ghd">
+        <h2>When to interrupt a human</h2>
+        <p>Most automation shouts. These decide when not to.</p>
+        <span class="cnt">2 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Only tell me when they actually qualify</h3>
+        <p>A record changes. If the person genuinely qualifies they are labelled, their intent is noted, the deal moves, and you are told. Otherwise nothing happens.</p>
+        <div class="flow" data-flow='{"id":"fl9","play":["t","q","g","f","o","n"],"caption":{"q":"The gate. Everything after it is worth your attention.","x":"No notification is the correct outcome most of the time","n":"You are only interrupted when it means something"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="Only tell me when they actually qualify workflow">
+      <path class="fe" data-a="t" data-b="q" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="q" data-b="g" d="M410 91 C 437 91, 437 48, 464 48"/><text class="fe-l" x="437" y="62.5" text-anchor="middle">yes</text>
+      <path class="fe" data-a="q" data-b="x" d="M410 91 C 437 91, 437 134, 464 134"/><text class="fe-l" x="437" y="105.5" text-anchor="middle">no</text>
+      <path class="fe" data-a="g" data-b="f" d="M634 48 C 661 48, 661 91, 688 91"/>
+      <path class="fe" data-a="f" data-b="o" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="o" data-b="n" d="M1082 91 C 1109 91, 1109 91, 1136 91"/>
+      <g class="fn k-trigger" id="fl9-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Their record changes</text>
+      </g>
+      <g class="fn k-decision" id="fl9-n-q" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Do they qualify?</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-g" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Label them</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-f" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Note what they want</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-o" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="88" text-anchor="middle">Move them down the</text><text class="fnt" x="997" y="102" text-anchor="middle">pipeline</text>
+      </g>
+      <g class="fn k-end" id="fl9-n-n" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="95" text-anchor="middle">Tell you</text>
+      </g>
+      <g class="fn k-fail" id="fl9-n-x" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="138" text-anchor="middle">Say nothing</text>
+      </g>
+      <circle class="fp" id="fl9-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Silence is the correct outcome most of the time. A notification for every change is a notification nobody reads.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>An email campaign that ends in a phone call</h3>
+        <p>Emails go out, and the people who engage are queued for a call rather than another email.</p>
+        <div class="flow" data-flow='{"id":"fl10","play":["t","e","o","c"],"caption":{"o":"Interest decides who gets a human","c":"A call, only to people who showed up"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 182" style="min-width:874px" role="img" aria-label="An email campaign that ends in a phone call workflow">
+      <path class="fe" data-a="t" data-b="e" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="e" data-b="o" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="o" data-b="c" d="M634 91 C 661 91, 661 48, 688 48"/><text class="fe-l" x="661" y="62.5" text-anchor="middle">engaged</text>
+      <path class="fe" data-a="o" data-b="r" d="M634 91 C 661 91, 661 134, 688 134"/><text class="fe-l" x="661" y="105.5" text-anchor="middle">not yet</text>
+      <g class="fn k-trigger" id="fl10-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A campaign starts</text>
+      </g>
+      <g class="fn k-action" id="fl10-n-e" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Emails go out</text>
+      </g>
+      <g class="fn k-decision" id="fl10-n-o" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Did they open it?</text>
+      </g>
+      <g class="fn k-end" id="fl10-n-c" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Queue a call</text>
+      </g>
+      <g class="fn k-action" id="fl10-n-r" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Keep emailing</text>
+      </g>
+      <circle class="fp" id="fl10-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Interest decides who gets a human, so nobody spends the day ringing people who never opened anything.</p>
+        
+      </article>
+    </section>
+
+<p class="lede" style="margin-top:26px">Two of these - the conversation engines - are five workflows each plus their own
+      exit. They are shown as one system rather than twelve rows, because that is what they are.</p>
+
+<script>
+
+(function(){
+  var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function build(box){
+    var cfg = JSON.parse(box.getAttribute("data-flow"));
+    var scroll = box.querySelector(".fscroll");
+    var svg = box.querySelector("svg");
+    var pulse = document.getElementById(cfg.id + "-pulse");
+    var cap = box.querySelector(".fcap");
+    var rail = box.querySelector(".frail i");
+    var timers = [], raf = null;
+
+    function node(n){ return document.getElementById(cfg.id + "-n-" + n); }
+    function edge(a,b){ return svg.querySelector('[data-a="' + a + '"][data-b="' + b + '"]'); }
+
+    function reset(){
+      timers.forEach(clearTimeout); timers = []; if (raf) cancelAnimationFrame(raf);
+      svg.querySelectorAll(".fn").forEach(function(n){ n.classList.remove("on","done"); });
+      svg.querySelectorAll(".fe").forEach(function(e){ e.classList.remove("lit"); });
+      pulse.classList.remove("go");
+      rail.style.width = "0%";
+      scroll.scrollLeft = 0;
+    }
+
+    /* Keep the live step in view. The canvas is wider than any phone, and a
+       reader who has to drag in order to follow along will not follow along. */
+    function follow(n){
+      if (!n) return;
+      var vb = svg.viewBox.baseVal.width || 1;
+      var scale = svg.getBoundingClientRect().width / vb;
+      var x = parseFloat(n.getAttribute("data-x")) * scale;
+      var w = parseFloat(n.getAttribute("data-w")) * scale;
+      var want = x + w / 2 - scroll.clientWidth / 2;
+      var max = scroll.scrollWidth - scroll.clientWidth;
+      want = Math.max(0, Math.min(max, want));
+      if (Math.abs(want - scroll.scrollLeft) < 8) return;
+      try { scroll.scrollTo({ left: want, behavior: "smooth" }); }
+      catch (e) { scroll.scrollLeft = want; }
+    }
+
+    /* The pulse walks the real path rather than being handed to CSS, so a
+       replay can interrupt it mid-wire and the captions stay on one clock. */
+    function travel(path, ms, done){
+      var len = path.getTotalLength(), t0 = null;
+      pulse.classList.add("go");
+      function step(t){
+        if (t0 === null) t0 = t;
+        var k = Math.min(1, (t - t0) / ms);
+        var p = path.getPointAtLength(len * k);
+        pulse.setAttribute("cx", p.x); pulse.setAttribute("cy", p.y);
+        if (k < 1) raf = requestAnimationFrame(step);
+        else { pulse.classList.remove("go"); done && done(); }
+      }
+      raf = requestAnimationFrame(step);
+    }
+
+    function play(){
+      reset();
+      var i = 0;
+      function hop(){
+        var id = cfg.play[i], n = node(id);
+        svg.querySelectorAll(".fn.on").forEach(function(x){ x.classList.remove("on"); x.classList.add("done"); });
+        if (n) n.classList.add("on");
+        cap.textContent = cfg.caption[id] || (n ? n.textContent.trim() : "");
+        rail.style.width = Math.round((i / (cfg.play.length - 1)) * 100) + "%";
+        follow(n);
+        if (i >= cfg.play.length - 1){
+          timers.push(setTimeout(function(){
+            if (n) { n.classList.remove("on"); n.classList.add("done"); }
+            cap.textContent = "Done";
+          }, 700));
+          return;
+        }
+        var e = edge(id, cfg.play[i + 1]);
+        timers.push(setTimeout(function(){
+          if (e){ e.classList.add("lit"); travel(e, 600, function(){ i++; hop(); }); }
+          else { i++; hop(); }
+        }, 500));
+      }
+      hop();
+    }
+
+    box.querySelector(".fplay").addEventListener("click", play);
+    return { play: play, box: box };
+  }
+
+  var flows = [].slice.call(document.querySelectorAll(".flow")).map(build);
+  if (reduced || !("IntersectionObserver" in window)) return;
+
+  /* Plays when it reaches you, once. The observer only watches boxes that are
+     on the page and visible; a filtered-out group is display:none and simply
+     never fires, which is correct rather than a bug. */
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(x){
+      if (!x.isIntersecting || seen.has(x.target)) return;
+      seen.add(x.target);
+      var f = flows.filter(function(y){ return y.box === x.target; })[0];
+      if (f) setTimeout(f.play, 240);
+    });
+  }, { threshold: 0.3 });
+  flows.forEach(function(f){ io.observe(f.box); });
+})();
+document.querySelectorAll(".fb").forEach(function(b){
+  b.addEventListener("click", function(){
+    var f = b.getAttribute("data-f");
+    document.querySelectorAll(".fb").forEach(function(o){ o.classList.toggle("on", o === b); });
+    document.querySelectorAll(".grp").forEach(function(g){
+      g.style.display = (f === "all" || g.getAttribute("data-g") === f) ? "" : "none";
+    });
+  });
+});
+</script></div></body></html>

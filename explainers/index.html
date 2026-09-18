@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>How these systems work</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Built, by tool</title><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
 <style>:root{
@@ -50,20 +50,152 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 .rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
   user-select:none;font-size:.92em}
 .hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
-.back{display:inline-flex;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
+.back{display:flex;width:fit-content;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
-.back:hover{color:var(--ink)}</style></head>
+.back:hover{color:var(--ink)}
+.tgrid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:660px){ .tgrid{grid-template-columns:repeat(2,1fr)} }
+@media(min-width:1000px){ .tgrid{grid-template-columns:repeat(3,1fr)} }
+/* The card is one object: same edges, same inner padding, and the arrow line
+   pinned to the bottom of every card whatever the bullets do above it. */
+.tc{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
+  border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:16px 16px 14px;
+  text-decoration:none;color:inherit;
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.tc:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 0 var(--ink)}
+.tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
+.tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
+.tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+/* A letterform, not a logo. Three of these six have no mark I hold, and a
+   redrawn-from-memory logo is wrong in a way the reader can feel. */
+.tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
+  border-radius:11px;background:var(--field);color:var(--pop);
+  font-family:var(--f-disp);font-weight:900;font-size:16px;letter-spacing:-.02em}
+.tcn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.tcn i{font-style:normal;opacity:.45}
+.tcti{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0 0 4px;
+  font-size:clamp(20px,2.4vw,24px);line-height:1.1;color:var(--ink)}
+.tct{margin:0 0 11px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.tcb{align-self:flex-start;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:4px 10px;margin-bottom:12px}
+.tcl{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:7px}
+.tcl li{position:relative;padding-left:23px;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.tcl li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:8px;
+  border-left:2.5px solid var(--field);border-bottom:2.5px solid var(--field);
+  transform:rotate(-45deg)}
+.tcg{margin-top:auto;padding-top:11px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tc:hover .tcg{color:var(--ink)}
+.tcg i{font-style:normal;transition:transform .18s var(--ease)}
+.tc:hover .tcg i{transform:translateX(4px)}
+@media(prefers-reduced-motion:reduce){
+  .tc,.tcg i{transition:none}
+  .tc:hover{transform:none;box-shadow:6px 6px 0 0 var(--ink)}
+  .tc:hover .tcg i{transform:none}
+}</style></head>
 <body><div class="wrap">
-<span class="eyebrow">Batch one &middot; the front door</span>
-<h1>Three ways in. One way out.</h1>
-<p class="lede">Four builds for one client, shown the way each one actually behaves rather than as
-four drawings that look alike. Three of them are doors in: the phone rings, the phone gets rung,
-somebody lands on the website. The fourth is the door out, and it is the one that matters most.</p>
-<div class="split">
-<a class="panel" href="retell-agent.html" style="text-decoration:none;color:inherit;display:block"><span class="tag">One</span><h2>The AI that phones people</h2><p>Ten places a call can go, and thirteen things it writes down on the way. You walk it, because no two calls take the same route.</p></a>
-<a class="panel" href="call-routing.html" style="text-decoration:none;color:inherit;display:block"><span class="tag">Two</span><h2>When the phone rings</h2><p>One question - is the office open? - with two answers. Move the clock and follow the call.</p></a>
-<a class="panel" href="website-chat.html" style="text-decoration:none;color:inherit;display:block"><span class="tag">Three</span><h2>The chat on the website</h2><p>144 people opened it, 11 booked without speaking to anyone. The real numbers, including the unflattering ones.</p></a>
-<a class="panel" href="the-way-out.html" style="text-decoration:none;color:inherit;display:block"><span class="tag">Four</span><h2>The word that stops everything</h2><p>Type quit and watch five conversations switch off. The part almost nobody builds.</p></a>
+<a class="back" href="../index.html#systems">&lsaquo; Back to the portfolio</a>
+<span class="eyebrow">The work &middot; 6 tools</span>
+<h1>Every build, sorted by what it was built in.</h1>
+<p class="lede">Six tools, and each one is here because it was the right one for that job rather
+than the one I happened to know. Open a tool to watch its builds run, step by step, from the thing
+that sets them off to the thing they leave behind.</p>
+
+<div class="tgrid">
+  <a class="tc" href="ghl.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">GH</span>
+      <span class="tcn">01 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">GoHighLevel</h3>
+    <p class="tct">Follow-up that runs on its own.</p>
+    <span class="tcb">11 systems</span>
+    <ul class="tcl">
+      <li>Leads move without anyone pushing</li>
+      <li>Nobody is chased after they say yes</li>
+      <li>Every conversation has an exit</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="make.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">MK</span>
+      <span class="tcn">02 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Make.com</h3>
+    <p class="tct">The wiring between everything else.</p>
+    <span class="tcb">19 scenarios</span>
+    <ul class="tcl">
+      <li>Tools that do not talk, made to</li>
+      <li>Nothing is done twice</li>
+      <li>It posts, files and writes while you sleep</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="n8n.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">N8</span>
+      <span class="tcn">03 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">n8n</h3>
+    <p class="tct">The jobs that have to wait, retry or loop.</p>
+    <span class="tcb">9 builds</span>
+    <ul class="tcl">
+      <li>Waits for a render to finish</li>
+      <li>Never calls at three in the morning</li>
+      <li>Fetches a long list without repeats</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="retell-agent.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">RT</span>
+      <span class="tcn">04 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Retell AI</h3>
+    <p class="tct">An AI that phones people for you.</p>
+    <span class="tcb">10 stops, 13 notes</span>
+    <ul class="tcl">
+      <li>No two calls take the same route</li>
+      <li>It writes down what it learns</li>
+      <li>It hands over, it never closes</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="website-chat.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">IC</span>
+      <span class="tcn">05 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Intercom</h3>
+    <p class="tct">The chat that books without a person.</p>
+    <span class="tcb">144 chats, 11 booked</span>
+    <ul class="tcl">
+      <li>Four ways in, eight packages</li>
+      <li>Answers from the company's own words</li>
+      <li>Real numbers, including the plain ones</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="call-routing.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">OP</span>
+      <span class="tcn">06 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">OpenPhone</h3>
+    <p class="tct">What happens when the phone rings.</p>
+    <span class="tcb">Open and shut</span>
+    <ul class="tcl">
+      <li>Everyone rings at once, for fifteen seconds</li>
+      <li>After hours it answers instantly</li>
+      <li>It takes a message, it never sells</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
 </div>
-<p class="lede" style="margin-top:22px">Every line quoted on these pages is word for word from the
-live build. Client names are withheld throughout.</p></div></body></html>
+
+<p class="lede" style="margin-top:26px">Read from the build files themselves. Client names are
+withheld throughout.</p></div></body></html>

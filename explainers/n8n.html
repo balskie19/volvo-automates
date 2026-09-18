@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>n8n builds</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>:root{
+  --field:#212A6B;--pop:#F5D547;--paper:#F2F1EA;--ink:#0B0E1C;--card:#fff;
+  --muted:#5C6070;--hair:#E0DED4;--good:#2E9E5B;--bad:#C8452F;
+  --f-disp:"Gabarito",system-ui,sans-serif;--f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,3.5vw,42px) clamp(14px,3vw,26px)}
+.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted)}
+h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;margin:6px 0 10px;
+  font-size:clamp(25px,4.6vw,44px);line-height:1.06}
+.lede{margin:0 0 22px;font-size:clamp(15px,1.8vw,17px);line-height:1.6;color:var(--muted);max-width:62ch}
+.split{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.split{grid-template-columns:1.25fr .9fr;align-items:start}}
+.panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px)}
+.panel h2{font-family:var(--f-disp);font-weight:900;font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
+.panel p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:3px 9px;margin-bottom:8px}
+.src{margin-top:16px;padding-top:12px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7}
+svg .n{cursor:pointer}
+svg .nb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
+svg .n:hover .nb,svg .n:focus .nb{fill:#FDF7DA}
+svg .n.on .nb{fill:var(--pop)}
+svg .nt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
+svg .ns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
+svg .e{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.32;transition:opacity .2s,stroke .2s}
+svg .e.lit{opacity:1;stroke:var(--field)}
+svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
+.says{background:var(--field);color:var(--paper);border-radius:12px;padding:13px 15px;
+  font-size:14.5px;line-height:1.55;margin:10px 0}
+.says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.f{font-family:var(--f-mono);font-size:10.5px;border:2px solid var(--hair);border-radius:99px;
+  padding:4px 9px;color:var(--muted);transition:all .25s var(--ease)}
+.f.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
+.rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
+  user-select:none;font-size:.92em}
+.hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
+.back{display:flex;width:fit-content;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
+.back:hover{color:var(--ink)}
+.flow{margin:14px 0 0;border:3px solid var(--ink);border-radius:14px;background:var(--paper);
+  padding:10px 0 0;overflow:hidden}
+.fscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;
+  scrollbar-width:thin}
+.flow svg{height:auto;display:block}
+.fnb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .22s var(--ease)}
+.fnt{font-family:var(--f-mono);font-size:11px;fill:var(--ink)}
+.fn.on .fnb{fill:var(--pop)}
+.fn.done .fnb{fill:#FBF3CE}
+.k-decision .fnb{fill:#EFEEE6}
+.k-decision.on .fnb,.k-fail.on .fnb{fill:var(--pop)}
+.k-fail .fnb{stroke:var(--bad)}
+.k-end .fnb{stroke-width:4.5}
+/* The trigger stays indigo the whole way through, so at a glance you can always
+   see where the thing starts without reading a word of it. */
+.k-trigger .fnb,.k-trigger.on .fnb,.k-trigger.done .fnb{fill:var(--field)}
+.k-trigger .fnt{fill:var(--paper)}
+.fe{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.28;transition:opacity .2s,stroke .2s}
+.fe.lit{opacity:1;stroke:var(--field)}
+.fe-l{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted)}
+.fp{fill:var(--pop);stroke:var(--ink);stroke-width:2.5;opacity:0;transition:opacity .15s}
+.fp.go{opacity:1}
+/* how far through the run you are, without a number to read */
+.frail{height:4px;background:var(--hair);margin:8px 10px 0;border-radius:3px;overflow:hidden}
+.frail i{display:block;height:100%;width:0;background:var(--field);transition:width .5s var(--ease)}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 10px 10px;flex-wrap:wrap}
+.fplay{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--pop);border:3px solid var(--ink);border-radius:99px;padding:7px 15px;
+  cursor:pointer;box-shadow:3px 3px 0 0 var(--ink)}
+.fplay:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fcap{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.04em;flex:1 1 180px}
+@media(prefers-reduced-motion:reduce){
+  /* Someone who asked not to be moved gets the finished state, not a
+     one-millisecond replay of it, and no canvas that scrolls itself. */
+  .fn .fnb{fill:#FBF3CE}
+  .k-trigger .fnb{fill:var(--field)}
+  .fe{opacity:1}
+  .fp,.fplay{display:none}
+  .frail i{width:100% !important}
+}
+.filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.fb{font-family:var(--f-mono);font-size:11.5px;background:var(--card);border:3px solid var(--ink);
+  border-radius:99px;padding:8px 14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--ink);
+  transition:background .16s var(--ease),transform .12s var(--ease)}
+.fb.on{background:var(--pop)}
+.fb:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fb:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+.grp{margin:0 0 34px}
+.ghd{margin:0 0 14px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
+.ghd h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0;
+  font-size:clamp(20px,2.8vw,28px)}
+.ghd p{margin:4px 0 0;font-size:14.5px;color:var(--muted);line-height:1.55;max-width:56ch}
+.cnt{position:absolute;right:0;top:2px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wf{background:var(--card);border:3px solid var(--ink);border-radius:15px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px);margin:0 0 14px}
+.wf h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;margin:0 0 6px;
+  font-size:clamp(17px,2.2vw,22px);line-height:1.2}
+.wf p{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.why{margin-top:12px !important;padding:10px 12px;background:rgba(245,213,71,.18);
+  border-left:4px solid var(--pop);border-radius:0 8px 8px 0;font-size:14px !important}
+.why b{color:var(--ink)}
+/* A few builds have a page of their own where you can drive them rather than
+   watch them. Those get a way through from here; the rest do not pretend to. */
+.deep{display:flex;width:fit-content;align-items:center;gap:8px;margin-top:12px;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--field);color:var(--paper);border-radius:99px;padding:8px 14px;
+  text-decoration:none;transition:transform .16s var(--ease)}
+.deep i{font-style:normal;transition:transform .16s var(--ease)}
+.deep:hover i{transform:translateX(4px)}
+.deep:active{transform:translateY(2px)}
+.deep:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
+@media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }</style></head>
+<body><div class="wrap">
+<a class="back" href="index.html">&lsaquo; All tools</a>
+<span class="eyebrow">n8n &middot; 9 builds</span>
+<h1>The jobs that have to wait, retry or loop.</h1>
+<p class="lede">n8n is where work goes when it cannot be done in one pass: a video that takes
+      minutes to render, a call that must wait for opening hours, a list too long to fetch in one go. Each one plays from its trigger to its last step, the same shape as
+the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
+
+<div class="filt" role="group" aria-label="Filter by what starts it">
+  <button class="fb on" data-f="all" type="button">Everything</button>
+  <button class="fb" data-f="form" type="button">When a form is filled in</button>
+  <button class="fb" data-f="call" type="button">When another system calls in</button>
+  <button class="fb" data-f="sched" type="button">On a clock</button>
+  <button class="fb" data-f="called" type="button">When another build asks for it</button>
+</div>
+
+    <section class="grp" data-g="form">
+      <header class="ghd">
+        <h2>When a form is filled in</h2>
+        <p>Somebody submits something, and the work happens before anyone has opened a tab.</p>
+        <span class="cnt">4 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Send a new lead straight into the CRM</h3>
+        <p>A form posts here, the answers are tidied into the right fields, and the contact is created or updated. Nobody retypes anything.</p>
+        <div class="flow" data-flow='{"id":"fl0","play":["t","e","c"],"caption":{"t":"Someone hits submit","e":"Answers into the right fields","c":"The contact exists. Nobody typed it."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 650 96" style="min-width:650px" role="img" aria-label="Send a new lead straight into the CRM workflow">
+      <path class="fe" data-a="t" data-b="e" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="e" data-b="c" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <g class="fn k-trigger" id="fl0-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A form is filled in</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-e" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Tidy the answers</text>
+      </g>
+      <g class="fn k-end" id="fl0-n-c" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Create or update the</text><text class="fnt" x="549" y="59" text-anchor="middle">contact</text>
+      </g>
+      <circle class="fp" id="fl0-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        
+        
+      </article>
+      <article class="wf">
+        <h3>Create the contact and book the slot</h3>
+        <p>The same thing, and then it books the appointment as well, reporting success and failure down two separate paths.</p>
+        <div class="flow" data-flow='{"id":"fl1","play":["t","e","c","f","b","ok"],"caption":{"b":"Two ways out, and they are not the same thing","no":"A failure reports as a failure, never as silence"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="Create the contact and book the slot workflow">
+      <path class="fe" data-a="t" data-b="e" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="e" data-b="c" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="c" data-b="f" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="f" data-b="b" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="b" data-b="ok" d="M1082 91 C 1109 91, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="62.5" text-anchor="middle">booked</text>
+      <path class="fe" data-a="b" data-b="no" d="M1082 91 C 1109 91, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="105.5" text-anchor="middle">did not book</text>
+      <g class="fn k-trigger" id="fl1-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A form is filled in</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-e" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Tidy the answers</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-c" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="88" text-anchor="middle">Create or update the</text><text class="fnt" x="549" y="102" text-anchor="middle">contact</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-f" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Find their record</text>
+      </g>
+      <g class="fn k-decision" id="fl1-n-b" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="95" text-anchor="middle">Book the appointment</text>
+      </g>
+      <g class="fn k-end" id="fl1-n-ok" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Confirm it worked</text>
+      </g>
+      <g class="fn k-fail" id="fl1-n-no" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Say it failed</text>
+      </g>
+      <circle class="fp" id="fl1-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Most builds treat an error as nothing happening. This one answers differently depending on which it was.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Turn a written answer into a finished video</h3>
+        <p>Someone describes what they want. It is rewritten as a prompt, sent to a generator, and the finished file lands in a folder.</p>
+        <div class="flow" data-flow='{"id":"fl2","play":["t","v","p","g","w","q","w","q","d","s"],"caption":{"g":"The render starts. Minutes, not seconds.","w":"Waiting","q":"Asking whether it is done yet","s":"In the folder. Nobody watched it render."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1770 130" style="min-width:1770px" role="img" aria-label="Turn a written answer into a finished video workflow">
+      <path class="fe" data-a="t" data-b="v" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="v" data-b="p" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="p" data-b="g" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="g" data-b="w" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="w" data-b="q" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <path class="fe" data-a="q" data-b="w" d="M1221 80 L 1221 100 L 997 100 L 997 80"/><text class="fe-l" x="1109" y="94" text-anchor="middle">not yet</text>
+      <path class="fe" data-a="q" data-b="d" d="M1306 48 C 1333 48, 1333 48, 1360 48"/><text class="fe-l" x="1333" y="41" text-anchor="middle">ready</text>
+      <path class="fe" data-a="d" data-b="s" d="M1530 48 C 1557 48, 1557 48, 1584 48"/>
+      <g class="fn k-trigger" id="fl2-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A form is filled in</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-v" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Read the answers</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-p" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Write the prompt</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-g" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Ask for the video</text>
+      </g>
+      <g class="fn k-wait" id="fl2-n-w" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Wait</text>
+      </g>
+      <g class="fn k-decision" id="fl2-n-q" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Is it finished?</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-d" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="52" text-anchor="middle">Download it</text>
+      </g>
+      <g class="fn k-end" id="fl2-n-s" data-x="1584" data-w="170">
+        <rect class="fnb" x="1584" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1669" y="52" text-anchor="middle">Save it to Drive</text>
+      </g>
+      <circle class="fp" id="fl2-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> A video takes minutes. So it waits, asks whether the render is done, and goes back to waiting - for as long as it takes, with nobody watching.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Call them back, but never at three in the morning</h3>
+        <p>A form comes in at any hour. The time is recorded, and the call only goes out once the office is open.</p>
+        <div class="flow" data-flow='{"id":"fl3","play":["t","r","h","o","x","w","o","c"],"caption":{"t":"It is ten at night","o":"Checking whether anyone is there","x":"Deciding whether to keep trying at all","c":"Nine in the morning. Now it rings."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 216" style="min-width:1322px" role="img" aria-label="Call them back, but never at three in the morning workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="r" data-b="h" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="h" data-b="o" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="o" data-b="c" d="M858 91 C 885 91, 885 48, 912 48"/><text class="fe-l" x="885" y="62.5" text-anchor="middle">open</text>
+      <path class="fe" data-a="o" data-b="x" d="M858 91 C 885 91, 885 134, 912 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">shut</text>
+      <path class="fe" data-a="x" data-b="s" d="M1082 134 C 1109 134, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="127" text-anchor="middle">yes</text>
+      <path class="fe" data-a="x" data-b="w" d="M1082 134 C 1109 134, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="84" text-anchor="middle">no</text>
+      <path class="fe" data-a="w" data-b="o" d="M1221 80 L 1221 186 L 773 186 L 773 123"/>
+      <g class="fn k-trigger" id="fl3-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A form is filled in</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Write down the time</text>
+      </g>
+      <g class="fn k-wait" id="fl3-n-h" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="88" text-anchor="middle">Wait for opening</text><text class="fnt" x="549" y="102" text-anchor="middle">hours</text>
+      </g>
+      <g class="fn k-decision" id="fl3-n-o" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Is it open yet?</text>
+      </g>
+      <g class="fn k-end" id="fl3-n-c" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Ring them</text>
+      </g>
+      <g class="fn k-decision" id="fl3-n-x" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="138" text-anchor="middle">Has a day passed?</text>
+      </g>
+      <g class="fn k-wait" id="fl3-n-w" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Wait fifteen minutes</text>
+      </g>
+      <g class="fn k-fail" id="fl3-n-s" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Tell the team instead</text>
+      </g>
+      <circle class="fp" id="fl3-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> If it is shut it waits fifteen minutes and checks again. If a whole day passes it stops and tells a human rather than looping forever.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="call">
+      <header class="ghd">
+        <h2>When another system calls in</h2>
+        <p>Something finishes somewhere else and hands over what it learned.</p>
+        <span class="cnt">2 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Write up the call, then chase what is missing</h3>
+        <p>After a call ends this collects the summary, files it, and checks whether everything needed was captured.</p>
+        <div class="flow" data-flow='{"id":"fl4","play":["t","f","l","q","g"],"caption":{"q":"It does not assume the call went well","g":"Something is missing, so it fetches it"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 182" style="min-width:1098px" role="img" aria-label="Write up the call, then chase what is missing workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="f" data-b="l" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="l" data-b="q" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="q" data-b="s" d="M858 91 C 885 91, 885 48, 912 48"/><text class="fe-l" x="885" y="62.5" text-anchor="middle">yes</text>
+      <path class="fe" data-a="q" data-b="g" d="M858 91 C 885 91, 885 134, 912 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">no</text>
+      <g class="fn k-trigger" id="fl4-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="88" text-anchor="middle">A call summary</text><text class="fnt" x="101" y="102" text-anchor="middle">arrives</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="88" text-anchor="middle">Only if it was</text><text class="fnt" x="325" y="102" text-anchor="middle">analysed</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-l" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">File the details</text>
+      </g>
+      <g class="fn k-decision" id="fl4-n-q" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Everything collected?</text>
+      </g>
+      <g class="fn k-end" id="fl4-n-s" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Tell the team</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-g" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="138" text-anchor="middle">Go back for the rest</text>
+      </g>
+      <circle class="fp" id="fl4-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It does not assume the call went well. A missing detail is fetched rather than filed as complete.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Say who is calling, before the call connects</h3>
+        <p>A number rings in. This looks it up and answers with who they are, fast enough to be useful while the phone is still ringing.</p>
+        <div class="flow" data-flow='{"id":"fl5","play":["t","s","v","a"],"caption":{"t":"The phone is still ringing","a":"Who is calling, before it connects"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 96" style="min-width:874px" role="img" aria-label="Say who is calling, before the call connects workflow">
+      <path class="fe" data-a="t" data-b="s" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="s" data-b="v" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="v" data-b="a" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <g class="fn k-trigger" id="fl5-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A call comes in</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-s" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Look up the number</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-v" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Read off their</text><text class="fnt" x="549" y="59" text-anchor="middle">details</text>
+      </g>
+      <g class="fn k-end" id="fl5-n-a" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Answer back</text>
+      </g>
+      <circle class="fp" id="fl5-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        
+        
+      </article>
+    </section>
+    <section class="grp" data-g="sched">
+      <header class="ghd">
+        <h2>On a clock</h2>
+        <p>Nobody has to remember.</p>
+        <span class="cnt">2 builds</span>
+      </header>
+      <article class="wf">
+        <h3>The Thursday reminder nobody has to remember</h3>
+        <p>Every Thursday morning a reminder goes to the team, worded differently each week so people keep reading it.</p>
+        <div class="flow" data-flow='{"id":"fl6","play":["t","c","r","p"],"caption":{"r":"Different words each week, so it keeps getting read","p":"Nobody had to remember"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 96" style="min-width:874px" role="img" aria-label="The Thursday reminder nobody has to remember workflow">
+      <path class="fe" data-a="t" data-b="c" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="c" data-b="r" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="r" data-b="p" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <g class="fn k-trigger" id="fl6-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every Thursday, 9am</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-c" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Tidy the wording</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-r" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Pick a different</text><text class="fnt" x="549" y="59" text-anchor="middle">version</text>
+      </g>
+      <g class="fn k-end" id="fl6-n-p" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Post it to the team</text>
+      </g>
+      <circle class="fp" id="fl6-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> A reminder that arrives in the same words every week stops being read by about the fourth one.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Find a video, watch it, write a new script from it</h3>
+        <p>Collects videos, skips any already seen, transcribes them, works out what made them work, researches around it, and drafts a script.</p>
+        <div class="flow" data-flow='{"id":"fl7","play":["t","c","k","d","n","s","w","p","x"],"caption":{"k":"The step that saves the money","d":"Repeats gone before anything is paid for","x":"A fresh script, from what actually worked"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1994 96" style="min-width:1994px" role="img" aria-label="Find a video, watch it, write a new script from it workflow">
+      <path class="fe" data-a="t" data-b="c" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="c" data-b="k" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="k" data-b="d" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="d" data-b="n" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="n" data-b="s" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <path class="fe" data-a="s" data-b="w" d="M1306 48 C 1333 48, 1333 48, 1360 48"/>
+      <path class="fe" data-a="w" data-b="p" d="M1530 48 C 1557 48, 1557 48, 1584 48"/>
+      <path class="fe" data-a="p" data-b="x" d="M1754 48 C 1781 48, 1781 48, 1808 48"/>
+      <g class="fn k-trigger" id="fl7-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">On a schedule</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-c" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Collect videos</text>
+      </g>
+      <g class="fn k-decision" id="fl7-n-k" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Seen this before?</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-d" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Drop the repeats</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-n" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Download the new ones</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-s" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Transcribe</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-w" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="52" text-anchor="middle">Work out what worked</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-p" data-x="1584" data-w="170">
+        <rect class="fnb" x="1584" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1669" y="52" text-anchor="middle">Research around it</text>
+      </g>
+      <g class="fn k-end" id="fl7-n-x" data-x="1808" data-w="170">
+        <rect class="fnb" x="1808" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1893" y="52" text-anchor="middle">Write a new script</text>
+      </g>
+      <circle class="fp" id="fl7-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The third step is the one that matters: it checks what it has already seen, so nothing is paid for twice.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="called">
+      <header class="ghd">
+        <h2>When another build asks for it</h2>
+        <p>Work other builds reuse, rather than each repeating it.</p>
+        <span class="cnt">1 build</span>
+      </header>
+      <article class="wf">
+        <h3>Collect a long list without collecting anything twice</h3>
+        <p>Fetches a long list a page at a time, throws away duplicates, works through the rest, and writes the result to a sheet.</p>
+        <div class="flow" data-flow='{"id":"fl8","play":["t","f","r","d","l","x","l","g","d2","s"],"caption":{"l":"One at a time, until there are none left","d2":"Again, because fetching detail can introduce new ones","s":"Nothing counted twice"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1770 216" style="min-width:1770px" role="img" aria-label="Collect a long list without collecting anything twice workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="f" data-b="r" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="r" data-b="d" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="d" data-b="l" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="l" data-b="x" d="M1082 91 C 1109 91, 1109 48, 1136 48"/><text class="fe-l" x="1109" y="62.5" text-anchor="middle">next one</text>
+      <path class="fe" data-a="x" data-b="l" d="M1221 80 L 1221 186 L 997 186 L 997 123"/>
+      <path class="fe" data-a="l" data-b="g" d="M1082 91 C 1109 91, 1109 134, 1136 134"/><text class="fe-l" x="1109" y="105.5" text-anchor="middle">all done</text>
+      <path class="fe" data-a="g" data-b="d2" d="M1306 134 C 1333 134, 1333 91, 1360 91"/>
+      <path class="fe" data-a="d2" data-b="s" d="M1530 91 C 1557 91, 1557 91, 1584 91"/>
+      <g class="fn k-trigger" id="fl8-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Another build asks</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Fetch the list</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-r" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Keep what matters</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-d" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Drop duplicates</text>
+      </g>
+      <g class="fn k-decision" id="fl8-n-l" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="95" text-anchor="middle">Work through them</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-x" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Fetch the detail</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-g" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="138" text-anchor="middle">Gather it back up</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-d2" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="95" text-anchor="middle">Drop duplicates again</text>
+      </g>
+      <g class="fn k-end" id="fl8-n-s" data-x="1584" data-w="170">
+        <rect class="fnb" x="1584" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1669" y="95" text-anchor="middle">Write it to the sheet</text>
+      </g>
+      <circle class="fp" id="fl8-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Duplicates are removed twice, before and after the detail is fetched, because the second fetch introduces repeats the first pass could not see.</p>
+        
+      </article>
+    </section>
+
+<p class="lede" style="margin-top:26px">Read from the supplied build files. Client names are withheld throughout.</p>
+
+<script>
+
+(function(){
+  var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function build(box){
+    var cfg = JSON.parse(box.getAttribute("data-flow"));
+    var scroll = box.querySelector(".fscroll");
+    var svg = box.querySelector("svg");
+    var pulse = document.getElementById(cfg.id + "-pulse");
+    var cap = box.querySelector(".fcap");
+    var rail = box.querySelector(".frail i");
+    var timers = [], raf = null;
+
+    function node(n){ return document.getElementById(cfg.id + "-n-" + n); }
+    function edge(a,b){ return svg.querySelector('[data-a="' + a + '"][data-b="' + b + '"]'); }
+
+    function reset(){
+      timers.forEach(clearTimeout); timers = []; if (raf) cancelAnimationFrame(raf);
+      svg.querySelectorAll(".fn").forEach(function(n){ n.classList.remove("on","done"); });
+      svg.querySelectorAll(".fe").forEach(function(e){ e.classList.remove("lit"); });
+      pulse.classList.remove("go");
+      rail.style.width = "0%";
+      scroll.scrollLeft = 0;
+    }
+
+    /* Keep the live step in view. The canvas is wider than any phone, and a
+       reader who has to drag in order to follow along will not follow along. */
+    function follow(n){
+      if (!n) return;
+      var vb = svg.viewBox.baseVal.width || 1;
+      var scale = svg.getBoundingClientRect().width / vb;
+      var x = parseFloat(n.getAttribute("data-x")) * scale;
+      var w = parseFloat(n.getAttribute("data-w")) * scale;
+      var want = x + w / 2 - scroll.clientWidth / 2;
+      var max = scroll.scrollWidth - scroll.clientWidth;
+      want = Math.max(0, Math.min(max, want));
+      if (Math.abs(want - scroll.scrollLeft) < 8) return;
+      try { scroll.scrollTo({ left: want, behavior: "smooth" }); }
+      catch (e) { scroll.scrollLeft = want; }
+    }
+
+    /* The pulse walks the real path rather than being handed to CSS, so a
+       replay can interrupt it mid-wire and the captions stay on one clock. */
+    function travel(path, ms, done){
+      var len = path.getTotalLength(), t0 = null;
+      pulse.classList.add("go");
+      function step(t){
+        if (t0 === null) t0 = t;
+        var k = Math.min(1, (t - t0) / ms);
+        var p = path.getPointAtLength(len * k);
+        pulse.setAttribute("cx", p.x); pulse.setAttribute("cy", p.y);
+        if (k < 1) raf = requestAnimationFrame(step);
+        else { pulse.classList.remove("go"); done && done(); }
+      }
+      raf = requestAnimationFrame(step);
+    }
+
+    function play(){
+      reset();
+      var i = 0;
+      function hop(){
+        var id = cfg.play[i], n = node(id);
+        svg.querySelectorAll(".fn.on").forEach(function(x){ x.classList.remove("on"); x.classList.add("done"); });
+        if (n) n.classList.add("on");
+        cap.textContent = cfg.caption[id] || (n ? n.textContent.trim() : "");
+        rail.style.width = Math.round((i / (cfg.play.length - 1)) * 100) + "%";
+        follow(n);
+        if (i >= cfg.play.length - 1){
+          timers.push(setTimeout(function(){
+            if (n) { n.classList.remove("on"); n.classList.add("done"); }
+            cap.textContent = "Done";
+          }, 700));
+          return;
+        }
+        var e = edge(id, cfg.play[i + 1]);
+        timers.push(setTimeout(function(){
+          if (e){ e.classList.add("lit"); travel(e, 600, function(){ i++; hop(); }); }
+          else { i++; hop(); }
+        }, 500));
+      }
+      hop();
+    }
+
+    box.querySelector(".fplay").addEventListener("click", play);
+    return { play: play, box: box };
+  }
+
+  var flows = [].slice.call(document.querySelectorAll(".flow")).map(build);
+  if (reduced || !("IntersectionObserver" in window)) return;
+
+  /* Plays when it reaches you, once. The observer only watches boxes that are
+     on the page and visible; a filtered-out group is display:none and simply
+     never fires, which is correct rather than a bug. */
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(x){
+      if (!x.isIntersecting || seen.has(x.target)) return;
+      seen.add(x.target);
+      var f = flows.filter(function(y){ return y.box === x.target; })[0];
+      if (f) setTimeout(f.play, 240);
+    });
+  }, { threshold: 0.3 });
+  flows.forEach(function(f){ io.observe(f.box); });
+})();
+document.querySelectorAll(".fb").forEach(function(b){
+  b.addEventListener("click", function(){
+    var f = b.getAttribute("data-f");
+    document.querySelectorAll(".fb").forEach(function(o){ o.classList.toggle("on", o === b); });
+    document.querySelectorAll(".grp").forEach(function(g){
+      g.style.display = (f === "all" || g.getAttribute("data-g") === f) ? "" : "none";
+    });
+  });
+});
+</script></div></body></html>

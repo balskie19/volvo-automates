@@ -486,6 +486,52 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   body,body.cur-plug .menu,body.cur-plug .notes,body.cur-plug .tray{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L13%2012%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9%201.5%20L18.5%2011%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.4%2011.4%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.8%202.6%20L17.6%2010.4%22%20stroke%3D%22%23F2F1EA%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2212.2%22%20y%3D%2212.2%22%20width%3D%2213%22%20height%3D%2210.6%22%20rx%3D%224%22%20transform%3D%22rotate(45%2018.7%2017.5)%22%20fill%3D%22%23F2F1EA%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%20%3Cpath%20d%3D%22M23%2022%20q%205%204%204%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
   a,button,summary,.tile,.card,.ch,body.cur-plug .app,body.cur-plug .card,body.cur-plug .ccard,body.cur-plug .guide{cursor:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M3.5%202.5%20L13%2012%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9%201.5%20L18.5%2011%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%225.2%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M4.6%203.6%20L12.4%2011.4%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Cpath%20d%3D%22M9.8%202.6%20L17.6%2010.4%22%20stroke%3D%22%23F5D547%22%20stroke-width%3D%222.4%22%20stroke-linecap%3D%22round%22%2F%3E%20%3Crect%20x%3D%2212.2%22%20y%3D%2212.2%22%20width%3D%2213%22%20height%3D%2210.6%22%20rx%3D%224%22%20transform%3D%22rotate(45%2018.7%2017.5)%22%20fill%3D%22%23F5D547%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%222.6%22%2F%3E%20%3Cpath%20d%3D%22M23%2022%20q%205%204%204%209%22%20fill%3D%22none%22%20stroke%3D%22%230B0E1C%22%20stroke-width%3D%224.4%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") 4 3, auto}
 }
+
+  /* tools:grid-css */
+.tgrid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:660px){ .tgrid{grid-template-columns:repeat(2,1fr)} }
+@media(min-width:1000px){ .tgrid{grid-template-columns:repeat(3,1fr)} }
+/* The card is one object: same edges, same inner padding, and the arrow line
+   pinned to the bottom of every card whatever the bullets do above it. */
+.tc{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
+  border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:16px 16px 14px;
+  text-decoration:none;color:inherit;
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.tc:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 0 var(--ink)}
+.tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
+.tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
+.tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+/* A letterform, not a logo. Three of these six have no mark I hold, and a
+   redrawn-from-memory logo is wrong in a way the reader can feel. */
+.tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
+  border-radius:11px;background:var(--field);color:var(--pop);
+  font-family:var(--f-disp);font-weight:900;font-size:16px;letter-spacing:-.02em}
+.tcn{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.tcn i{font-style:normal;opacity:.45}
+.tcti{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0 0 4px;
+  font-size:clamp(20px,2.4vw,24px);line-height:1.1;color:var(--ink)}
+.tct{margin:0 0 11px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.tcb{align-self:flex-start;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:4px 10px;margin-bottom:12px}
+.tcl{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:7px}
+.tcl li{position:relative;padding-left:23px;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.tcl li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:8px;
+  border-left:2.5px solid var(--field);border-bottom:2.5px solid var(--field);
+  transform:rotate(-45deg)}
+.tcg{margin-top:auto;padding-top:11px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tc:hover .tcg{color:var(--ink)}
+.tcg i{font-style:normal;transition:transform .18s var(--ease)}
+.tc:hover .tcg i{transform:translateX(4px)}
+@media(prefers-reduced-motion:reduce){
+  .tc,.tcg i{transition:none}
+  .tc:hover{transform:none;box-shadow:6px 6px 0 0 var(--ink)}
+  .tc:hover .tcg i{transform:none}
+}
+/* /tools:grid-css */
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://volvo-automates.pages.dev/#volvo","name":"Volvo Ebal","jobTitle":"AI systems and automation specialist","email":"mailto:volvo.ebal8@gmail.com","url":"https://volvo-automates.pages.dev","sameAs":["https://www.linkedin.com/in/volvo-ebal/","https://github.com/balskie19"],"address":{"@type":"PostalAddress","addressCountry":"PH"},"knowsAbout":["GoHighLevel","n8n","Claude Code","Marketing automation","CRM automation","Workflow automation","AI voice agents","Make.com","Zapier","HubSpot","Lead reactivation"],"worksFor":{"@id":"https://volvo-automates.pages.dev/#practice"}},{"@type":"ProfessionalService","@id":"https://volvo-automates.pages.dev/#practice","name":"Volvo Automates","description":"Automation for agencies and service businesses: GoHighLevel CRM builds, n8n workflow automation, and custom applications built with Claude Code.","url":"https://volvo-automates.pages.dev","founder":{"@id":"https://volvo-automates.pages.dev/#volvo"},"areaServed":[{"@type":"Country","name":"United States"},{"@type":"Country","name":"Philippines"}],"availableLanguage":"en","serviceType":["CRM automation","Workflow automation","AI voice and chat agents","Custom application development"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"What I am hired for","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"GoHighLevel CRM builds and repairs"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"n8n workflow automation and integration"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Custom applications built with Claude Code"}}]}},{"@type":"WebSite","@id":"https://volvo-automates.pages.dev/#site","url":"https://volvo-automates.pages.dev","name":"Volvo Automates","publisher":{"@id":"https://volvo-automates.pages.dev/#volvo"},"inLanguage":"en"},{"@type":"FAQPage","@id":"https://volvo-automates.pages.dev/#faq","mainEntity":[{"@type":"Question","name":"We tried automation before and it broke.","acceptedAnswer":{"@type":"Answer","text":"Usually it did not break, it stopped being watched. Anything I build reports to a channel you already read, and says so when it fails. A silent automation is worse than none, which is why failure is a feature I build on purpose."}},{"@type":"Question","name":"Our setup is complicated.","acceptedAnswer":{"@type":"Answer","text":"Good. Simple setups rarely need me. I start by wiring ONE process end to end rather than mapping everything, so you see it working in week one instead of reading a discovery document in month three."}},{"@type":"Question","name":"We already know the problem, we need someone to fix it.","acceptedAnswer":{"@type":"Answer","text":"Then we skip the audit. Send me the process, I will tell you on the call whether it is worth automating, and I will tell you when it is not."}},{"@type":"Question","name":"Why you and not an agency?","acceptedAnswer":{"@type":"Answer","text":"An agency sells you a retainer and a project manager. You get the person who builds it. And every build I have shipped is on this site with the part that went wrong, which is not a thing a brochure can fake."}},{"@type":"Question","name":"We do not have budget for this.","acceptedAnswer":{"@type":"Answer","text":"Then the honest answer may be no. If the process does not cost you real hours or real leads, automating it is a hobby. Bring the one that hurts and we will size it in twenty minutes."}},{"@type":"Question","name":"Can you work with the tools we already have?","acceptedAnswer":{"@type":"Answer","text":"That is the whole job. GoHighLevel, HubSpot, n8n, Make, Zapier, Apify, Slack, OpenPhone, Intercom, Monday. If it has an API or a webhook, it can be wired in. If it does not, I build the missing piece."}}]}]}</script>
 </head>
@@ -1077,38 +1123,107 @@ details.q .a{padding:0 18px 16px;font-size:14.5px;line-height:1.6;color:var(--mu
   <section class="room" id="room-systems" aria-labelledby="systems-h">
     <a class="back" href="#home" data-room="home">&lsaquo; Back to everything</a>
     <header>
-      <p class="kick">Under the hood</p>
-      <h2 id="systems-h">Three ways in. One way out.</h2>
-      <p class="lede">Four systems built for one client. Each one opens in full, and each is shown
-        the way it actually behaves rather than as a diagram. Every line quoted is word for word
-        from the live build. Client names are withheld.</p>
+      <p class="kick">The work, by tool</p>
+      <h2 id="systems-h">Every build, sorted by what it was built in.</h2>
+      <p class="lede">Six tools, and each one is here because it was the right one for that job
+        rather than the one I happened to know. Open a tool to watch its builds run, step by step,
+        from the thing that sets them off to the thing they leave behind. Client names are
+        withheld throughout.</p>
     </header>
-    <div class="cards">
-      <article class="card">
-        <p class="kick">Calls out</p>
-        <h3>The AI that phones people</h3>
-        <p>Ten places a call can go and thirteen things it writes down on the way. No two calls take the same route, so you walk it rather than read it.</p>
-        <a class="lk" href="explainers/retell-agent.html">Open it &rsaquo;</a>
-      </article>
-      <article class="card">
-        <p class="kick">Calls in</p>
-        <h3>When the phone rings</h3>
-        <p>One question with two answers: is the office open? Move the clock and follow the same call down two different paths.</p>
-        <a class="lk" href="explainers/call-routing.html">Open it &rsaquo;</a>
-      </article>
-      <article class="card">
-        <p class="kick">Website chat</p>
-        <h3>The chat on the website</h3>
-        <p>144 people opened it. Eleven booked without speaking to anyone. The real numbers, including the ones that are not flattering.</p>
-        <a class="lk" href="explainers/website-chat.html">Open it &rsaquo;</a>
-      </article>
-      <article class="card">
-        <p class="kick">The way out</p>
-        <h3>The word that stops everything</h3>
-        <p>Type quit and watch five conversations switch off at once. This is the part almost nobody builds, and the part that earns trust.</p>
-        <a class="lk" href="explainers/the-way-out.html">Open it &rsaquo;</a>
-      </article>
+    <!-- tools:grid -->
+    <div class="tgrid">
+  <a class="tc" href="explainers/ghl.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">GH</span>
+      <span class="tcn">01 <i>/</i> 06</span>
     </div>
+    <h3 class="tcti">GoHighLevel</h3>
+    <p class="tct">Follow-up that runs on its own.</p>
+    <span class="tcb">11 systems</span>
+    <ul class="tcl">
+      <li>Leads move without anyone pushing</li>
+      <li>Nobody is chased after they say yes</li>
+      <li>Every conversation has an exit</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="explainers/make.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">MK</span>
+      <span class="tcn">02 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Make.com</h3>
+    <p class="tct">The wiring between everything else.</p>
+    <span class="tcb">19 scenarios</span>
+    <ul class="tcl">
+      <li>Tools that do not talk, made to</li>
+      <li>Nothing is done twice</li>
+      <li>It posts, files and writes while you sleep</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="explainers/n8n.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">N8</span>
+      <span class="tcn">03 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">n8n</h3>
+    <p class="tct">The jobs that have to wait, retry or loop.</p>
+    <span class="tcb">9 builds</span>
+    <ul class="tcl">
+      <li>Waits for a render to finish</li>
+      <li>Never calls at three in the morning</li>
+      <li>Fetches a long list without repeats</li>
+    </ul>
+    <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="explainers/retell-agent.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">RT</span>
+      <span class="tcn">04 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Retell AI</h3>
+    <p class="tct">An AI that phones people for you.</p>
+    <span class="tcb">10 stops, 13 notes</span>
+    <ul class="tcl">
+      <li>No two calls take the same route</li>
+      <li>It writes down what it learns</li>
+      <li>It hands over, it never closes</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="explainers/website-chat.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">IC</span>
+      <span class="tcn">05 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">Intercom</h3>
+    <p class="tct">The chat that books without a person.</p>
+    <span class="tcb">144 chats, 11 booked</span>
+    <ul class="tcl">
+      <li>Four ways in, eight packages</li>
+      <li>Answers from the company's own words</li>
+      <li>Real numbers, including the plain ones</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
+  <a class="tc" href="explainers/call-routing.html">
+    <div class="tch">
+      <span class="tcm" aria-hidden="true">OP</span>
+      <span class="tcn">06 <i>/</i> 06</span>
+    </div>
+    <h3 class="tcti">OpenPhone</h3>
+    <p class="tct">What happens when the phone rings.</p>
+    <span class="tcb">Open and shut</span>
+    <ul class="tcl">
+      <li>Everyone rings at once, for fifteen seconds</li>
+      <li>After hours it answers instantly</li>
+      <li>It takes a message, it never sells</li>
+    </ul>
+    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+  </a>
+    </div>
+  <!-- /tools:grid -->
   </section>
 
   <section class="room" id="room-about" aria-labelledby="about-h">

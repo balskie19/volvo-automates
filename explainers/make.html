@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Make.com builds</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;700&family=Gabarito:wght@500;700;800;900&family=Public+Sans:wght@400;500;600;700&display=swap">
+<style>:root{
+  --field:#212A6B;--pop:#F5D547;--paper:#F2F1EA;--ink:#0B0E1C;--card:#fff;
+  --muted:#5C6070;--hair:#E0DED4;--good:#2E9E5B;--bad:#C8452F;
+  --f-disp:"Gabarito",system-ui,sans-serif;--f-body:"Public Sans",system-ui,sans-serif;
+  --f-mono:"Azeret Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(18px,3.5vw,42px) clamp(14px,3vw,26px)}
+.eyebrow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted)}
+h1{font-family:var(--f-disp);font-weight:900;letter-spacing:-.03em;margin:6px 0 10px;
+  font-size:clamp(25px,4.6vw,44px);line-height:1.06}
+.lede{margin:0 0 22px;font-size:clamp(15px,1.8vw,17px);line-height:1.6;color:var(--muted);max-width:62ch}
+.split{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:900px){.split{grid-template-columns:1.25fr .9fr;align-items:start}}
+.panel{background:var(--card);border:3px solid var(--ink);border-radius:16px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px)}
+.panel h2{font-family:var(--f-disp);font-weight:900;font-size:19px;margin:0 0 4px;letter-spacing:-.02em}
+.panel p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--pop);border:2px solid var(--ink);border-radius:99px;
+  padding:3px 9px;margin-bottom:8px}
+.src{margin-top:16px;padding-top:12px;border-top:2px dashed var(--hair);
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);line-height:1.7}
+svg .n{cursor:pointer}
+svg .nb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .18s var(--ease)}
+svg .n:hover .nb,svg .n:focus .nb{fill:#FDF7DA}
+svg .n.on .nb{fill:var(--pop)}
+svg .nt{font-family:var(--f-mono);font-size:11px;fill:var(--ink);pointer-events:none}
+svg .ns{font-family:var(--f-body);font-size:10px;fill:var(--muted);pointer-events:none}
+svg .e{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.32;transition:opacity .2s,stroke .2s}
+svg .e.lit{opacity:1;stroke:var(--field)}
+svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
+.says{background:var(--field);color:var(--paper);border-radius:12px;padding:13px 15px;
+  font-size:14.5px;line-height:1.55;margin:10px 0}
+.says b{color:var(--pop);display:block;font-family:var(--f-mono);font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.fields{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.f{font-family:var(--f-mono);font-size:10.5px;border:2px solid var(--hair);border-radius:99px;
+  padding:4px 9px;color:var(--muted);transition:all .25s var(--ease)}
+.f.hit{border-color:var(--ink);background:var(--pop);color:var(--ink)}
+.rd{background:var(--ink);color:var(--ink);border-radius:3px;padding:0 6px;
+  user-select:none;font-size:.92em}
+.hint{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em;margin-top:10px}
+.back{display:flex;width:fit-content;gap:7px;align-items:center;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
+.back:hover{color:var(--ink)}
+.flow{margin:14px 0 0;border:3px solid var(--ink);border-radius:14px;background:var(--paper);
+  padding:10px 0 0;overflow:hidden}
+.fscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;
+  scrollbar-width:thin}
+.flow svg{height:auto;display:block}
+.fnb{fill:var(--card);stroke:var(--ink);stroke-width:3;transition:fill .22s var(--ease)}
+.fnt{font-family:var(--f-mono);font-size:11px;fill:var(--ink)}
+.fn.on .fnb{fill:var(--pop)}
+.fn.done .fnb{fill:#FBF3CE}
+.k-decision .fnb{fill:#EFEEE6}
+.k-decision.on .fnb,.k-fail.on .fnb{fill:var(--pop)}
+.k-fail .fnb{stroke:var(--bad)}
+.k-end .fnb{stroke-width:4.5}
+/* The trigger stays indigo the whole way through, so at a glance you can always
+   see where the thing starts without reading a word of it. */
+.k-trigger .fnb,.k-trigger.on .fnb,.k-trigger.done .fnb{fill:var(--field)}
+.k-trigger .fnt{fill:var(--paper)}
+.fe{stroke:var(--ink);stroke-width:2.5;fill:none;opacity:.28;transition:opacity .2s,stroke .2s}
+.fe.lit{opacity:1;stroke:var(--field)}
+.fe-l{font-family:var(--f-mono);font-size:9.5px;fill:var(--muted)}
+.fp{fill:var(--pop);stroke:var(--ink);stroke-width:2.5;opacity:0;transition:opacity .15s}
+.fp.go{opacity:1}
+/* how far through the run you are, without a number to read */
+.frail{height:4px;background:var(--hair);margin:8px 10px 0;border-radius:3px;overflow:hidden}
+.frail i{display:block;height:100%;width:0;background:var(--field);transition:width .5s var(--ease)}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 10px 10px;flex-wrap:wrap}
+.fplay{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--pop);border:3px solid var(--ink);border-radius:99px;padding:7px 15px;
+  cursor:pointer;box-shadow:3px 3px 0 0 var(--ink)}
+.fplay:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fcap{font-family:var(--f-mono);font-size:11px;color:var(--muted);letter-spacing:.04em;flex:1 1 180px}
+@media(prefers-reduced-motion:reduce){
+  /* Someone who asked not to be moved gets the finished state, not a
+     one-millisecond replay of it, and no canvas that scrolls itself. */
+  .fn .fnb{fill:#FBF3CE}
+  .k-trigger .fnb{fill:var(--field)}
+  .fe{opacity:1}
+  .fp,.fplay{display:none}
+  .frail i{width:100% !important}
+}
+.filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.fb{font-family:var(--f-mono);font-size:11.5px;background:var(--card);border:3px solid var(--ink);
+  border-radius:99px;padding:8px 14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--ink);
+  transition:background .16s var(--ease),transform .12s var(--ease)}
+.fb.on{background:var(--pop)}
+.fb:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
+.fb:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+.grp{margin:0 0 34px}
+.ghd{margin:0 0 14px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
+.ghd h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0;
+  font-size:clamp(20px,2.8vw,28px)}
+.ghd p{margin:4px 0 0;font-size:14.5px;color:var(--muted);line-height:1.55;max-width:56ch}
+.cnt{position:absolute;right:0;top:2px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wf{background:var(--card);border:3px solid var(--ink);border-radius:15px;
+  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px);margin:0 0 14px}
+.wf h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;margin:0 0 6px;
+  font-size:clamp(17px,2.2vw,22px);line-height:1.2}
+.wf p{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.why{margin-top:12px !important;padding:10px 12px;background:rgba(245,213,71,.18);
+  border-left:4px solid var(--pop);border-radius:0 8px 8px 0;font-size:14px !important}
+.why b{color:var(--ink)}
+/* A few builds have a page of their own where you can drive them rather than
+   watch them. Those get a way through from here; the rest do not pretend to. */
+.deep{display:flex;width:fit-content;align-items:center;gap:8px;margin-top:12px;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--field);color:var(--paper);border-radius:99px;padding:8px 14px;
+  text-decoration:none;transition:transform .16s var(--ease)}
+.deep i{font-style:normal;transition:transform .16s var(--ease)}
+.deep:hover i{transform:translateX(4px)}
+.deep:active{transform:translateY(2px)}
+.deep:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
+@media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }</style></head>
+<body><div class="wrap">
+<a class="back" href="index.html">&lsaquo; All tools</a>
+<span class="eyebrow">Make.com &middot; 19 scenarios</span>
+<h1>The wiring between everything else.</h1>
+<p class="lede">Make is where the tools that were never designed to work together are made to.
+      A form here, a document there, a record somewhere else - joined up. Each one plays from its trigger to its last step, the same shape as
+the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
+
+<div class="filt" role="group" aria-label="Filter by what starts it">
+  <button class="fb on" data-f="all" type="button">Everything</button>
+  <button class="fb" data-f="form" type="button">When a form is answered</button>
+  <button class="fb" data-f="call" type="button">When another system calls in</button>
+  <button class="fb" data-f="clock" type="button">On a clock</button>
+</div>
+
+    <section class="grp" data-g="form">
+      <header class="ghd">
+        <h2>When a form is answered</h2>
+        <p>The answer does more than land in an inbox.</p>
+        <span class="cnt">4 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Their answers become a document, emailed back</h3>
+        <p>Someone fills in a form. What they wrote is turned into a document made for them, and it is in their inbox while they are still on the page.</p>
+        <div class="flow" data-flow='{"id":"fl0","play":["t","r","g","b","l","e"],"caption":{"g":"Their answers, not a template with their name on it","e":"A document made for them, while they are still on the page"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="Their answers become a document, emailed back workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="r" data-b="g" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="g" data-b="b" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="b" data-b="l" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="l" data-b="e" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl0-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A form is answered</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Read the answers</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-g" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Write their version</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-b" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Build the document</text>
+      </g>
+      <g class="fn k-action" id="fl0-n-l" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Get a shareable link</text>
+      </g>
+      <g class="fn k-end" id="fl0-n-e" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Email it to them</text>
+      </g>
+      <circle class="fp" id="fl0-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It is built from their answers, not a template with their name dropped in.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>One form, two very different follow-ups</h3>
+        <p>The same form is answered by people who paid and people who only replied, and each is treated differently from that moment on.</p>
+        <div class="flow" data-flow='{"id":"fl1","play":["t","d","p","n"],"caption":{"d":"One form, two completely different follow-ups","x":"Someone who only answered is not chased like someone who bought"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 182" style="min-width:874px" role="img" aria-label="One form, two very different follow-ups workflow">
+      <path class="fe" data-a="t" data-b="d" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="d" data-b="p" d="M410 91 C 437 91, 437 48, 464 48"/><text class="fe-l" x="437" y="62.5" text-anchor="middle">paid</text>
+      <path class="fe" data-a="d" data-b="s" d="M410 91 C 437 91, 437 134, 464 134"/><text class="fe-l" x="437" y="105.5" text-anchor="middle">just replied</text>
+      <path class="fe" data-a="p" data-b="n" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="s" data-b="x" d="M634 134 C 661 134, 661 134, 688 134"/>
+      <g class="fn k-trigger" id="fl1-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A form is answered</text>
+      </g>
+      <g class="fn k-decision" id="fl1-n-d" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Did they pay?</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-p" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Send them onward</text>
+      </g>
+      <g class="fn k-action" id="fl1-n-s" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="131" text-anchor="middle">Find or make the</text><text class="fnt" x="549" y="145" text-anchor="middle">record</text>
+      </g>
+      <g class="fn k-end" id="fl1-n-n" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Nudge them</text>
+      </g>
+      <g class="fn k-end" id="fl1-n-x" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Label and wait</text>
+      </g>
+      <circle class="fp" id="fl1-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Someone who only answered is not chased like someone who bought.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>A form becomes a signed document, filed</h3>
+        <p>An answer draws up the document, fetches the finished copy, files it where the team already looks, and logs it.</p>
+        <div class="flow" data-flow='{"id":"fl2","play":["t","c","d","u","s"],"caption":{"u":"Filed where the team already looks","s":"And written down, so it can be found later"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 96" style="min-width:1098px" role="img" aria-label="A form becomes a signed document, filed workflow">
+      <path class="fe" data-a="t" data-b="c" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="c" data-b="d" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="d" data-b="u" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="u" data-b="s" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <g class="fn k-trigger" id="fl2-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">A form is answered</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-c" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Draw up the document</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-d" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Fetch the finished</text><text class="fnt" x="549" y="59" text-anchor="middle">copy</text>
+      </g>
+      <g class="fn k-action" id="fl2-n-u" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">File it</text>
+      </g>
+      <g class="fn k-end" id="fl2-n-s" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Log it on the sheet</text>
+      </g>
+      <circle class="fp" id="fl2-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Filed AND logged. A document nobody can find later was not really filed.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Two documents, two recipients</h3>
+        <p>One answer fills a template twice: the customer's copy and the internal copy, each sent to the right place.</p>
+        <div class="flow" data-flow='{"id":"fl3","play":["t","f","b","s","d","e2"],"caption":{"d":"The customer&#39;s copy and the internal copy are not the same document"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 182" style="min-width:1322px" role="img" aria-label="Two documents, two recipients workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="f" data-b="b" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="b" data-b="s" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="s" data-b="d" d="M858 91 C 885 91, 885 91, 912 91"/>
+      <path class="fe" data-a="d" data-b="e1" d="M1082 91 C 1109 91, 1109 48, 1136 48"/>
+      <path class="fe" data-a="d" data-b="e2" d="M1082 91 C 1109 91, 1109 134, 1136 134"/>
+      <g class="fn k-trigger" id="fl3-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">A form is answered</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Pull the template</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-b" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Fill it in</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-s" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Save both copies</text>
+      </g>
+      <g class="fn k-decision" id="fl3-n-d" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="95" text-anchor="middle">Who gets which?</text>
+      </g>
+      <g class="fn k-action" id="fl3-n-e1" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">One goes to them</text>
+      </g>
+      <g class="fn k-end" id="fl3-n-e2" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="131" text-anchor="middle">One goes to the</text><text class="fnt" x="1221" y="145" text-anchor="middle">office</text>
+      </g>
+      <circle class="fp" id="fl3-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> They are not the same document, and treating them as one is how the wrong version reaches a customer.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="call">
+      <header class="ghd">
+        <h2>When another system calls in</h2>
+        <p>Something finishes elsewhere and this picks it up.</p>
+        <span class="cnt">3 builds</span>
+      </header>
+      <article class="wf">
+        <h3>Write the text and the email, then send</h3>
+        <p>One event produces both a short message for a phone and a longer one for an inbox, then sends it.</p>
+        <div class="flow" data-flow='{"id":"fl4","play":["t","s","e","g"],"caption":{"s":"Short, for a phone","e":"Longer, for an inbox. Same facts, different shape."}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 96" style="min-width:874px" role="img" aria-label="Write the text and the email, then send workflow">
+      <path class="fe" data-a="t" data-b="s" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="s" data-b="e" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="e" data-b="g" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <g class="fn k-trigger" id="fl4-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Something calls in</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-s" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="45" text-anchor="middle">Write the text</text><text class="fnt" x="325" y="59" text-anchor="middle">message</text>
+      </g>
+      <g class="fn k-action" id="fl4-n-e" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Write the email</text>
+      </g>
+      <g class="fn k-end" id="fl4-n-g" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Send it</text>
+      </g>
+      <circle class="fp" id="fl4-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Same facts, different shape. A text that reads like an email gets deleted.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>A booking changes, and the record keeps up</h3>
+        <p>Cancelled, started or moved - three different things, each written onto the person's record properly.</p>
+        <div class="flow" data-flow='{"id":"fl5","play":["t","v","d","r","n"],"caption":{"d":"Three things can happen and they are not interchangeable","n":"Whatever happened, the record says so"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 268" style="min-width:1098px" role="img" aria-label="A booking changes, and the record keeps up workflow">
+      <path class="fe" data-a="t" data-b="v" d="M186 134 C 213 134, 213 134, 240 134"/>
+      <path class="fe" data-a="v" data-b="d" d="M410 134 C 437 134, 437 134, 464 134"/>
+      <path class="fe" data-a="d" data-b="c" d="M634 134 C 661 134, 661 48, 688 48"/><text class="fe-l" x="661" y="84" text-anchor="middle">cancelled</text>
+      <path class="fe" data-a="d" data-b="s" d="M634 134 C 661 134, 661 134, 688 134"/><text class="fe-l" x="661" y="127" text-anchor="middle">started</text>
+      <path class="fe" data-a="d" data-b="r" d="M634 134 C 661 134, 661 220, 688 220"/><text class="fe-l" x="661" y="170" text-anchor="middle">rescheduled</text>
+      <path class="fe" data-a="c" data-b="n" d="M858 48 C 885 48, 885 134, 912 134"/>
+      <path class="fe" data-a="s" data-b="n" d="M858 134 C 885 134, 885 134, 912 134"/>
+      <path class="fe" data-a="r" data-b="n" d="M858 220 C 885 220, 885 134, 912 134"/>
+      <g class="fn k-trigger" id="fl5-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="138" text-anchor="middle">A booking changes</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-v" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="138" text-anchor="middle">Work out whose</text>
+      </g>
+      <g class="fn k-decision" id="fl5-n-d" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="138" text-anchor="middle">Which change?</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-c" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Cancelled</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-s" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Started</text>
+      </g>
+      <g class="fn k-action" id="fl5-n-r" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="188" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="224" text-anchor="middle">Moved</text>
+      </g>
+      <g class="fn k-end" id="fl5-n-n" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="131" text-anchor="middle">Write it on the</text><text class="fnt" x="997" y="145" text-anchor="middle">record</text>
+      </g>
+      <circle class="fp" id="fl5-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Three outcomes, three paths. Collapsing them loses the reason the record changed.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Tell the voice agent what time it is</h3>
+        <p>A voice agent has no clock of its own. This answers with the current time in the caller's timezone.</p>
+        <div class="flow" data-flow='{"id":"fl6","play":["t","n","f","r"],"caption":{"t":"A voice agent has no clock of its own","f":"Their timezone, not the server&#39;s","r":"So it never offers a slot in the past"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 96" style="min-width:874px" role="img" aria-label="Tell the voice agent what time it is workflow">
+      <path class="fe" data-a="t" data-b="n" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="n" data-b="f" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="f" data-b="r" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <g class="fn k-trigger" id="fl6-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">The agent asks</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-n" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Get the time now</text>
+      </g>
+      <g class="fn k-action" id="fl6-n-f" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="45" text-anchor="middle">Put it in their</text><text class="fnt" x="549" y="59" text-anchor="middle">timezone</text>
+      </g>
+      <g class="fn k-end" id="fl6-n-r" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Answer</text>
+      </g>
+      <circle class="fp" id="fl6-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Without it an agent will cheerfully offer an appointment slot that has already passed.</p>
+        
+      </article>
+    </section>
+    <section class="grp" data-g="clock">
+      <header class="ghd">
+        <h2>On a clock</h2>
+        <p>Running whether anyone is at a desk or not.</p>
+        <span class="cnt">12 builds</span>
+      </header>
+      <article class="wf">
+        <h3>The email that goes out without anyone sending it</h3>
+        <p>Reads the next row, fills in the blanks, pauses, and sends.</p>
+        <div class="flow" data-flow='{"id":"fl7","play":["t","r","v","w","g"],"caption":{"w":"Spaced out on purpose, so it does not look like a blast","g":"Sent, by nobody"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 96" style="min-width:1098px" role="img" aria-label="The email that goes out without anyone sending it workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="r" data-b="v" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="v" data-b="w" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="w" data-b="g" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <g class="fn k-trigger" id="fl7-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Read the sheet</text>
+      </g>
+      <g class="fn k-action" id="fl7-n-v" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Fill in the blanks</text>
+      </g>
+      <g class="fn k-wait" id="fl7-n-w" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Pause between sends</text>
+      </g>
+      <g class="fn k-end" id="fl7-n-g" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Send it</text>
+      </g>
+      <circle class="fp" id="fl7-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The pause is deliberate. Sent all at once it looks like a blast, and gets treated like one.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Look at the picture, write the caption, post it</h3>
+        <p>Finds the next image, actually looks at it, writes a caption from what is in it, marks it used, and posts.</p>
+        <div class="flow" data-flow='{"id":"fl8","play":["t","r","l","w","u","p"],"caption":{"l":"It actually looks at the image before describing it","u":"Marked used first, so a crash never posts it twice"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="Look at the picture, write the caption, post it workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="r" data-b="l" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="l" data-b="w" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="w" data-b="u" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="u" data-b="p" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl8-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Find the next image</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-l" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Look at the picture</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-w" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Write the caption</text>
+      </g>
+      <g class="fn k-action" id="fl8-n-u" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Mark it as used</text>
+      </g>
+      <g class="fn k-end" id="fl8-n-p" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Post it</text>
+      </g>
+      <circle class="fp" id="fl8-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It marks the image used BEFORE posting. Crash after posting and you have a duplicate; crash after marking and you have a gap, which is the cheaper mistake.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>One post a day, without a person</h3>
+        <p>The same idea on a daily clock for a different platform.</p>
+        <div class="flow" data-flow='{"id":"fl9","play":["t","r","l","u","w","p"],"caption":{"t":"Once a day, at the same time","p":"One post, every day, without a person"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="One post a day, without a person workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="r" data-b="l" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="l" data-b="u" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="u" data-b="w" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="w" data-b="p" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl9-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every morning</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Find the next image</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-l" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Look at the picture</text>
+      </g>
+      <g class="fn k-action" id="fl9-n-u" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Mark it as used</text>
+      </g>
+      <g class="fn k-wait" id="fl9-n-w" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Pause</text>
+      </g>
+      <g class="fn k-end" id="fl9-n-p" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Post it</text>
+      </g>
+      <circle class="fp" id="fl9-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Once a day at a fixed time, so the account looks tended rather than automated.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Read the news, draft the post</h3>
+        <p>New articles get a draft written about them, and only the good ones go out. The rest are kept to finish later.</p>
+        <div class="flow" data-flow='{"id":"fl10","play":["t","g","d","o"],"caption":{"d":"Not everything drafted is worth posting","o":"The drafts nobody posts still get kept"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 182" style="min-width:874px" role="img" aria-label="Read the news, draft the post workflow">
+      <path class="fe" data-a="t" data-b="g" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="g" data-b="d" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="d" data-b="l" d="M634 91 C 661 91, 661 48, 688 48"/><text class="fe-l" x="661" y="62.5" text-anchor="middle">good enough</text>
+      <path class="fe" data-a="d" data-b="o" d="M634 91 C 661 91, 661 134, 688 134"/><text class="fe-l" x="661" y="105.5" text-anchor="middle">needs a person</text>
+      <g class="fn k-trigger" id="fl10-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">New article appears</text>
+      </g>
+      <g class="fn k-action" id="fl10-n-g" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Draft a take on it</text>
+      </g>
+      <g class="fn k-decision" id="fl10-n-d" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Post or park?</text>
+      </g>
+      <g class="fn k-end" id="fl10-n-l" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Post it</text>
+      </g>
+      <g class="fn k-action" id="fl10-n-o" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="131" text-anchor="middle">Save it to write</text><text class="fnt" x="773" y="145" text-anchor="middle">later</text>
+      </g>
+      <circle class="fp" id="fl10-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Not everything drafted is worth posting, and the ones that are not still get kept.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>New name or old name, and the team is told</h3>
+        <p>Checks each row against the records, adds a note to people already known, creates the ones who are not, and announces only the new ones.</p>
+        <div class="flow" data-flow='{"id":"fl11","play":["t","r","s","n","k"],"caption":{"s":"An existing name is not treated as a new lead","k":"The team hears about the new ones only"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 182" style="min-width:1098px" role="img" aria-label="New name or old name, and the team is told workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="r" data-b="s" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="s" data-b="a" d="M634 91 C 661 91, 661 48, 688 48"/><text class="fe-l" x="661" y="62.5" text-anchor="middle">we do</text>
+      <path class="fe" data-a="s" data-b="n" d="M634 91 C 661 91, 661 134, 688 134"/><text class="fe-l" x="661" y="105.5" text-anchor="middle">new</text>
+      <path class="fe" data-a="n" data-b="k" d="M858 134 C 885 134, 885 91, 912 91"/>
+      <g class="fn k-trigger" id="fl11-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl11-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Read the sheet</text>
+      </g>
+      <g class="fn k-decision" id="fl11-n-s" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Do we know them?</text>
+      </g>
+      <g class="fn k-action" id="fl11-n-a" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="45" text-anchor="middle">Add a note to their</text><text class="fnt" x="773" y="59" text-anchor="middle">record</text>
+      </g>
+      <g class="fn k-action" id="fl11-n-n" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Create the record</text>
+      </g>
+      <g class="fn k-end" id="fl11-n-k" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="95" text-anchor="middle">Tell the team</text>
+      </g>
+      <circle class="fp" id="fl11-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> An existing customer arriving again is not a new lead, and announcing them as one costs the team's trust in the alerts.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Clean up a list of phone numbers</h3>
+        <p>Fetches records, works through them one at a time, puts every number into the same shape, and writes them down.</p>
+        <div class="flow" data-flow='{"id":"fl12","play":["t","f","i","p","i","s"],"caption":{"p":"Every number ends up in the same shape","s":"A list you can actually dial from"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 216" style="min-width:874px" role="img" aria-label="Clean up a list of phone numbers workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="f" data-b="i" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="i" data-b="p" d="M634 91 C 661 91, 661 48, 688 48"/><text class="fe-l" x="661" y="62.5" text-anchor="middle">next</text>
+      <path class="fe" data-a="p" data-b="i" d="M773 80 L 773 186 L 549 186 L 549 123"/>
+      <path class="fe" data-a="i" data-b="s" d="M634 91 C 661 91, 661 134, 688 134"/><text class="fe-l" x="661" y="105.5" text-anchor="middle">done</text>
+      <g class="fn k-trigger" id="fl12-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl12-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Fetch the records</text>
+      </g>
+      <g class="fn k-decision" id="fl12-n-i" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">One at a time</text>
+      </g>
+      <g class="fn k-action" id="fl12-n-p" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Tidy the number</text>
+      </g>
+      <g class="fn k-end" id="fl12-n-s" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Write it down</text>
+      </g>
+      <circle class="fp" id="fl12-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> One shape means a list you can dial from rather than one somebody has to fix first.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Every product gets its folder</h3>
+        <p>Runs each afternoon, checks whether each product already has a folder, and creates only the missing ones.</p>
+        <div class="flow" data-flow='{"id":"fl13","play":["t","r","l","c"],"caption":{"l":"It checks first, so it never makes a second one","s":"Doing nothing is the common case, and it is fine"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 874 182" style="min-width:874px" role="img" aria-label="Every product gets its folder workflow">
+      <path class="fe" data-a="t" data-b="r" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="r" data-b="l" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="l" data-b="c" d="M634 91 C 661 91, 661 48, 688 48"/><text class="fe-l" x="661" y="62.5" text-anchor="middle">no</text>
+      <path class="fe" data-a="l" data-b="s" d="M634 91 C 661 91, 661 134, 688 134"/><text class="fe-l" x="661" y="105.5" text-anchor="middle">already there</text>
+      <g class="fn k-trigger" id="fl13-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">Every afternoon</text>
+      </g>
+      <g class="fn k-action" id="fl13-n-r" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Read the product list</text>
+      </g>
+      <g class="fn k-decision" id="fl13-n-l" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="88" text-anchor="middle">Does it have a</text><text class="fnt" x="549" y="102" text-anchor="middle">folder?</text>
+      </g>
+      <g class="fn k-end" id="fl13-n-c" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Make one</text>
+      </g>
+      <g class="fn k-fail" id="fl13-n-s" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="138" text-anchor="middle">Leave it alone</text>
+      </g>
+      <circle class="fp" id="fl13-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Doing nothing is the usual outcome, and that is the point of checking first.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Read the ad copy and score it</h3>
+        <p>Finds copy waiting for review, reads it, turns the verdict into columns, and writes it back to the same row.</p>
+        <div class="flow" data-flow='{"id":"fl14","play":["t","f","a","j","u"],"caption":{"j":"Prose turned into columns, so it can be sorted","u":"Back in the same row it came from"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 96" style="min-width:1098px" role="img" aria-label="Read the ad copy and score it workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="f" data-b="a" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="a" data-b="j" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="j" data-b="u" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <g class="fn k-trigger" id="fl14-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl14-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Find copy to review</text>
+      </g>
+      <g class="fn k-action" id="fl14-n-a" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Read it</text>
+      </g>
+      <g class="fn k-action" id="fl14-n-j" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Turn it into fields</text>
+      </g>
+      <g class="fn k-end" id="fl14-n-u" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="45" text-anchor="middle">Write the verdict</text><text class="fnt" x="997" y="59" text-anchor="middle">back</text>
+      </g>
+      <circle class="fp" id="fl14-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Prose into columns, so a hundred pieces can be sorted instead of read.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Ad copy in three languages</h3>
+        <p>One piece of copy translated into English, German and French, each written back into its own column.</p>
+        <div class="flow" data-flow='{"id":"fl15","play":["t","f","e","g","r","s"],"caption":{"s":"Three markets from one piece of copy, each in its own column"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1322 96" style="min-width:1322px" role="img" aria-label="Ad copy in three languages workflow">
+      <path class="fe" data-a="t" data-b="f" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="f" data-b="e" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="e" data-b="g" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="g" data-b="r" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="r" data-b="s" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <g class="fn k-trigger" id="fl15-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Someone asks</text>
+      </g>
+      <g class="fn k-action" id="fl15-n-f" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Find the copy</text>
+      </g>
+      <g class="fn k-action" id="fl15-n-e" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Into English</text>
+      </g>
+      <g class="fn k-action" id="fl15-n-g" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Into German</text>
+      </g>
+      <g class="fn k-action" id="fl15-n-r" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Into French</text>
+      </g>
+      <g class="fn k-end" id="fl15-n-s" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Write all three back</text>
+      </g>
+      <circle class="fp" id="fl15-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> Three markets from one write-up, with the original kept beside them.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>The Thursday reminder, worded differently</h3>
+        <p>Loads the reminders, shuffles the wording, and posts it to the team every Thursday.</p>
+        <div class="flow" data-flow='{"id":"fl16","play":["t","l","j","r","s"],"caption":{"r":"Same message, different words, so it keeps being read"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 96" style="min-width:1098px" role="img" aria-label="The Thursday reminder, worded differently workflow">
+      <path class="fe" data-a="t" data-b="l" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="l" data-b="j" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="j" data-b="r" d="M634 48 C 661 48, 661 48, 688 48"/>
+      <path class="fe" data-a="r" data-b="s" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <g class="fn k-trigger" id="fl16-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every Thursday</text>
+      </g>
+      <g class="fn k-action" id="fl16-n-l" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Load the reminders</text>
+      </g>
+      <g class="fn k-action" id="fl16-n-j" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Pick the pieces</text>
+      </g>
+      <g class="fn k-action" id="fl16-n-r" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Shuffle the wording</text>
+      </g>
+      <g class="fn k-end" id="fl16-n-s" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Post it</text>
+      </g>
+      <circle class="fp" id="fl16-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> The shuffle is the point. The same words every week stop being read by about the fourth one.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Collect offices, skip the ones on file</h3>
+        <p>Runs a collector, waits for it to finish, takes the results, and adds only the ones not already recorded.</p>
+        <div class="flow" data-flow='{"id":"fl17","play":["t","w","g","d","c"],"caption":{"w":"Collecting takes time, so it waits rather than guessing","d":"The same office is never added twice"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1098 182" style="min-width:1098px" role="img" aria-label="Collect offices, skip the ones on file workflow">
+      <path class="fe" data-a="t" data-b="w" d="M186 91 C 213 91, 213 91, 240 91"/>
+      <path class="fe" data-a="w" data-b="g" d="M410 91 C 437 91, 437 91, 464 91"/>
+      <path class="fe" data-a="g" data-b="d" d="M634 91 C 661 91, 661 91, 688 91"/>
+      <path class="fe" data-a="d" data-b="c" d="M858 91 C 885 91, 885 48, 912 48"/><text class="fe-l" x="885" y="62.5" text-anchor="middle">new</text>
+      <path class="fe" data-a="d" data-b="s" d="M858 91 C 885 91, 885 134, 912 134"/><text class="fe-l" x="885" y="105.5" text-anchor="middle">known</text>
+      <g class="fn k-trigger" id="fl17-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="95" text-anchor="middle">The collector runs</text>
+      </g>
+      <g class="fn k-wait" id="fl17-n-w" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="95" text-anchor="middle">Wait for it to finish</text>
+      </g>
+      <g class="fn k-action" id="fl17-n-g" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="95" text-anchor="middle">Take the results</text>
+      </g>
+      <g class="fn k-decision" id="fl17-n-d" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="59" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="95" text-anchor="middle">Already on file?</text>
+      </g>
+      <g class="fn k-end" id="fl17-n-c" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Add them</text>
+      </g>
+      <g class="fn k-fail" id="fl17-n-s" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="102" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="138" text-anchor="middle">Skip</text>
+      </g>
+      <circle class="fp" id="fl17-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It waits rather than guessing how long collecting takes, and it never adds the same office twice.</p>
+        
+      </article>
+      <article class="wf">
+        <h3>Line up the call, then place it</h3>
+        <p>Finds who to call, checks nobody is rung twice, reads the real diary for free slots, hands the details over, and places the call.</p>
+        <div class="flow" data-flow='{"id":"fl18","play":["t","s","d","a","c","v","k"],"caption":{"d":"Nobody gets rung twice","c":"It reads the real diary first, so it can offer a slot that exists","k":"The agent dials knowing who it is calling and when they are free"}}'>
+  <div class="fscroll">
+    <svg viewBox="0 0 1546 96" style="min-width:1546px" role="img" aria-label="Line up the call, then place it workflow">
+      <path class="fe" data-a="t" data-b="s" d="M186 48 C 213 48, 213 48, 240 48"/>
+      <path class="fe" data-a="s" data-b="d" d="M410 48 C 437 48, 437 48, 464 48"/>
+      <path class="fe" data-a="d" data-b="a" d="M634 48 C 661 48, 661 48, 688 48"/><text class="fe-l" x="661" y="41" text-anchor="middle">no</text>
+      <path class="fe" data-a="a" data-b="c" d="M858 48 C 885 48, 885 48, 912 48"/>
+      <path class="fe" data-a="c" data-b="v" d="M1082 48 C 1109 48, 1109 48, 1136 48"/>
+      <path class="fe" data-a="v" data-b="k" d="M1306 48 C 1333 48, 1333 48, 1360 48"/>
+      <g class="fn k-trigger" id="fl18-n-t" data-x="16" data-w="170">
+        <rect class="fnb" x="16" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="101" y="52" text-anchor="middle">Every fifteen minutes</text>
+      </g>
+      <g class="fn k-action" id="fl18-n-s" data-x="240" data-w="170">
+        <rect class="fnb" x="240" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="325" y="52" text-anchor="middle">Find who to call</text>
+      </g>
+      <g class="fn k-decision" id="fl18-n-d" data-x="464" data-w="170">
+        <rect class="fnb" x="464" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="549" y="52" text-anchor="middle">Called already?</text>
+      </g>
+      <g class="fn k-action" id="fl18-n-a" data-x="688" data-w="170">
+        <rect class="fnb" x="688" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="773" y="52" text-anchor="middle">Add them</text>
+      </g>
+      <g class="fn k-action" id="fl18-n-c" data-x="912" data-w="170">
+        <rect class="fnb" x="912" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="997" y="52" text-anchor="middle">Check the diary</text>
+      </g>
+      <g class="fn k-action" id="fl18-n-v" data-x="1136" data-w="170">
+        <rect class="fnb" x="1136" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1221" y="52" text-anchor="middle">Hand over the details</text>
+      </g>
+      <g class="fn k-end" id="fl18-n-k" data-x="1360" data-w="170">
+        <rect class="fnb" x="1360" y="16" width="170" height="64" rx="13"/>
+        <text class="fnt" x="1445" y="52" text-anchor="middle">Place the call</text>
+      </g>
+      <circle class="fp" id="fl18-pulse" r="7" cx="-99" cy="-99"/>
+    </svg>
+  </div>
+  <div class="frail"><i></i></div>
+  <div class="fbar">
+    <button class="fplay" type="button" aria-label="Play this workflow">Play</button>
+    <span class="fcap" aria-live="polite">Ready</span>
+  </div>
+</div>
+        <p class="why"><b>Worth noticing.</b> It reads the actual diary first, so the agent can offer a time that genuinely exists.</p>
+        
+      </article>
+    </section>
+
+<p class="lede" style="margin-top:26px">Read from the supplied scenario files. Two of them appeared in both sets and are
+      counted once.</p>
+
+<script>
+
+(function(){
+  var reduced = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function build(box){
+    var cfg = JSON.parse(box.getAttribute("data-flow"));
+    var scroll = box.querySelector(".fscroll");
+    var svg = box.querySelector("svg");
+    var pulse = document.getElementById(cfg.id + "-pulse");
+    var cap = box.querySelector(".fcap");
+    var rail = box.querySelector(".frail i");
+    var timers = [], raf = null;
+
+    function node(n){ return document.getElementById(cfg.id + "-n-" + n); }
+    function edge(a,b){ return svg.querySelector('[data-a="' + a + '"][data-b="' + b + '"]'); }
+
+    function reset(){
+      timers.forEach(clearTimeout); timers = []; if (raf) cancelAnimationFrame(raf);
+      svg.querySelectorAll(".fn").forEach(function(n){ n.classList.remove("on","done"); });
+      svg.querySelectorAll(".fe").forEach(function(e){ e.classList.remove("lit"); });
+      pulse.classList.remove("go");
+      rail.style.width = "0%";
+      scroll.scrollLeft = 0;
+    }
+
+    /* Keep the live step in view. The canvas is wider than any phone, and a
+       reader who has to drag in order to follow along will not follow along. */
+    function follow(n){
+      if (!n) return;
+      var vb = svg.viewBox.baseVal.width || 1;
+      var scale = svg.getBoundingClientRect().width / vb;
+      var x = parseFloat(n.getAttribute("data-x")) * scale;
+      var w = parseFloat(n.getAttribute("data-w")) * scale;
+      var want = x + w / 2 - scroll.clientWidth / 2;
+      var max = scroll.scrollWidth - scroll.clientWidth;
+      want = Math.max(0, Math.min(max, want));
+      if (Math.abs(want - scroll.scrollLeft) < 8) return;
+      try { scroll.scrollTo({ left: want, behavior: "smooth" }); }
+      catch (e) { scroll.scrollLeft = want; }
+    }
+
+    /* The pulse walks the real path rather than being handed to CSS, so a
+       replay can interrupt it mid-wire and the captions stay on one clock. */
+    function travel(path, ms, done){
+      var len = path.getTotalLength(), t0 = null;
+      pulse.classList.add("go");
+      function step(t){
+        if (t0 === null) t0 = t;
+        var k = Math.min(1, (t - t0) / ms);
+        var p = path.getPointAtLength(len * k);
+        pulse.setAttribute("cx", p.x); pulse.setAttribute("cy", p.y);
+        if (k < 1) raf = requestAnimationFrame(step);
+        else { pulse.classList.remove("go"); done && done(); }
+      }
+      raf = requestAnimationFrame(step);
+    }
+
+    function play(){
+      reset();
+      var i = 0;
+      function hop(){
+        var id = cfg.play[i], n = node(id);
+        svg.querySelectorAll(".fn.on").forEach(function(x){ x.classList.remove("on"); x.classList.add("done"); });
+        if (n) n.classList.add("on");
+        cap.textContent = cfg.caption[id] || (n ? n.textContent.trim() : "");
+        rail.style.width = Math.round((i / (cfg.play.length - 1)) * 100) + "%";
+        follow(n);
+        if (i >= cfg.play.length - 1){
+          timers.push(setTimeout(function(){
+            if (n) { n.classList.remove("on"); n.classList.add("done"); }
+            cap.textContent = "Done";
+          }, 700));
+          return;
+        }
+        var e = edge(id, cfg.play[i + 1]);
+        timers.push(setTimeout(function(){
+          if (e){ e.classList.add("lit"); travel(e, 600, function(){ i++; hop(); }); }
+          else { i++; hop(); }
+        }, 500));
+      }
+      hop();
+    }
+
+    box.querySelector(".fplay").addEventListener("click", play);
+    return { play: play, box: box };
+  }
+
+  var flows = [].slice.call(document.querySelectorAll(".flow")).map(build);
+  if (reduced || !("IntersectionObserver" in window)) return;
+
+  /* Plays when it reaches you, once. The observer only watches boxes that are
+     on the page and visible; a filtered-out group is display:none and simply
+     never fires, which is correct rather than a bug. */
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function(en){
+    en.forEach(function(x){
+      if (!x.isIntersecting || seen.has(x.target)) return;
+      seen.add(x.target);
+      var f = flows.filter(function(y){ return y.box === x.target; })[0];
+      if (f) setTimeout(f.play, 240);
+    });
+  }, { threshold: 0.3 });
+  flows.forEach(function(f){ io.observe(f.box); });
+})();
+document.querySelectorAll(".fb").forEach(function(b){
+  b.addEventListener("click", function(){
+    var f = b.getAttribute("data-f");
+    document.querySelectorAll(".fb").forEach(function(o){ o.classList.toggle("on", o === b); });
+    document.querySelectorAll(".grp").forEach(function(g){
+      g.style.display = (f === "all" || g.getAttribute("data-g") === f) ? "" : "none";
+    });
+  });
+});
+</script></div></body></html>

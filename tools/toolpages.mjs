@@ -27,6 +27,8 @@ import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { page } from "./lib/pagekit.mjs";
 import { renderFlow, FLOW_CSS, FLOW_JS } from "./lib/flowplayer.mjs";
+import { renderWalk, WALK_CSS, WALK_JS } from "./lib/walkmap.mjs";
+import { GHL, RECORD } from "./lib/ghldata.mjs";
 import { TOOLS, DEEP } from "./lib/tooldata.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -75,10 +77,16 @@ const TOOL_CSS = FLOW_CSS + `
 
 function toolPage(tool) {
   let n = 0;
+  /* A build with a `walk` key is drawn as a map you tap through, with a panel
+     that answers and a panel showing what it writes on the contact. Everything
+     else keeps the canvas that plays itself. */
+  const canvas = it => it.walk
+    ? renderWalk(it.walk, GHL[it.walk], RECORD)
+    : renderFlow(it.flow, n++, it.name);
   const item = it => `      <article class="wf">
         <h3>${esc(it.name)}</h3>
         <p>${esc(it.purpose)}</p>
-        ${renderFlow(it.flow, n++, it.name)}
+        ${canvas(it)}
         ${it.note ? `<p class="why"><b>Worth noticing.</b> ${esc(it.note)}</p>` : ""}
         ${it.deep ? `<a class="deep" href="${it.deep.file}">${esc(it.deep.label)} <i aria-hidden="true">&rarr;</i></a>` : ""}
       </article>`;
@@ -98,8 +106,7 @@ ${g.items.map(item).join("\n")}
 <a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">${esc(tool.name)} &middot; ${plural(total, tool.countNote.replace(/s$/, ""))}</span>
 <h1>${esc(tool.tagline)}</h1>
-<p class="lede">${esc(tool.blurb)} Each one plays from its trigger to its last step, the same shape as
-the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
+<p class="lede">${esc(tool.blurb)} ${tool.walkNote || "Each one plays from its trigger to its last step, the same shape as the canvas it was built on. Press play, or just scroll - they start when they reach you."}</p>
 
 <div class="filt" role="group" aria-label="Filter by what starts it">
   <button class="fb on" data-f="all" type="button">Everything</button>
@@ -111,7 +118,7 @@ ${tool.groups.map(group).join("\n")}
 <p class="lede" style="margin-top:26px">${esc(tool.foot)}</p>
 
 <script>
-${FLOW_JS}
+${tool.groups.some(g => g.items.some(i => i.walk)) ? WALK_JS : FLOW_JS}
 document.querySelectorAll(".fb").forEach(function(b){
   b.addEventListener("click", function(){
     var f = b.getAttribute("data-f");
@@ -121,7 +128,7 @@ document.querySelectorAll(".fb").forEach(function(b){
     });
   });
 });
-</script>`, TOOL_CSS);
+</script>`, TOOL_CSS + (tool.groups.some(g => g.items.some(i => i.walk)) ? WALK_CSS : ""));
 }
 
 /* ── the index: one card per tool ───────────────────────────────────────── */

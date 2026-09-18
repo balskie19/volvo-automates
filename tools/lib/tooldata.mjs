@@ -461,49 +461,52 @@ export const TOOLS = [
     bullets: ["Leads move without anyone pushing", "Nobody is chased after they say yes", "Every conversation has an exit"],
     blurb: `The CRM is where the follow-up lives. These are the builds that decide who gets
       messaged, who gets left alone, and who is worth interrupting you for.`,
+    walkNote: `Each one is a map rather than a film: tap any step to read what it does and watch
+      what it writes on the contact light up. That last part is the point - these builds are only
+      worth anything because of what they leave on the record.`,
     foot: `Two of these - the conversation engines - are five workflows each plus their own
       exit. They are shown as one system rather than twelve rows, because that is what they are.`,
     groups: [
       { key: "form", label: "When someone fills in a form",
         blurb: "The moment somebody asks for something, the record is already right.",
         items: [
-          { name: "A purchase turns a lead into a customer", flow: G.purchase,
+          { name: "A purchase turns a lead into a customer", flow: G.purchase, walk: "purchase",
             purpose: "An order comes in. The old label comes off, the new one goes on, the deal moves down the pipeline, and the confirmation goes out.",
             note: "The lead label is removed BEFORE the customer label is added. Left on, a paying customer keeps getting the emails meant for people who have not bought." },
-          { name: "A form becomes a quote", flow: G.quote,
+          { name: "A form becomes a quote", flow: G.quote, walk: "quote",
             purpose: "Someone asks for a price. The numbers are worked out elsewhere and handed back, the contact is created, and the quote is emailed.",
             note: "The quote is built by a separate system and handed back. One job per tool, so neither becomes the thing nobody can safely change." },
-          { name: "Six emails, spaced out, then it stops", flow: G.nurture,
+          { name: "Six emails, spaced out, then it stops", flow: G.nurture, walk: "nurture",
             purpose: "A new contact gets six emails days apart: hello, the story, the useful one, the offer, the proof, the objections.",
             note: "It ends. A sequence with no end is not nurture, it is spam with a schedule." }
         ] },
       { key: "book", label: "When a call is booked",
         blurb: "Booked is a different state from interested, and it is treated as one.",
         items: [
-          { name: "Booked, then reminded four times", flow: G.booked,
+          { name: "Booked, then reminded four times", flow: G.booked, walk: "booked",
             purpose: "A confirmed booking is labelled, moved down the pipeline, and reminded at three days, two days, the day before and on the day.",
             note: "The step that matters is the fourth one: it takes them OUT of the chase. Without it the person who just booked keeps receiving messages asking them to book." }
         ] },
       { key: "social", label: "When someone comments",
         blurb: "A public comment answered in public, then continued in private.",
         items: [
-          { name: "A comment becomes a conversation", flow: G.fb,
+          { name: "A comment becomes a conversation", flow: G.fb, walk: "fb",
             purpose: "Someone comments on a post. It waits, replies publicly, waits again, then opens a private message with a way to go further.",
             note: "It pauses before replying. An instant answer to a comment reads as a robot, and the pause costs nothing." },
-          { name: "The same question, asked two ways", flow: G.ig,
+          { name: "The same question, asked two ways", flow: G.ig, walk: "ig",
             purpose: "A comment and a direct message are the same intent arriving differently, so they get different handling and end in the same place.",
             note: "One of the endings is simply 'not for me', and it is taken at face value rather than answered with another offer." }
         ] },
       { key: "convo", label: "The conversation engines",
         blurb: "Two systems that hold a real back-and-forth by text. Five stages each, and an exit each.",
         items: [
-          { name: "Speed to Lead: answer before they cool", flow: G.speed,
+          { name: "Speed to Lead: answer before they cool", flow: G.speed, walk: "speed",
             purpose: "A brand new lead gets a message within moments, then up to five stages of conversation, and a human takes over the second it is worth a human.",
             note: "It never tries to close. Its whole job is to reach a person who is still interested and hand them over warm." },
-          { name: "Waking up leads everyone gave up on", flow: G.defib,
+          { name: "Waking up leads everyone gave up on", flow: G.defib, walk: "defib",
             purpose: "Old leads nobody has time to call twice get re-opened by text, qualified over five stages, and only then handed a calendar link.",
             note: "The calendar link is gated. Sending it to everyone turns a booking page into a spam complaint." },
-          { name: "One word, and everything stops", flow: G.quit,
+          { name: "One word, and everything stops", flow: G.quit, walk: "quit",
             purpose: "The customer replies quit. Messages stop, and they are removed from all five stages at once.",
             note: "Three separate triggers watch for Quit, QUIT and quit, because a person who wants out will not check their capital letters first. This ships with BOTH engines.",
             deep: { file: "the-way-out.html", label: "Type the word, watch five conversations switch off" } }
@@ -511,10 +514,10 @@ export const TOOLS = [
       { key: "gate", label: "When to interrupt a human",
         blurb: "Most automation shouts. These decide when not to.",
         items: [
-          { name: "Only tell me when they actually qualify", flow: G.qualify,
+          { name: "Only tell me when they actually qualify", flow: G.qualify, walk: "qualify",
             purpose: "A record changes. If the person genuinely qualifies they are labelled, their intent is noted, the deal moves, and you are told. Otherwise nothing happens.",
             note: "Silence is the correct outcome most of the time. A notification for every change is a notification nobody reads." },
-          { name: "An email campaign that ends in a phone call", flow: G.emailcall,
+          { name: "An email campaign that ends in a phone call", flow: G.emailcall, walk: "emailcall",
             purpose: "Emails go out, and the people who engage are queued for a call rather than another email.",
             note: "Interest decides who gets a human, so nobody spends the day ringing people who never opened anything." }
         ] }

@@ -2,8 +2,8 @@
 // fine in a screenshot and still be broken in the ways that matter: stuck in a
 // corner, hiding behind the lightbox, swallowing clicks, or hijacking the
 // pointer on a phone. So:
-//   * on a mouse: his photo appears, the native cursor is hidden, a precise dot
-//     sits exactly on the pointer and the photo catches up with it;
+//   * on a mouse: his character appears, the native cursor is hidden, a precise dot
+//     sits exactly on the pointer and the character catches up with it;
 //   * over a workflow image it says "Enlarge", over a Calendly link "Book a
 //     call"; pressing squashes it; releasing throws a ring;
 //   * clicks still land (the cursor never intercepts them);
@@ -43,7 +43,7 @@ for (const [label, path, hot, hotSay] of [
   await pg.reload({ waitUntil: "networkidle0" });
 
   const s0 = await state(pg);
-  ok(!!s0, "his photo cursor exists on a mouse");
+  ok(!!s0, "his character cursor exists on a mouse");
   if (!s0) { await pg.close(); continue; }
   ok(s0.native === "none", "the native pointer is hidden", "cursor: " + s0.native);
   const img = await pg.evaluate(() => getComputedStyle(document.querySelector(".vc-face")).backgroundImage);
@@ -51,7 +51,7 @@ for (const [label, path, hot, hotSay] of [
     const m = u.match(/url\("?(.*?)"?\)/); if (!m) return false;
     return await new Promise((r) => { const i = new Image(); i.onload = () => r(i.naturalWidth > 0); i.onerror = () => r(false); i.src = m[1]; });
   }, img);
-  ok(loaded, "the photo inside it actually loads", img.slice(0, 70));
+  ok(loaded, "the character inside it actually loads", img.slice(0, 70));
 
   await pg.mouse.move(300, 300); await pg.mouse.move(520, 410, { steps: 12 }); await wait(700);
   const s1 = await state(pg);
@@ -59,13 +59,13 @@ for (const [label, path, hot, hotSay] of [
   /* it settles BESIDE the pointer (16px margin + half its 46px width), so it
      never covers what is being clicked */
   const ex = 520 + 16 + 23, ey = 410 + 16 + 23;
-  ok(Math.hypot(s1.cx - ex, s1.cy - ey) < 3, "the photo catches up and settles just beside the pointer", Math.hypot(s1.cx - ex, s1.cy - ey).toFixed(1) + "px off its resting spot");
+  ok(Math.hypot(s1.cx - ex, s1.cy - ey) < 3, "the character catches up and settles just beside the pointer", Math.hypot(s1.cx - ex, s1.cy - ey).toFixed(1) + "px off its resting spot");
   const covers = await pg.evaluate(() => {
     const r = document.querySelector(".vc").getBoundingClientRect(), d = document.querySelector(".vc-dot").getBoundingClientRect();
     const px = d.left + d.width / 2, py = d.top + d.height / 2;
     return px >= r.left && px <= r.right && py >= r.top && py <= r.bottom;
   });
-  ok(!covers, "the photo does not sit on top of the point being clicked");
+  ok(!covers, "the character does not sit on top of the point being clicked");
   ok(s1.op > 0.9, "it is visible once the mouse moves", "opacity " + s1.op);
 
   const h = await center(pg, hot); await wait(300);

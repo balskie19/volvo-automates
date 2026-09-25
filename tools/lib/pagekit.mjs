@@ -67,5 +67,5 @@ export const page = (title, body, extraCss = "") => `<!doctype html>
 <title>${title}</title>${FONTS}
 <style>${BASE}${extraCss}</style></head>
 <body><div class="wrap">${body}</div>
-${cursorBlock("../img/volvo-small.webp")}
+${cursorBlock("../img/vo-cursor.svg")}
 </body></html>`;

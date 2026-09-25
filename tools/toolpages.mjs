@@ -233,7 +233,7 @@ hub = cut(hub, AC, BC, GRID_CSS + "\n");
 const CUR = /<!-- cursor -->[\s\S]*?<!-- \/cursor -->/;
 const nCur = (hub.match(/<!-- cursor -->/g) || []).length;
 if (nCur > 1) throw new Error("index.html holds more than one cursor block");
-hub = nCur ? hub.replace(CUR, cursorBlock("img/volvo-small.webp"))
-           : hub.replace(/<\/body>/, cursorBlock("img/volvo-small.webp") + "\n</body>");
+hub = nCur ? hub.replace(CUR, cursorBlock("img/vo-cursor.svg"))
+           : hub.replace(/<\/body>/, cursorBlock("img/vo-cursor.svg") + "\n</body>");
 writeFileSync(HUB, hub);
 console.log("synced the Systems room in index.html (" + CARDS.length + " cards)");

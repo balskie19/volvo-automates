@@ -1,16 +1,20 @@
-// Volvo's face as the mouse cursor, and it reacts to what a lead is doing.
+// Volvo's drawn character as the mouse cursor, reacting to what a lead does.
 //
 // Volvo: "Change the mouse cursor into my animated image that is interactive
-// when a lead clicks into stuff into my portfolio." His REAL photograph, never
-// a drawing (standing rule).
+// when a lead clicks into stuff into my portfolio." It first used his real
+// photograph; he then sent the site icon and said "I want this one, not my
+// actual face hovering with the cursor". So the artwork is img/vo-cursor.svg -
+// the favicon's own character, lifted byte for byte, with blinking eyes added.
+// (The real-photo rule still stands for portraits and the CV; this is his
+// explicit choice for the cursor.)
 //
 // What it does, all on transform/opacity only:
-//   * a small photo disc follows the pointer on a spring, so it trails and
+//   * a small character tile follows the pointer on a spring, so it trails and
 //     settles rather than being glued to it, and leans into the direction of
 //     travel;
-//   * a precise ink dot sits EXACTLY on the pointer - the disc is the
+//   * a precise ink dot sits EXACTLY on the pointer - the tile is the
 //     personality, the dot is what you aim with, so nothing gets harder to click;
-//   * over anything clickable the disc grows, gets a lemon ring, and says what a
+//   * over anything clickable the tile grows, gets a lemon ring, and says what a
 //     click will do: "Enlarge" on a workflow image, "Book a call" on a Calendly
 //     link, "Open" on everything else (or the element's own data-cursor text);
 //   * pressing squashes it, releasing throws a ring out from the click point;
@@ -32,20 +36,21 @@ export const cursorBlock = (img) => `<!-- cursor -->
   html.vc-on input, html.vc-on textarea, html.vc-on select, html.vc-on [contenteditable]{cursor:auto !important}
   .vc, .vc-dot, .vc-ring{position:fixed;left:0;top:0;pointer-events:none;z-index:2147483646;
     will-change:transform,opacity}
-  /* the photo rides BESIDE the pointer, down and to the right, like a
-     companion. Centred on it, his face covered the very thing being clicked
+  /* the tile rides BESIDE the pointer, down and to the right, like a
+     companion. Centred on it, the face covered the very thing being clicked
      and the aiming dot landed on his face. It grows away from the pointer too. */
   .vc{width:46px;height:46px;margin:16px 0 0 16px;opacity:0;transition:opacity .25s ease}
   .vc-face,.vc-halo{transform-origin:0 0}
   .vc-tag{left:0 !important;transform:translate(0,-4px) !important}
   .vc.is-hot .vc-tag{transform:translate(0,22px) !important}
   html.vc-on .vc.is-in{opacity:1}
-  .vc-face{position:absolute;inset:0;border-radius:50%;border:3px solid #0B0E1C;
-    background:#F5D547 url("${img}") center/cover no-repeat;
+  /* a rounded tile, the same shape as the icon he pointed at */
+  .vc-face{position:absolute;inset:0;border-radius:12px;border:3px solid #0B0E1C;overflow:hidden;
+    background:#212A6B url("${img}") center/cover no-repeat;
     box-shadow:3px 3px 0 0 #0B0E1C;
     transition:transform .32s cubic-bezier(.16,1,.3,1),border-color .2s ease,box-shadow .2s ease}
   /* the lemon halo that appears over a link */
-  .vc-halo{position:absolute;inset:-7px;border-radius:50%;border:3px solid #F5D547;
+  .vc-halo{position:absolute;inset:-7px;border-radius:17px;border:3px solid #F5D547;
     opacity:0;transform:scale(.7);transition:opacity .22s ease,transform .32s cubic-bezier(.16,1,.3,1)}
   .vc-tag{position:absolute;left:50%;top:100%;margin-top:12px;white-space:nowrap;
     font:700 10px/1 "Azeret Mono",ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;

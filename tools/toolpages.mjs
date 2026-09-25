@@ -27,8 +27,8 @@ import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { page } from "./lib/pagekit.mjs";
 import { renderFlow, FLOW_CSS, FLOW_JS } from "./lib/flowplayer.mjs";
-import { renderWalk, WALK_CSS, WALK_JS } from "./lib/walkmap.mjs";
-import { GHL, RECORD } from "./lib/ghldata.mjs";
+import { renderWorkflow, WORKFLOW_CSS, WORKFLOW_JS, WORKFLOW_DIALOG } from "./lib/walkmap.mjs";
+import { GHL, GROUPS as GHL_GROUPS } from "./lib/ghldata.mjs";
 import { TOOLS, DEEP } from "./lib/tooldata.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -75,18 +75,45 @@ const TOOL_CSS = FLOW_CSS + `
 @media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
 @media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }`;
 
+/* GoHighLevel is a list of HIS workflows, grouped by what sets them off. Each
+   card is one workflow: his name highlighted, one plain line saying what it
+   does, and the steps as his builder prints them. */
+function ghlPage(tool) {
+  let n = 0;
+  const sections = GHL_GROUPS.map((g) => {
+    const mine = GHL.filter((w) => w.group === g.key);
+    if (!mine.length) return "";
+    return `    <section class="grp">
+      <header class="ghd">
+        <h2>${esc(g.label)}</h2>
+        <span class="cnt">${plural(mine.length, "workflow")}</span>
+      </header>
+${mine.map((w) => renderWorkflow(w, ++n)).join("\n")}
+    </section>`;
+  }).filter(Boolean).join("\n");
+
+  return page("GoHighLevel workflows", `
+<a class="back" href="index.html">&lsaquo; All tools</a>
+<span class="eyebrow">GoHighLevel &middot; ${plural(GHL.length, "workflow")}</span>
+<h1>${esc(tool.tagline)}</h1>
+<p class="lede">${esc(tool.blurb)} Each one below is a real workflow from the account, under the name
+it carries in the builder, drawn step by step as it runs. Click any one to see it full size.</p>
+
+${sections}
+
+<p class="lede" style="margin-top:26px">Read off the builder itself. Client names are withheld
+throughout, and where a workflow was too large to screenshot legibly the drawing says so rather
+than inventing the steps.</p>
+${WORKFLOW_DIALOG}
+<script>${WORKFLOW_JS}</script>`, TOOL_CSS + WORKFLOW_CSS);
+}
+
 function toolPage(tool) {
   let n = 0;
-  /* A build with a `walk` key is drawn as a map you tap through, with a panel
-     that answers and a panel showing what it writes on the contact. Everything
-     else keeps the canvas that plays itself. */
-  const canvas = it => it.walk
-    ? renderWalk(it.walk, GHL[it.walk], RECORD)
-    : renderFlow(it.flow, n++, it.name);
   const item = it => `      <article class="wf">
         <h3>${esc(it.name)}</h3>
         <p>${esc(it.purpose)}</p>
-        ${canvas(it)}
+        ${renderFlow(it.flow, n++, it.name)}
         ${it.note ? `<p class="why"><b>Worth noticing.</b> ${esc(it.note)}</p>` : ""}
         ${it.deep ? `<a class="deep" href="${it.deep.file}">${esc(it.deep.label)} <i aria-hidden="true">&rarr;</i></a>` : ""}
       </article>`;
@@ -106,7 +133,8 @@ ${g.items.map(item).join("\n")}
 <a class="back" href="index.html">&lsaquo; All tools</a>
 <span class="eyebrow">${esc(tool.name)} &middot; ${plural(total, tool.countNote.replace(/s$/, ""))}</span>
 <h1>${esc(tool.tagline)}</h1>
-<p class="lede">${esc(tool.blurb)} ${tool.walkNote || "Each one plays from its trigger to its last step, the same shape as the canvas it was built on. Press play, or just scroll - they start when they reach you."}</p>
+<p class="lede">${esc(tool.blurb)} Each one plays from its trigger to its last step, the same shape as
+the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
 
 <div class="filt" role="group" aria-label="Filter by what starts it">
   <button class="fb on" data-f="all" type="button">Everything</button>
@@ -118,7 +146,7 @@ ${tool.groups.map(group).join("\n")}
 <p class="lede" style="margin-top:26px">${esc(tool.foot)}</p>
 
 <script>
-${tool.groups.some(g => g.items.some(i => i.walk)) ? WALK_JS : FLOW_JS}
+${FLOW_JS}
 document.querySelectorAll(".fb").forEach(function(b){
   b.addEventListener("click", function(){
     var f = b.getAttribute("data-f");
@@ -128,7 +156,7 @@ document.querySelectorAll(".fb").forEach(function(b){
     });
   });
 });
-</script>`, TOOL_CSS + (tool.groups.some(g => g.items.some(i => i.walk)) ? WALK_CSS : ""));
+</script>`, TOOL_CSS);
 }
 
 /* ── the index: one card per tool ───────────────────────────────────────── */
@@ -232,7 +260,7 @@ writeFileSync(join(OUT, "index.html"), index);
 console.log("wrote explainers/index.html  (" + CARDS.length + " tool cards)");
 
 for (const t of TOOLS) {
-  writeFileSync(join(OUT, t.file), toolPage(t));
+  writeFileSync(join(OUT, t.file), t.key === "ghl" ? ghlPage(t) : toolPage(t));
   const n = t.groups.reduce((a, g) => a + g.items.length, 0);
   console.log("wrote explainers/" + t.file.padEnd(10) + " " + String(n).padStart(2) + " builds, " +
     t.groups.length + " groups");

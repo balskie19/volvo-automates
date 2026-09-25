@@ -1,262 +1,352 @@
-// The eleven GoHighLevel systems, drawn the way the Retell map is drawn.
+// Volvo's GoHighLevel workflows, READ OFF HIS OWN BUILDER SCREENSHOTS.
 //
-// Volvo showed the Retell map and said "the kind of workflow I wanna see": a
-// VERTICAL tree. Trigger at the top, routes fanning down, every box carrying a
-// name and a short line saying what it is. That shape is the instruction - I
-// built it left to right first and that was wrong.
+// He corrected me twice and the correction is the same both times: these are
+// HIS workflows and HIS names. I had been renaming them for what I thought they
+// did - `Purchase Delivery` became "A purchase turns a lead into a customer" -
+// which is an invention wearing his work's clothes. Prospects are shown the
+// real name, highlighted, over the real steps.
 //
-// Each step therefore has four things:
-//   label  the box's name
-//   sub    the small line under it, so a box explains itself before it is tapped
-//   says   what fills the panel when it is
-//   writes what it leaves on the contact, which is the panel that lights up
+// Source: "003 GHL WORKFLOWS.pdf" (19 pages) and "004 GHL Workflows.pdf" (4),
+// each page one workflow open in the GHL builder. Every `name` below is the
+// title bar. Every `label` is a node as the builder prints it.
 //
-// The third panel is the one that earns the tap. For a voice agent it is the
-// notes the call takes; for a CRM it is the CONTACT RECORD, because that is the
-// only thing these builds change. A step that writes nothing says so, and on
-// several of these that is the entire point.
+//   name     his workflow name, exactly, shown as the heading
+//   does     one plain line for a prospect - the only words here that are mine
+//   nodes    the steps, labelled as the builder labels them
 //
-// Plain words throughout, no client names, nothing invented: every chain is
-// read off the build files he supplied.
+// WHERE THE SOURCE CANNOT BE READ, IT SAYS SO. Five of these were screenshotted
+// at 20-28% browser zoom because they are enormous, and their node text does
+// not survive that. Those carry `partial: true` and show the structure the
+// screenshot DOES support - trigger, shape, stage count - rather than node
+// names I would have had to guess. Guessing there is the exact thing being
+// corrected.
 
-/* Everything the eleven builds can write on a contact, in the order a person
-   would look for them. Each build's list is DERIVED from its own steps. */
-export const RECORD = {
-  lead: "Labelled: new lead",
-  customer: "Labelled: customer",
-  booked: "Labelled: booked a call",
-  quoted: "Labelled: sent a quote",
-  qualified: "Labelled: qualified",
-  optout: "Labelled: asked to stop",
-  stage: "Moved down the pipeline",
-  removed: "Taken out of the chase",
-  want: "What they asked for",
-  when: "When they want it",
-  source: "Where they came from",
-  email: "Email sent",
-  sms: "Text sent",
-  reply: "Their reply, kept",
-  notify: "Your team told",
-  nothing: "Nothing written"
-};
+const S = (label, kind) => ({ label, kind });
 
-const S = (label, sub, kind, says, writes = [], quote = null) =>
-  ({ label, sub, kind, says, writes, quote });
-
-export const GHL = {
-  purchase: {
+export const GHL = [
+  /* ═══ 004 GHL Workflows.pdf ═══════════════════════════════════════════ */
+  {
+    key: "purchase",
+    name: "Purchase Delivery",
+    does: "Someone buys. They stop being a lead, become a customer, the deal moves, and the confirmation goes out.",
+    group: "form",
+    note: "The lead tag comes OFF before the customer tag goes on. Left on, a paying customer keeps receiving the emails written for people who have not bought.",
     nodes: {
-      t: S("An order is placed", "where it starts", "trigger",
-        "The payment is what starts it. Nobody opens the CRM, and nobody has to remember to.", ["source"]),
-      r: S("They stop being a lead", "the label comes off", null,
-        "The lead label comes off first. This is the step everyone forgets, and it is the one that stops a paying customer receiving the emails written for people who have not bought.", ["lead"]),
-      a: S("They become a customer", "and the new one goes on", null,
-        "Order matters here: off, then on, so there is never a moment where they carry both.", ["customer"]),
-      o: S("Move them down the pipeline", "the board catches up", null,
-        "The deal moves to the stage that means money has changed hands, so your board tells the truth without anyone dragging a card.", ["stage"]),
-      w: S("Wait", "on purpose", "wait",
-        "A deliberate pause, so your confirmation does not arrive before the payment receipt and read as a mistake.", []),
-      e: S("Send the confirmation", "the only thing they see", "end",
-        "Confirmed, in their inbox, while they are still on the thank-you page.", ["email"])
+      t: S("Order Form Submission", "trigger"),
+      a: S("Remove Tag: Lead"),
+      b: S("Add Tag: Customer"),
+      c: S("Create Or Update Opportunity"),
+      d: S("Wait", "wait"),
+      e: S("Confirmation Email"),
+      z: S("END", "end")
     },
-    edges: [["t", "r"], ["r", "a"], ["a", "o"], ["o", "w"], ["w", "e"]]
+    edges: [["t", "a"], ["a", "b"], ["b", "c"], ["c", "d"], ["d", "e"], ["e", "z"]]
   },
 
-  quote: {
+  {
+    key: "quotation",
+    name: "Form Submission-Create Quotation",
+    does: "A quote request comes in, the numbers are built in Make.com, and the quote is emailed back.",
+    group: "form",
+    note: "GoHighLevel hands the pricing to Make.com and takes the answer back. One job per tool, so neither becomes the thing nobody dares change.",
     nodes: {
-      t: S("A quote is requested", "where it starts", "trigger",
-        "Someone asks what it costs. That question has a very short shelf life.", ["source", "want"]),
-      m: S("Hand it to the quote builder", "the numbers happen elsewhere", null,
-        "The pricing is worked out by a separate system and handed back. One job per tool, so neither becomes the thing nobody dares change.", []),
-      g: S("Label them", "so later builds know", null,
-        "Labelled as quoted, so every build after this one knows where the person is without asking.", ["quoted"]),
-      c: S("Create the contact", "from what they typed", null,
-        "The record is built from their own answers. Nobody retypes it, so nobody mistypes it.", ["want"]),
-      w: S("Wait", "a considered pause", "wait",
-        "A short pause, so it reads as considered rather than automatic.", []),
-      e: S("Send the quote", "in minutes, not tomorrow", "end",
-        "A price in their inbox while they are still thinking about it, which is usually the whole difference.", ["email"])
+      t: S("CE.FormSubmission", "trigger"),
+      a: S("Receive data, send to Make"),
+      b: S("Add Tag"),
+      c: S("Create Contact"),
+      d: S("Wait", "wait"),
+      e: S("Send Email"),
+      z: S("END", "end")
     },
-    edges: [["t", "m"], ["m", "g"], ["g", "c"], ["c", "w"], ["w", "e"]]
+    edges: [["t", "a"], ["a", "b"], ["b", "c"], ["c", "d"], ["d", "e"], ["e", "z"]]
   },
 
-  nurture: {
+  {
+    key: "nurture",
+    name: "Email Nurture Sequence",
+    does: "Six emails over days, in a fixed order, and then it stops.",
+    group: "form",
+    note: "It ends on the objections email. A sequence with no end is spam with a schedule.",
     nodes: {
-      t: S("A form is filled in", "where it starts", "trigger",
-        "A new contact arrives, from anywhere.", ["source"]),
-      g: S("Label them", "a new lead", null,
-        "Labelled so the sequence knows who it is talking to.", ["lead"]),
-      p: S("Put them in the pipeline", "visible, not buried", null,
-        "On the board at the first stage, rather than sitting in an inbox.", ["stage"]),
-      e1: S("Email one: hello", "nothing is asked for", null,
-        "Who you are and why they are hearing from you. Nothing is asked for yet.", ["email"]),
-      w: S("Wait", "days, not minutes", "wait",
-        "The gap is the difference between a sequence and a blast.", []),
-      e2: S("Emails two to five", "story, use, offer, proof", null,
-        "Four more, each its own step, so any one of them can be rewritten without touching the rest.", ["email"]),
-      e6: S("Email six: the objections", "and then it stops", "end",
-        "It answers what people actually push back on, and then it STOPS. A sequence with no end is spam with a schedule.", ["email"])
+      t: S("Form Submitted", "trigger"),
+      w0: S("Wait", "wait"),
+      g: S("Tag: Prospect Name"),
+      p: S("Add: Customer Pipeline"),
+      e1: S("Email 1: Confirmation + Introduction"),
+      w1: S("Wait", "wait"),
+      e2: S("Email 2: Epiphany Moment Story"),
+      w2: S("Wait", "wait"),
+      e3: S("Email 3: The Wrong Vehicle"),
+      w3: S("Wait", "wait"),
+      e4: S("Email 4: Introduction to Offer"),
+      w4: S("Wait", "wait"),
+      e5: S("Email 5: Success System and Testimonials"),
+      w5: S("Wait", "wait"),
+      e6: S("Email 6: FAQ and Objections"),
+      z: S("END", "end")
     },
-    edges: [["t", "g"], ["g", "p"], ["p", "e1"], ["e1", "w"], ["w", "e2"], ["e2", "e6"]]
+    edges: [["t", "w0"], ["w0", "g"], ["g", "p"], ["p", "e1"], ["e1", "w1"], ["w1", "e2"],
+      ["e2", "w2"], ["w2", "e3"], ["e3", "w3"], ["w3", "e4"], ["e4", "w4"], ["w4", "e5"],
+      ["e5", "w5"], ["w5", "e6"], ["e6", "z"]]
   },
 
-  booked: {
+  {
+    key: "booked",
+    name: "Booked Appointment + Reminders",
+    does: "A confirmed booking is tagged, taken out of the chase, and reminded four times before the call.",
+    group: "booked",
+    note: "Remove from Workflow is the step that matters. Without it the person who just booked keeps getting messages asking them to book.",
     nodes: {
-      t: S("They book a call", "where it starts", "trigger",
-        "A real booking, in your calendar.", ["when"]),
-      g: S("Label the booking", "booked is not interested", null,
-        "Booked is a different state from interested, and everything after this depends on the difference.", ["booked"]),
-      o: S("Move them down the pipeline", "the board catches up", null,
-        "The board shows a booked call rather than an open lead.", ["stage"]),
-      x: S("Take them out of the chase", "the step that matters", "decision",
-        "The most important step on this page. Without it, the person who just booked keeps getting messages asking them to book, which is the fastest way to lose someone who already said yes.", ["removed"]),
-      c: S("Confirm it", "time and what happens next", null,
-        "A confirmation with the time and what to expect.", ["email"]),
-      r3: S("Three days before", "far enough out to move", null,
-        "The first reminder, early enough that they can still rearrange.", ["sms"]),
-      r2: S("Two days before", "when plans firm up", null,
-        "The second, at the point people decide what their week looks like.", ["sms"]),
-      r1: S("The day before", "the last one", "end",
-        "Four touches in total, none of them sent by a person.", ["sms"])
+      t: S("Appointment Status Confirmed", "trigger"),
+      g: S("Tag: Booked Discovery Call"),
+      o: S("Create Or Update Opportunity"),
+      x: S("Remove from Workflow"),
+      w: S("Wait", "wait"),
+      c: S("Booking Confirmation Email"),
+      d3: S("3 Days Before", "wait"),
+      m3: S("Email"),
+      d2: S("2 Days Before", "wait"),
+      m2: S("Email"),
+      r2: S("2nd Reminder", "wait"),
+      n2: S("Email"),
+      r1: S("1st Reminder", "wait"),
+      n1: S("Email"),
+      z: S("END", "end")
     },
-    edges: [["t", "g"], ["g", "o"], ["o", "x"], ["x", "c"], ["c", "r3"], ["r3", "r2"], ["r2", "r1"]]
+    edges: [["t", "g"], ["g", "o"], ["o", "x"], ["x", "w"], ["w", "c"], ["c", "d3"],
+      ["d3", "m3"], ["m3", "d2"], ["d2", "m2"], ["m2", "r2"], ["r2", "n2"], ["n2", "r1"],
+      ["r1", "n1"], ["n1", "z"]]
   },
 
-  fb: {
+  /* ═══ 003 GHL WORKFLOWS.pdf ═══════════════════════════════════════════ */
+  {
+    key: "refer",
+    name: '"REFER" FB Responder',
+    does: "Someone comments on a Facebook post. It answers in public, then opens a private message with a referral offer.",
+    group: "social",
+    note: "It waits before replying. An instant answer to a comment reads as a machine, and the pause costs nothing.",
     nodes: {
-      t: S("Someone comments", "where it starts", "trigger",
-        "A public comment on a post.", ["source"]),
-      w: S("Wait a moment", "so it is not a robot", "wait",
-        "A pause before replying. An instant answer to a comment reads as a machine, and waiting costs nothing.", []),
-      r: S("Reply in public", "where everyone reads it", null,
-        "Answered where the rest of the thread can see it, because the answer is worth more to the people reading than to the person who asked.", []),
-      w2: S("Wait again", "one beat more", "wait",
-        "So the private message does not land on top of the public reply.", []),
-      m: S("Message them privately", "where it can go somewhere", "decision",
-        "Now privately, where the conversation has room to become a real one.", ["sms"]),
-      y: S("They ask for the link", "a real conversation", "end",
-        "They reply, and there is something to actually answer.", ["reply"]),
-      n: S("Nothing more", "silence is an answer", "fail",
-        "Silence is allowed to be the end of it. No second message, no third.", ["nothing"])
+      t: S("Facebook - Comment(s) On A Post", "trigger"),
+      w1: S("Wait", "wait"),
+      r: S("Respond On Comment"),
+      w2: S("Wait", "wait"),
+      m: S("Facebook Interactive Messenger", "decision"),
+      refer: S("Refer a Friend Here!"),
+      to1: S("Default Timeout"),
+      m2: S("Facebook Interactive Messenger"),
+      to2: S("Default Timeout"),
+      z1: S("END", "end"),
+      z2: S("END", "end")
     },
-    edges: [["t", "w"], ["w", "r"], ["r", "w2"], ["w2", "m"],
-      ["m", "y", "they reply"], ["m", "n", "silence"]]
+    edges: [["t", "w1"], ["w1", "r"], ["r", "w2"], ["w2", "m"],
+      ["m", "to1", "no reply"], ["m", "refer", "Refer a Friend Here!"],
+      ["refer", "z1"], ["to1", "m2"], ["m2", "to2"], ["to2", "z2"]]
   },
 
-  ig: {
+  {
+    key: "headshots",
+    name: '"Headshots" event IG Responder',
+    does: "An Instagram comment or DM about the headshots event gets answered on whichever channel it arrived on, and ends in an RSVP.",
+    group: "social",
+    note: "A comment and a DM are the same question arriving two ways. The build splits on which one it was and answers each properly.",
     nodes: {
-      t: S("Someone comments", "where it starts", "trigger",
-        "The same question can arrive two different ways.", ["source"]),
-      d: S("Comment or message?", "two doors, one question", "decision",
-        "A public comment and a private message are the same intent arriving differently, and they are answered differently on purpose.", []),
-      c: S("Answer the comment", "in public, briefly", null,
-        "Answered in public and kept short. The reply is worth more to the people reading the thread than to the person who asked.", []),
-      m: S("Answer the message", "in private, at length", null,
-        "Answered in private, where there is room to actually deal with the question rather than perform an answer.", []),
-      o: S("Offer them a place", "only now", "decision",
-        "Nothing is offered until here.", []),
-      y: S("Count them in", "and the record says so", "end",
-        "They are in, and it is written down rather than remembered.", ["qualified", "reply"]),
-      n: S("Leave it there", "a no is a real answer", "fail",
-        "Taken at face value, not answered with another offer.", ["nothing"])
+      t: S("Instagram - Comment(s) On A Post", "trigger"),
+      t2: S("Customer Replied", "trigger"),
+      w1: S("Wait", "wait"),
+      q: S("Comment or DM?", "decision"),
+      c: S("Respond On Comment"),
+      g: S("Go To"),
+      w2: S("Wait", "wait"),
+      m: S("Instagram Interactive Messenger", "decision"),
+      rsvp: S("RSVP me!"),
+      no: S("Sorry, not interested", "fail"),
+      to: S("Default Timeout"),
+      dm: S("INSTAGRAM-DM"),
+      z: S("END", "end")
     },
-    edges: [["t", "d"], ["d", "c", "comment"], ["d", "m", "message"], ["c", "o"], ["m", "o"],
-      ["o", "y", "yes"], ["o", "n", "not for me"]]
+    edges: [["t", "w1"], ["t2", "w1"], ["w1", "q"],
+      ["q", "c", "Comment"], ["q", "g", "DM"],
+      ["c", "w2"], ["g", "w2"], ["w2", "m"],
+      ["m", "to", "Default Timeout"], ["m", "rsvp", "RSVP me!"], ["m", "no", "not interested"],
+      ["rsvp", "dm"], ["to", "dm"], ["dm", "z"]]
   },
 
-  speed: {
+  {
+    key: "calendar",
+    name: "2.6) Calendar Link Sent",
+    does: "When the AI conversation produces a booking link, the contact is tagged, the deal is created and you are told.",
+    group: "engine",
+    note: "Everything past 'Do They Qualify?' is worth your attention. The None branch ends silently, which is the right answer most of the time.",
     nodes: {
-      t: S("A new lead lands", "the clock starts", "trigger",
-        "The clock that matters starts here, and it is measured in minutes.", ["lead", "source"]),
-      c1: S("Opening message", "within moments", null,
-        "A text while they still remember filling the form in.", ["sms"],
-        "Hi {name}, saw you were looking at {thing} - still after that, or has it sorted itself out?"),
-      r: S("Do they reply?", "nothing is assumed", "decision",
-        "Everything past this point depends on a human answering.", ["reply"]),
-      c2: S("Conversations two to five", "five stages, five builds", null,
-        "Real back-and-forth, each stage its own workflow, so one can be rewritten without disturbing the others.", ["sms", "reply"]),
-      q: S("Qualified?", "the gate", "decision",
-        "It decides whether a person is worth a person.", ["qualified"]),
-      h: S("Hand to a human", "it never closes", "end",
-        "Its whole job is to reach someone still interested and hand them over warm.", ["notify", "qualified"]),
-      s: S("Stop, quietly", "no sixth message", "fail",
-        "No reply, or not a fit. It stops rather than sending one more.", ["nothing"])
+      t: S("Contact Changed", "trigger"),
+      q: S("Do They Qualify?", "decision"),
+      yes: S('If "Chat-GPT" contains "https://tour..."'),
+      none: S("When none of the conditions are met", "fail"),
+      tag: S("Add Tag"),
+      f: S('Update "Want\'s To Schedule" Field'),
+      o: S("Create Or Update Opportunity"),
+      n: S("Lead Qualified Notification To You"),
+      z1: S("END", "end"),
+      z2: S("END", "end")
     },
-    edges: [["t", "c1"], ["c1", "r"], ["r", "c2", "yes"], ["r", "s", "no reply"],
-      ["c2", "q"], ["q", "h", "yes"], ["q", "s", "no"]]
+    edges: [["t", "q"], ["q", "yes", "Yes"], ["q", "none", "None"],
+      ["yes", "tag"], ["tag", "f"], ["f", "o"], ["o", "n"], ["n", "z1"], ["none", "z2"]]
   },
 
-  defib: {
+  {
+    key: "quit2",
+    name: '2.7) DND After "Quit" Reply',
+    does: "The customer replies quit. Messaging stops, and they are pulled out of all five Defibrillator conversations.",
+    group: "engine",
+    note: "Three separate triggers watch for Quit, QUIT and quit, because a person who wants out will not check their capital letters first.",
     nodes: {
-      t: S("An old lead is picked", "cold, months old", "trigger",
-        "Someone who went quiet months ago, and that nobody has time to ring twice.", ["source"]),
-      c1: S("Opening message", "it admits the gap", null,
-        "It opens by admitting the silence rather than pretending there was not one.", ["sms"],
-        "Hi {name} - we spoke a while back about {thing}. Probably long sorted, but thought I would check."),
-      r: S("Any answer?", "most will not", "decision",
-        "Silence is the expected case here, not the failure case.", ["reply"]),
-      c2: S("Conversations two to five", "same five stages", null,
-        "The same structure as the other engine, aimed at a colder audience.", ["sms", "reply"]),
-      l: S("Send the calendar link", "gated, on purpose", "decision",
-        "Sent to everyone, a booking page becomes a spam complaint. It goes only to people who qualify.", []),
-      n: S("Tell you they qualified", "worth hearing about", "end",
-        "You hear about it once it is worth hearing about, and not before.", ["notify", "qualified"]),
-      s: S("Let them be", "back to dormant", "fail",
-        "Nothing sent that anyone would resent.", ["nothing"])
+      t1: S('Customer Replied "Quit"', "trigger"),
+      t2: S('Customer Replied "QUIT"', "trigger"),
+      t3: S('Customer Replied "quit"', "trigger"),
+      d: S("Enable/Disable DND"),
+      r1: S("Remove from Defibrillator AI Convo Start"),
+      r2: S("Remove from Defibrillator AI Convo 2"),
+      r3: S("Remove from Defibrillator AI Convo 3"),
+      r4: S("Remove from Defibrillator AI Convo 4"),
+      r5: S("Remove from Defibrillator AI Convo 5"),
+      z: S("END", "end")
     },
-    edges: [["t", "c1"], ["c1", "r"], ["r", "c2", "yes"], ["r", "s", "nothing"],
-      ["c2", "l"], ["l", "n", "they qualify"], ["l", "s", "they do not"]]
+    edges: [["t1", "d"], ["t2", "d"], ["t3", "d"], ["d", "r1"], ["r1", "r2"], ["r2", "r3"],
+      ["r3", "r4"], ["r4", "r5"], ["r5", "z"]]
   },
 
-  quit: {
+  {
+    key: "quit1",
+    name: '1.7) DND After "Quit" Reply',
+    does: "The same exit, built again for the Speed To Lead side. Five conversations, all switched off.",
+    group: "engine",
+    note: "It exists twice on purpose, once per engine. A person left in one of five conversations is worse off than one who was never in any.",
     nodes: {
-      t: S("They reply: quit", "three triggers, one word", "trigger",
-        "Quit, QUIT and quit each have their own trigger, because a person who wants out will not check their capital letters first.", ["optout"]),
-      d: S("Stop all messages", "before anything else", null,
-        "Everything stops first. No goodbye message, no last offer.", ["removed"]),
-      r1: S("Out of stage one", "removed, not paused", null,
-        "Taken out of the first conversation entirely.", ["removed"]),
-      r2: S("Out of stages two to four", "each on its own", null,
-        "The middle three, removed separately. A person left in one of five conversations is worse off than one who was never in any.", ["removed"]),
-      r5: S("Out of stage five", "nothing left running", "end",
-        "This build exists twice, once per conversation engine, because a half-removed person is the worst outcome available.", ["removed"])
+      t1: S('Customer Replied "Quit"', "trigger"),
+      t2: S('Customer Replied "quit"', "trigger"),
+      t3: S('Customer Replied "QUIT"', "trigger"),
+      d: S("Enable/Disable DND"),
+      r1: S("Remove from Speed To Lead Convo Starter"),
+      r2: S("Remove from Speed To Lead Convo 2"),
+      r3: S("Remove from Speed To Lead Convo 3"),
+      r4: S("Remove from Speed To Lead Convo 4"),
+      r5: S("Remove from Speed To Lead Convo 5"),
+      z: S("END", "end")
     },
-    edges: [["t", "d"], ["d", "r1"], ["r1", "r2"], ["r2", "r5"]]
+    edges: [["t1", "d"], ["t2", "d"], ["t3", "d"], ["d", "r1"], ["r1", "r2"], ["r2", "r3"],
+      ["r3", "r4"], ["r4", "r5"], ["r5", "z"]]
   },
 
-  qualify: {
+  {
+    key: "hook2",
+    name: "Test Webhook - Defibrillator",
+    does: "Takes the AI's reply back from outside GoHighLevel and writes it onto the contact.",
+    group: "engine",
     nodes: {
-      t: S("Their record changes", "anything at all", "trigger",
-        "Any change. Most of them will turn out not to matter.", []),
-      q: S("Do they qualify?", "the gate", "decision",
-        "Everything past this point is worth your attention. Everything before it is noise.", []),
-      g: S("Label them", "so the board can filter", null,
-        "Labelled as qualified, which is what makes the board useful.", ["qualified"]),
-      f: S("Note what they want", "in their own words", null,
-        "Written down as they said it, so whoever picks up the call is not starting from nothing.", ["want"]),
-      o: S("Move them down the pipeline", "a person should call", null,
-        "On to the stage that means somebody rings them.", ["stage"]),
-      n: S("Tell you", "here, and only here", "end",
-        "You are interrupted at this point and at no other.", ["notify"]),
-      x: S("Say nothing", "the usual outcome", "fail",
-        "Correct most of the time. A notification for every change is a notification nobody reads.", ["nothing"])
+      t: S("Add New Trigger", "trigger"),
+      u: S('Update contact field "Lead Response"'),
+      w: S("Webhook"),
+      z: S("END", "end")
     },
-    edges: [["t", "q"], ["q", "g", "yes"], ["q", "x", "no"], ["g", "f"], ["f", "o"], ["o", "n"]]
+    edges: [["t", "u"], ["u", "w"], ["w", "z"]]
   },
 
-  emailcall: {
+  {
+    key: "hook1",
+    name: "Test Webhook - Speed2Lead",
+    does: "The same hand-off, on the Speed To Lead side.",
+    group: "engine",
     nodes: {
-      t: S("A campaign starts", "a list and a reason", "trigger",
-        "A list, and something worth saying to it.", []),
-      e: S("Emails go out", "the cheap step", null,
-        "Sent to everyone, because email costs nothing.", ["email"]),
-      o: S("Did they open it?", "interest decides", "decision",
-        "This is the whole idea: interest decides who gets a human.", ["reply"]),
-      c: S("Queue a call", "only the engaged", "end",
-        "A call, only to people who showed up, so nobody spends the day ringing people who never opened anything.", ["notify", "stage"]),
-      r: S("Keep emailing", "still on the cheap route", null,
-        "The rest stay on email until they do something.", ["email"])
+      t: S("Add New Trigger", "trigger"),
+      u: S('Update contact field "Lead Response"'),
+      w: S("Webhook"),
+      z: S("END", "end")
     },
-    edges: [["t", "e"], ["e", "o"], ["o", "c", "engaged"], ["o", "r", "not yet"]]
+    edges: [["t", "u"], ["u", "w"], ["w", "z"]]
+  },
+
+  /* ── the five that are too big to screenshot legibly ──────────────────── */
+  {
+    key: "speedstart",
+    name: "1.1) Speed To Lead AI Convo Starter",
+    does: "A brand new lead gets a text within moments, and the AI holds the first stage of the conversation.",
+    group: "engine",
+    partial: "Screenshotted at 20% zoom because of its size, so the node text is not legible in the source. Shown as the structure it is: a long branching conversation, every reply routed to its own follow-up.",
+    nodes: {
+      t: S("A new lead arrives", "trigger"),
+      ai: S("AI reads the reply", "decision"),
+      a: S("Branch: they answer"),
+      b: S("Branch: no answer yet"),
+      n: S("Hand on to Convo 2", "end")
+    },
+    edges: [["t", "ai"], ["ai", "a"], ["ai", "b"], ["a", "n"], ["b", "n"]]
+  },
+  {
+    key: "speed3",
+    name: "1.3) Speed To Lead Convo 3",
+    does: "The third stage of the same conversation, once the lead is still talking.",
+    group: "engine",
+    partial: "Screenshotted at 28% zoom, so the node text is not legible in the source. Same branching shape as the other stages.",
+    nodes: {
+      t: S("Carried in from Convo 2", "trigger"),
+      ai: S("AI reads the reply", "decision"),
+      a: S("Branch: they answer"),
+      b: S("Branch: no answer yet"),
+      n: S("Hand on to Convo 4", "end")
+    },
+    edges: [["t", "ai"], ["ai", "a"], ["ai", "b"], ["a", "n"], ["b", "n"]]
+  },
+  {
+    key: "defibstart",
+    name: "2.1) Defibrillator AI Convo Start",
+    does: "Re-opens a lead that went cold months ago, by text, and holds the first stage of that conversation.",
+    group: "engine",
+    partial: "Screenshotted at 20% zoom, so the node text is not legible in the source. Shown as the structure it is.",
+    nodes: {
+      t: S("An old lead is picked", "trigger"),
+      ai: S("AI reads the reply", "decision"),
+      a: S("Branch: they answer"),
+      b: S("Branch: nothing back"),
+      n: S("Hand on to Convo 2", "end")
+    },
+    edges: [["t", "ai"], ["ai", "a"], ["ai", "b"], ["a", "n"], ["b", "n"]]
+  },
+  {
+    key: "defib5",
+    name: "2.5) Defibrillator AI Convo 5",
+    does: "The last stage before the calendar link is considered.",
+    group: "engine",
+    partial: "Screenshotted at 28% zoom, so the node text is not legible in the source.",
+    nodes: {
+      t: S("Carried in from Convo 4", "trigger"),
+      ai: S("AI reads the reply", "decision"),
+      a: S("Branch: they answer"),
+      b: S("Branch: nothing back"),
+      n: S("Hand on to Calendar Link Sent", "end")
+    },
+    edges: [["t", "ai"], ["ai", "a"], ["ai", "b"], ["a", "n"], ["b", "n"]]
+  },
+  {
+    key: "wf001",
+    name: "WF 001: Email Marketing + Call",
+    does: "An email campaign where the people who engage get queued for a phone call instead of another email.",
+    group: "gate",
+    partial: "The largest of them, screenshotted at 20% zoom, so the node text is not legible in the source. Dozens of branches on what the contact did.",
+    nodes: {
+      t: S("Campaign starts", "trigger"),
+      e: S("Emails go out"),
+      q: S("Did they engage?", "decision"),
+      c: S("Queue a call", "end"),
+      r: S("Stay on email")
+    },
+    edges: [["t", "e"], ["e", "q"], ["q", "c", "engaged"], ["q", "r", "not yet"]]
   }
-};
+];
+
+export const GROUPS = [
+  { key: "form", label: "When someone fills in a form" },
+  { key: "booked", label: "When a call is booked" },
+  { key: "social", label: "When someone comments" },
+  { key: "engine", label: "The two AI conversation engines" },
+  { key: "gate", label: "When to interrupt a human" }
+];

@@ -37,8 +37,57 @@ if (!fit.length) {
 ok(fit.every((f) => !f.over), "all " + fit.length + " images fit their frame", fit.filter((f) => f.over).map((f) => f.key).join(",") || "");
 ok(Math.max(...fit.map((f) => f.h)) <= 312, "longest image capped", "tallest " + Math.max(...fit.map((f) => f.h)) + "px");
 
+/* geometry, on the full-size drawings: no label out of its box, no two boxes
+   overlapping, no forward wire climbing the page (loops are exempt - they are
+   meant to go back up, round the side) */
+const geo = await pg.evaluate(() => {
+  const out = { spill: [], overlap: [], up: [] };
+  document.querySelectorAll("template[id^='wfx-']").forEach((tpl) => {
+    const host = document.createElement("div");
+    host.style.cssText = "position:absolute;left:-99999px;top:0";
+    host.innerHTML = tpl.innerHTML;
+    document.body.appendChild(host);
+    const key = tpl.id.slice(4);
+    const boxes = [...host.querySelectorAll(".wn")].map((g) => g.querySelector("rect").getBBox());
+    host.querySelectorAll(".wn").forEach((g) => {
+      const r = g.querySelector("rect").getBBox();
+      g.querySelectorAll("text").forEach((t) => {
+        const b = t.getBBox();
+        if (b.x < r.x + 1 || b.x + b.width > r.x + r.width - 1) out.spill.push(key + ':"' + t.textContent + '"');
+      });
+    });
+    for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+      const A = boxes[i], B = boxes[j];
+      if (A.x < B.x + B.width && B.x < A.x + A.width && A.y < B.y + B.height && B.y < A.y + A.height) out.overlap.push(key);
+    }
+    host.querySelectorAll(".we:not(.is-loop)").forEach((p) => {
+      const L = p.getTotalLength(), s = p.getPointAtLength(0), e = p.getPointAtLength(L);
+      if (e.y <= s.y) out.up.push(key);
+    });
+    host.remove();
+  });
+  return out;
+});
+ok(geo.spill.length === 0, "no step label runs out of its box", geo.spill.slice(0, 5).join(", "));
+ok(geo.overlap.length === 0, "no two steps overlap", [...new Set(geo.overlap)].join(", "));
+ok(geo.up.length === 0, "no forward wire climbs the page", [...new Set(geo.up)].join(", "));
+
 /* 2. scroll a LONG one into view, let it draw, confirm nothing is left hidden */
-const target = "nurture";
+/* The page decides which workflow to drive, not this file: the one with the
+   most steps (the hardest to fit and the longest to animate), plus any other
+   one for the backdrop test. Hard-coding GoHighLevel keys made this checker
+   useless on the other five tool pages. */
+const picks = await pg.evaluate(() => {
+  const all = [...document.querySelectorAll(".wf")].map((c) => ({
+    key: c.querySelector(".wfthumb").dataset.open,
+    name: c.querySelector(".wft").textContent.trim(),
+    steps: c.querySelectorAll(".wfthumb .wn").length }));
+  all.sort((a, b) => b.steps - a.steps);
+  return { target: all[0], other: all[all.length - 1] };
+});
+const target = picks.target.key;
+const targetName = picks.target.name;
+const otherKey = picks.other.key;
 await pg.evaluate((k) => document.querySelector('[data-open="' + k + '"]').scrollIntoView({ block: "center" }), target);
 await wait(250);
 const armed = await pg.evaluate((k) => document.querySelector('[data-open="' + k + '"]').className, target);
@@ -94,7 +143,7 @@ const box = await pg.evaluate(() => {
     locked: document.documentElement.classList.contains("wfx-open") };
 });
 ok(box.open, "clicking the image opens the lightbox");
-ok(box.name === "Email Nurture Sequence", "the lightbox carries HIS workflow name", JSON.stringify(box.name));
+ok(box.name === targetName, "the lightbox carries the workflow's own name", JSON.stringify(box.name));
 ok(box.svgW >= box.natural, "the lightbox shows it at least full size", box.svgW + "px against " + box.natural + "px drawn");
 ok(box.locked, "the page behind stops scrolling");
 await pg.screenshot({ path: "motion-lightbox.png" });
@@ -114,7 +163,7 @@ ok(!afterEsc.open, "Esc closes it");
 ok(afterEsc.focus === target, "focus returns to the image that opened it", String(afterEsc.focus));
 ok(!afterEsc.locked, "the page scrolls again");
 
-await pg.click('[data-open="purchase"]'); await wait(400);
+await pg.click('[data-open="' + otherKey + '"]'); await wait(400);
 await pg.mouse.click(8, 8); await wait(250);
 ok(!(await pg.evaluate(() => document.getElementById("wfx").open)), "a click on the backdrop closes it");
 
@@ -139,7 +188,7 @@ ok(wrong.length === 0, "all " + names.length + " lightboxes show the workflow's 
   wrong.map((n) => JSON.stringify(n.card) + " -> " + JSON.stringify(n.box)).join("; "));
 
 ok(errs.length === 0, "no script errors", errs[0] || "");
-await pg.evaluate(() => document.getElementById("wf-purchase").scrollIntoView({ block: "center" }));
+await pg.evaluate(() => document.querySelector(".wf").scrollIntoView({ block: "center" }));
 await wait(3200);
 await pg.screenshot({ path: "motion-card.png" });
 await pg.close();
@@ -163,7 +212,7 @@ await ph.setViewport({ width: 390, height: 844, deviceScaleFactor: 2 });
 await ph.goto(U, { waitUntil: "networkidle0" });
 const phone = await ph.evaluate(() => ({ sideways: document.documentElement.scrollWidth > document.documentElement.clientWidth }));
 ok(!phone.sideways, "phone: no sideways scroll");
-await ph.click('[data-open="booked"]'); await wait(600);
+await ph.click('[data-open="' + target + '"]'); await wait(600);
 const pbox = await ph.evaluate(() => {
   const d = document.getElementById("wfx"), r = d.getBoundingClientRect();
   return { open: d.open, w: Math.round(r.width), h: Math.round(r.height) };

@@ -56,8 +56,6 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 .tgrid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:660px){ .tgrid{grid-template-columns:repeat(2,1fr)} }
 @media(min-width:1000px){ .tgrid{grid-template-columns:repeat(3,1fr)} }
-/* The card is one object: same edges, same inner padding, and the arrow line
-   pinned to the bottom of every card whatever the bullets do above it. */
 .tc{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
   border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:16px 16px 14px;
   text-decoration:none;color:inherit;
@@ -66,12 +64,7 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* The vendor's real mark, fetched from the vendor - or, where a brand
-   publishes no square glyph anywhere, from its own app-store icon - and kept as
-   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
-   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
-   do not use it, and a letterform is the honest fallback when it cannot be
-   found at all. */
+/* the vendor's real mark, fetched from the vendor, never redrawn */
 .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
   border-radius:11px;background:var(--card)}
 .tcm img{display:block;width:26px;height:26px;object-fit:contain}
@@ -105,7 +98,7 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
 }</style></head>
 <body><div class="wrap">
 <a class="back" href="../index.html#systems">&lsaquo; Back to the portfolio</a>
-<span class="eyebrow">The work &middot; 6 tools</span>
+<span class="eyebrow">The work &middot; 6 tools &middot; 47 builds</span>
 <h1>Every build, sorted by what it was built in.</h1>
 <p class="lede">Six tools, and each one is here because it was the right one for that job rather
 than the one I happened to know. Open a tool to watch its builds run, step by step, from the thing
@@ -119,7 +112,7 @@ that sets them off to the thing they leave behind.</p>
     </div>
     <h3 class="tcti">GoHighLevel</h3>
     <p class="tct">Follow-up that runs on its own.</p>
-    <span class="tcb">11 systems</span>
+    <span class="tcb">16 workflows</span>
     <ul class="tcl">
       <li>Leads move without anyone pushing</li>
       <li>Nobody is chased after they say yes</li>
@@ -149,7 +142,7 @@ that sets them off to the thing they leave behind.</p>
     </div>
     <h3 class="tcti">n8n</h3>
     <p class="tct">The jobs that have to wait, retry or loop.</p>
-    <span class="tcb">9 builds</span>
+    <span class="tcb">9 workflows</span>
     <ul class="tcl">
       <li>Waits for a render to finish</li>
       <li>Never calls at three in the morning</li>
@@ -157,7 +150,7 @@ that sets them off to the thing they leave behind.</p>
     </ul>
     <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="retell-agent.html">
+  <a class="tc" href="retell.html">
     <div class="tch">
       <span class="tcm"><img src="../img/logos/retell.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">04 <i>/</i> 06</span>
@@ -170,9 +163,9 @@ that sets them off to the thing they leave behind.</p>
       <li>It writes down what it learns</li>
       <li>It hands over, it never closes</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="website-chat.html">
+  <a class="tc" href="intercom.html">
     <div class="tch">
       <span class="tcm"><img src="../img/logos/intercom.svg" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">05 <i>/</i> 06</span>
@@ -185,9 +178,9 @@ that sets them off to the thing they leave behind.</p>
       <li>Answers from the company's own words</li>
       <li>Real numbers, including the plain ones</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="call-routing.html">
+  <a class="tc" href="openphone.html">
     <div class="tch">
       <span class="tcm"><img src="../img/logos/quo.png" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">06 <i>/</i> 06</span>
@@ -200,7 +193,7 @@ that sets them off to the thing they leave behind.</p>
       <li>After hours it answers instantly</li>
       <li>It takes a message, it never sells</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
 </div>
 

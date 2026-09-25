@@ -532,8 +532,6 @@
 #vo-site .tgrid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:660px){ #vo-site .tgrid{grid-template-columns:repeat(2,1fr)} }
 @media(min-width:1000px){ #vo-site .tgrid{grid-template-columns:repeat(3,1fr)} }
-/* The card is one object: same edges, same inner padding, and the arrow line
-   pinned to the bottom of every card whatever the bullets do above it. */
 #vo-site .tc{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
   border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:16px 16px 14px;
   text-decoration:none;color:inherit;
@@ -542,12 +540,7 @@
 #vo-site .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 #vo-site .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 #vo-site .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* The vendor's real mark, fetched from the vendor - or, where a brand
-   publishes no square glyph anywhere, from its own app-store icon - and kept as
-   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
-   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
-   do not use it, and a letterform is the honest fallback when it cannot be
-   found at all. */
+/* the vendor's real mark, fetched from the vendor, never redrawn */
 #vo-site .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
   border-radius:11px;background:var(--card)}
 #vo-site .tcm img{display:block;width:26px;height:26px;object-fit:contain}
@@ -1119,7 +1112,7 @@
     </div>
     <h3 class="tcti">GoHighLevel</h3>
     <p class="tct">Follow-up that runs on its own.</p>
-    <span class="tcb">11 systems</span>
+    <span class="tcb">16 workflows</span>
     <ul class="tcl">
       <li>Leads move without anyone pushing</li>
       <li>Nobody is chased after they say yes</li>
@@ -1149,7 +1142,7 @@
     </div>
     <h3 class="tcti">n8n</h3>
     <p class="tct">The jobs that have to wait, retry or loop.</p>
-    <span class="tcb">9 builds</span>
+    <span class="tcb">9 workflows</span>
     <ul class="tcl">
       <li>Waits for a render to finish</li>
       <li>Never calls at three in the morning</li>
@@ -1157,7 +1150,7 @@
     </ul>
     <span class="tcg">See them run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="explainers/retell-agent.html">
+  <a class="tc" href="explainers/retell.html">
     <div class="tch">
       <span class="tcm"><img src="data:image/png;base64,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" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">04 <i>/</i> 06</span>
@@ -1170,9 +1163,9 @@
       <li>It writes down what it learns</li>
       <li>It hands over, it never closes</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="explainers/website-chat.html">
+  <a class="tc" href="explainers/intercom.html">
     <div class="tch">
       <span class="tcm"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzFGOERFRCI+PHBhdGggZD0iTTIxIDBIM0MxLjM0MyAwIDAgMS4zNDMgMCAzdjE4YzAgMS42NTggMS4zNDMgMyAzIDNoMThjMS42NTggMCAzLTEuMzQyIDMtM1YzYzAtMS42NTctMS4zNDItMy0zLTN6bS01LjgwMSA0LjM5OWMwLS40NC4zNi0uOC44MDItLjguNDQgMCAuOC4zNi44Ljh2MTAuNjg4YzAgLjQ0Mi0uMzYuODAxLS44LjgwMS0uNDQzIDAtLjgwMi0uMzU5LS44MDItLjgwMVY0LjM5OXpNMTEuMiAzLjk5NGMwLS40NC4zNTctLjc5OS44LS43OTlzLjguMzU5LjguNzk5djExLjYwMmMwIC40NC0uMzU3LjgtLjguOHMtLjgtLjM2LS44LS44VjMuOTk0em0tNCAuNDA1YzAtLjQ0LjM1OS0uOC43OTktLjguNDQzIDAgLjgwMi4zNi44MDIuOHYxMC42ODhjMCAuNDQyLS4zNi44MDEtLjgwMi44MDEtLjQ0IDAtLjc5OS0uMzU5LS43OTktLjgwMVY0LjM5OXpNMy4xOTkgNmMwLS40NDIuMzYtLjguODAyLS44LjQ0IDAgLjc5OS4zNTguNzk5Ljh2Ny4xOTVjMCAuNDQxLS4zNTkuOC0uNzk5LjgtLjQ0MyAwLS44MDItLjM2LS44MDItLjhWNnpNMjAuNTIgMTguMjAyYy0uMTIzLjEwNS0zLjA4NiAyLjU5My04LjUyIDIuNTkzLTUuNDMzIDAtOC4zOTctMi40ODYtOC41MjEtMi41OTMtLjMzNS0uMjg4LS4zNzUtLjc5Mi0uMDg2LTEuMTI4LjI4NS0uMzM0Ljc5LS4zNzUgMS4xMjUtLjA5LjA0Ny4wNDEgMi42OTMgMi4yMTEgNy40ODEgMi4yMTEgNC44NDggMCA3LjQ1Ni0yLjE4NiA3LjQ3OS0yLjIwNy4zMzQtLjI4OS44MzktLjI1IDEuMTI4LjA4Ni4yODkuMzM2LjI1Ljg0LS4wODYgMS4xMjh6bS4yODEtNS4wMDdjMCAuNDQxLS4zNi44LS44MDEuOC0uNDQxIDAtLjgwMS0uMzYtLjgwMS0uOFY2YzAtLjQ0Mi4zNjEtLjguODAxLS44LjQ0MSAwIC44MDEuMzU3LjgwMS44djcuMTk1eiIvPjwvc3ZnPg==" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">05 <i>/</i> 06</span>
@@ -1185,9 +1178,9 @@
       <li>Answers from the company's own words</li>
       <li>Real numbers, including the plain ones</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
-  <a class="tc" href="explainers/call-routing.html">
+  <a class="tc" href="explainers/openphone.html">
     <div class="tch">
       <span class="tcm"><img src="data:image/png;base64,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" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
       <span class="tcn">06 <i>/</i> 06</span>
@@ -1200,7 +1193,7 @@
       <li>After hours it answers instantly</li>
       <li>It takes a message, it never sells</li>
     </ul>
-    <span class="tcg">walk it through <i aria-hidden="true">&rarr;</i></span>
+    <span class="tcg">See it run <i aria-hidden="true">&rarr;</i></span>
   </a>
     </div>
   <!-- /tools:grid -->

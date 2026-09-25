@@ -1,34 +1,30 @@
-// One card per tool on the index, one page behind each card.
+// One card per tool on the index, one page behind each card, and EVERY page
+// built the same way: his real workflows, his name for each one highlighted,
+// a compact moving image of the whole workflow that opens full size.
 //
 //   node tools/toolpages.mjs   ->  explainers/index.html
-//                                  explainers/ghl.html
-//                                  explainers/make.html
-//                                  explainers/n8n.html
+//                                  explainers/{ghl,make,n8n,retell,intercom,openphone}.html
+//                                  + the Systems room of index.html (between sentinels)
 //
-// Volvo's note: the work was "not properly named", and he is right. In the
-// source files a build is identified by its first node - "Webhook", "Search AD
-// Copy Column" - which names the MECHANISM and hides the job. Every entry is
-// renamed for what it removes from somebody's week, and the chain underneath is
-// drawn step for step so the claim stays checkable.
+// Volvo, after the GoHighLevel page: "recreate all workflows I have on each
+// different tool on this manner." So there is one page builder and one card
+// renderer for all six tools. The data is read off his own screenshots:
+// GoHighLevel in lib/ghldata.mjs, everything else in lib/workflows.mjs.
 //
-// Inside a tool page the builds are grouped by TRIGGER, because that is how a
-// reader picks one: they arrive wondering "can he make something happen when a
-// form is filled in", not wondering which node came first.
+// The index is the card grid from the reference he sent, in his branding. The
+// marks are each vendor's REAL logo, fetched from that vendor (img/logos/).
+// OpenPhone now trades as Quo, and the card says so.
 //
-// The index is the card grid from the reference he sent, in his branding: paper
-// on ink with a hard offset shadow rather than dark glass. The marks are each
-// vendor's REAL logo, fetched from that vendor and kept in img/logos/.
-//
-// OpenPhone now trades as Quo - its App Store listing reads "Quo (formerly
-// OpenPhone)" - so its mark is a Q. The card keeps the name he worked under and
-// carries the rename beside it, because a Q with no explanation reads as the
-// wrong logo.
+// Retell, Intercom and OpenPhone each also have an interactive explainer from
+// earlier (retell-agent, website-chat, call-routing). Those are kept and linked
+// from the workflow card as "Walk through it", not replaced.
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { page } from "./lib/pagekit.mjs";
-import { renderFlow, FLOW_CSS, FLOW_JS } from "./lib/flowplayer.mjs";
-import { renderWorkflow, WORKFLOW_CSS, WORKFLOW_JS, WORKFLOW_DIALOG } from "./lib/walkmap.mjs";
+import { renderWorkflow, WORKFLOW_CSS, WORKFLOW_JS, workflowDialog } from "./lib/walkmap.mjs";
 import { GHL, GROUPS as GHL_GROUPS } from "./lib/ghldata.mjs";
+import { N8N, N8N_GROUPS, MAKE, MAKE_GROUPS, RETELL, RETELL_GROUPS,
+  INTERCOM, INTERCOM_GROUPS, OPENPHONE, OPENPHONE_GROUPS } from "./lib/workflows.mjs";
 import { TOOLS, DEEP } from "./lib/tooldata.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -38,139 +34,91 @@ mkdirSync(OUT, { recursive: true });
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const plural = (n, w) => n + " " + w + (n === 1 ? "" : "s");
 
-/* ── the shared look of a tool page ─────────────────────────────────────── */
-const TOOL_CSS = FLOW_CSS + `
-.filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
-.fb{font-family:var(--f-mono);font-size:11.5px;background:var(--card);border:3px solid var(--ink);
-  border-radius:99px;padding:8px 14px;cursor:pointer;box-shadow:3px 3px 0 0 var(--ink);
-  transition:background .16s var(--ease),transform .12s var(--ease)}
-.fb.on{background:var(--pop)}
-.fb:active{transform:translateY(2px);box-shadow:1px 1px 0 0 var(--ink)}
-.fb:focus-visible{outline:3px solid var(--field);outline-offset:3px}
+/* card copy (logo, bullets, tagline) lives in tooldata.mjs; look it up by key */
+const COPY = Object.fromEntries([...TOOLS, ...DEEP].map(t => [t.key, t]));
+
+/* ── the six pages ──────────────────────────────────────────────────────── */
+const PAGES = [
+  { key: "ghl", file: "ghl.html", list: GHL, groups: GHL_GROUPS,
+    unit: "workflow", kicker: "GoHighLevel workflow",
+    blurb: COPY.ghl.blurb,
+    foot: "Read off the builder itself. Client names are withheld throughout, and where a workflow was too large to screenshot legibly the drawing says so rather than inventing the steps." },
+  { key: "make", file: "make.html", list: MAKE, groups: MAKE_GROUPS,
+    unit: "scenario", kicker: "Make.com scenario",
+    blurb: COPY.make.blurb,
+    foot: "Read off the scenario editor itself. Scenario names are blurred in the screenshots to keep client names private, so all but four are titled from their own modules; the four with visible names carry them exactly. Every module is labelled as the editor labels it." },
+  { key: "n8n", file: "n8n.html", list: N8N, groups: N8N_GROUPS,
+    unit: "workflow", kicker: "n8n workflow",
+    blurb: COPY.n8n.blurb,
+    foot: "Read off the n8n editor. The screenshots show the canvas without the workflow's name, so each is titled from its own steps; the steps are exactly as the editor labels them. Dashed curves are loops: the workflow goes round again until its condition is met." },
+  { key: "retell", file: "retell.html", list: RETELL, groups: RETELL_GROUPS,
+    unit: "agent", kicker: "Retell AI voice agent",
+    blurb: "A voice agent that makes real phone calls. Every box is a state in the agent's conversation, and the call chooses its own route through them.",
+    foot: "Read off the Retell builder. The client's name is withheld." },
+  { key: "intercom", file: "intercom.html", list: INTERCOM, groups: INTERCOM_GROUPS,
+    unit: "workflow", kicker: "Intercom workflow",
+    blurb: "The chat on a client's website, built in Intercom. It greets, shows packages, and books a shoot without anyone on the team replying.",
+    foot: "Read off the Intercom workflow canvas, including its own numbers. The client's name is withheld." },
+  { key: "openphone", file: "openphone.html", list: OPENPHONE, groups: OPENPHONE_GROUPS,
+    unit: "call flow", kicker: "OpenPhone call flow",
+    blurb: "What happens when the business phone rings, built in OpenPhone (now Quo) with its Sona AI answering whenever a person cannot.",
+    foot: "Read off the OpenPhone call flow editor. The client's name and number are withheld." }
+];
+
+const PAGE_CSS = `
 .grp{margin:0 0 34px}
-.ghd{margin:0 0 14px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
+.ghd{margin:0 0 16px;padding-bottom:10px;border-bottom:3px solid var(--ink);position:relative}
 .ghd h2{font-family:var(--f-disp);font-weight:900;letter-spacing:-.025em;margin:0;
   font-size:clamp(20px,2.8vw,28px)}
-.ghd p{margin:4px 0 0;font-size:14.5px;color:var(--muted);line-height:1.55;max-width:56ch}
-.cnt{position:absolute;right:0;top:2px;font-family:var(--f-mono);font-size:10.5px;
+.cnt{position:absolute;right:0;top:4px;font-family:var(--f-mono);font-size:10.5px;
   letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.wf{background:var(--card);border:3px solid var(--ink);border-radius:15px;
-  box-shadow:5px 5px 0 0 var(--ink);padding:clamp(14px,2vw,20px);margin:0 0 14px}
-.wf h3{font-family:var(--f-disp);font-weight:900;letter-spacing:-.02em;margin:0 0 6px;
-  font-size:clamp(17px,2.2vw,22px);line-height:1.2}
-.wf p{margin:0;font-size:14.5px;line-height:1.6;color:var(--muted)}
-.why{margin-top:12px !important;padding:10px 12px;background:rgba(245,213,71,.18);
-  border-left:4px solid var(--pop);border-radius:0 8px 8px 0;font-size:14px !important}
-.why b{color:var(--ink)}
-/* A few builds have a page of their own where you can drive them rather than
-   watch them. Those get a way through from here; the rest do not pretend to. */
-.deep{display:flex;width:fit-content;align-items:center;gap:8px;margin-top:12px;
-  font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
-  background:var(--field);color:var(--paper);border-radius:99px;padding:8px 14px;
-  text-decoration:none;transition:transform .16s var(--ease)}
-.deep i{font-style:normal;transition:transform .16s var(--ease)}
-.deep:hover i{transform:translateX(4px)}
-.deep:active{transform:translateY(2px)}
-.deep:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-@media(prefers-reduced-motion:reduce){ .deep,.deep i{transition:none} }
 @media(max-width:560px){ .cnt{position:static;display:block;margin-top:6px} }`;
 
-/* GoHighLevel is a list of HIS workflows, grouped by what sets them off. Each
-   card is one workflow: his name highlighted, one plain line saying what it
-   does, and the steps as his builder prints them. */
-function ghlPage(tool) {
+function workflowPage(p) {
+  const c = COPY[p.key];
   let n = 0;
-  const sections = GHL_GROUPS.map((g) => {
-    const mine = GHL.filter((w) => w.group === g.key);
+  const sections = p.groups.map((g) => {
+    const mine = p.list.filter((w) => w.group === g.key);
     if (!mine.length) return "";
     return `    <section class="grp">
       <header class="ghd">
         <h2>${esc(g.label)}</h2>
-        <span class="cnt">${plural(mine.length, "workflow")}</span>
+        <span class="cnt">${plural(mine.length, p.unit)}</span>
       </header>
 ${mine.map((w) => renderWorkflow(w, ++n)).join("\n")}
     </section>`;
   }).filter(Boolean).join("\n");
 
-  return page("GoHighLevel workflows", `
+  /* every workflow must belong to a group the page draws, or it silently vanishes */
+  const orphans = p.list.filter(w => !p.groups.some(g => g.key === w.group));
+  if (orphans.length) throw new Error(p.key + ": no group for " + orphans.map(w => w.key).join(", "));
+
+  const many = p.list.length > 1;
+  return page(c.name + " " + p.unit + "s", `
 <a class="back" href="index.html">&lsaquo; All tools</a>
-<span class="eyebrow">GoHighLevel &middot; ${plural(GHL.length, "workflow")}</span>
-<h1>${esc(tool.tagline)}</h1>
-<p class="lede">${esc(tool.blurb)} Each one below is a real workflow from the account, under the name
-it carries in the builder, drawn step by step as it runs. Click any one to see it full size.</p>
+<span class="eyebrow">${esc(c.name)}${c.note ? " (" + esc(c.note) + ")" : ""} &middot; ${plural(p.list.length, p.unit)}</span>
+<h1>${esc(c.tagline)}</h1>
+<p class="lede">${esc(p.blurb)} ${many ? "Each one below is" : "Below is"} a real build, drawn step by step
+as it runs. Click ${many ? "any one" : "it"} to see it full size.</p>
 
 ${sections}
 
-<p class="lede" style="margin-top:26px">Read off the builder itself. Client names are withheld
-throughout, and where a workflow was too large to screenshot legibly the drawing says so rather
-than inventing the steps.</p>
-${WORKFLOW_DIALOG}
-<script>${WORKFLOW_JS}</script>`, TOOL_CSS + WORKFLOW_CSS);
-}
-
-function toolPage(tool) {
-  let n = 0;
-  const item = it => `      <article class="wf">
-        <h3>${esc(it.name)}</h3>
-        <p>${esc(it.purpose)}</p>
-        ${renderFlow(it.flow, n++, it.name)}
-        ${it.note ? `<p class="why"><b>Worth noticing.</b> ${esc(it.note)}</p>` : ""}
-        ${it.deep ? `<a class="deep" href="${it.deep.file}">${esc(it.deep.label)} <i aria-hidden="true">&rarr;</i></a>` : ""}
-      </article>`;
-
-  const group = g => `    <section class="grp" data-g="${g.key}">
-      <header class="ghd">
-        <h2>${esc(g.label)}</h2>
-        <p>${esc(g.blurb)}</p>
-        <span class="cnt">${plural(g.items.length, "build")}</span>
-      </header>
-${g.items.map(item).join("\n")}
-    </section>`;
-
-  const total = tool.groups.reduce((a, g) => a + g.items.length, 0);
-
-  return page(tool.name + " builds", `
-<a class="back" href="index.html">&lsaquo; All tools</a>
-<span class="eyebrow">${esc(tool.name)} &middot; ${plural(total, tool.countNote.replace(/s$/, ""))}</span>
-<h1>${esc(tool.tagline)}</h1>
-<p class="lede">${esc(tool.blurb)} Each one plays from its trigger to its last step, the same shape as
-the canvas it was built on. Press play, or just scroll - they start when they reach you.</p>
-
-<div class="filt" role="group" aria-label="Filter by what starts it">
-  <button class="fb on" data-f="all" type="button">Everything</button>
-${tool.groups.map(g => `  <button class="fb" data-f="${g.key}" type="button">${esc(g.label)}</button>`).join("\n")}
-</div>
-
-${tool.groups.map(group).join("\n")}
-
-<p class="lede" style="margin-top:26px">${esc(tool.foot)}</p>
-
-<script>
-${FLOW_JS}
-document.querySelectorAll(".fb").forEach(function(b){
-  b.addEventListener("click", function(){
-    var f = b.getAttribute("data-f");
-    document.querySelectorAll(".fb").forEach(function(o){ o.classList.toggle("on", o === b); });
-    document.querySelectorAll(".grp").forEach(function(g){
-      g.style.display = (f === "all" || g.getAttribute("data-g") === f) ? "" : "none";
-    });
-  });
-});
-</script>`, TOOL_CSS);
+<p class="lede" style="margin-top:26px">${esc(p.foot)}</p>
+${workflowDialog(p.kicker)}
+<script>${WORKFLOW_JS}</script>`, PAGE_CSS + WORKFLOW_CSS);
 }
 
 /* ── the index: one card per tool ───────────────────────────────────────── */
-const CARDS = [
-  ...TOOLS.map(t => ({ file: t.file, logo: t.logo, note: t.note, name: t.name, tagline: t.tagline,
-    badge: t.badge, bullets: t.bullets,
-    meta: "See them run" })),
-  ...DEEP.map(d => ({ file: d.file, logo: d.logo, note: d.note, name: d.name, tagline: d.tagline,
-    badge: d.badge, bullets: d.bullets, meta: "walk it through" }))
-];
+const BADGE = { ghl: true, make: true, n8n: true };   // these show a live count
+const CARDS = PAGES.map(p => {
+  const c = COPY[p.key];
+  return { file: p.file, logo: c.logo, note: c.note, name: c.name, tagline: c.tagline,
+    badge: BADGE[p.key] ? plural(p.list.length, p.unit) : c.badge,
+    bullets: c.bullets, meta: p.list.length > 1 ? "See them run" : "See it run" };
+});
 
 /* The counter is a position in a set, and it is only honest because the set is
-   closed and shown whole: six cards, all on screen, numbered 01 to 06. It would
-   be decoration on a list that scrolled or filtered. */
+   closed and shown whole: six cards, all on screen, numbered 01 to 06. */
 const card = (base = "", logoBase = "") => (c, i) => `  <a class="tc" href="${base}${c.file}">
     <div class="tch">
       <span class="tcm"><img src="${logoBase}img/logos/${c.logo}" alt="" aria-hidden="true" width="26" height="26" loading="lazy"></span>
@@ -186,14 +134,11 @@ ${c.bullets.map(b => `      <li>${esc(b)}</li>`).join("\n")}
   </a>`;
 
 /* One stylesheet for the grid, used by the standalone index AND pasted into the
-   hub's Systems room. Two copies of it would be two of them waiting to
-   disagree, and the hub is the one a client actually lands on. */
+   hub's Systems room, so the two cannot disagree. */
 const GRID_CSS = `
 .tgrid{display:grid;gap:16px;grid-template-columns:1fr}
 @media(min-width:660px){ .tgrid{grid-template-columns:repeat(2,1fr)} }
 @media(min-width:1000px){ .tgrid{grid-template-columns:repeat(3,1fr)} }
-/* The card is one object: same edges, same inner padding, and the arrow line
-   pinned to the bottom of every card whatever the bullets do above it. */
 .tc{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);
   border-radius:16px;box-shadow:6px 6px 0 0 var(--ink);padding:16px 16px 14px;
   text-decoration:none;color:inherit;
@@ -202,12 +147,7 @@ const GRID_CSS = `
 .tc:active{transform:translate(2px,2px);box-shadow:3px 3px 0 0 var(--ink)}
 .tc:focus-visible{outline:3px solid var(--field);outline-offset:4px}
 .tch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-/* The vendor's real mark, fetched from the vendor - or, where a brand
-   publishes no square glyph anywhere, from its own app-store icon - and kept as
-   a file in img/logos/. None of them is drawn here. A logo redrawn from memory
-   is wrong in a way a reader feels but cannot name, so the rule is fetch it or
-   do not use it, and a letterform is the honest fallback when it cannot be
-   found at all. */
+/* the vendor's real mark, fetched from the vendor, never redrawn */
 .tcm{display:grid;place-items:center;width:42px;height:42px;border:3px solid var(--ink);
   border-radius:11px;background:var(--card)}
 .tcm img{display:block;width:26px;height:26px;object-fit:contain}
@@ -240,9 +180,10 @@ const GRID_CSS = `
   .tc:hover .tcg i{transform:none}
 }`;
 
+const total = PAGES.reduce((a, p) => a + p.list.length, 0);
 const index = page("Built, by tool", `
 <a class="back" href="../index.html#systems">&lsaquo; Back to the portfolio</a>
-<span class="eyebrow">The work &middot; ${CARDS.length} tools</span>
+<span class="eyebrow">The work &middot; ${CARDS.length} tools &middot; ${total} builds</span>
 <h1>Every build, sorted by what it was built in.</h1>
 <p class="lede">Six tools, and each one is here because it was the right one for that job rather
 than the one I happened to know. Open a tool to watch its builds run, step by step, from the thing
@@ -255,37 +196,30 @@ ${CARDS.map(card("", "../")).join("\n")}
 <p class="lede" style="margin-top:26px">Read from the build files themselves. Client names are
 withheld throughout.</p>`, GRID_CSS);
 
-
 writeFileSync(join(OUT, "index.html"), index);
-console.log("wrote explainers/index.html  (" + CARDS.length + " tool cards)");
+console.log("wrote explainers/index.html  (" + CARDS.length + " tool cards, " + total + " builds)");
 
-for (const t of TOOLS) {
-  writeFileSync(join(OUT, t.file), t.key === "ghl" ? ghlPage(t) : toolPage(t));
-  const n = t.groups.reduce((a, g) => a + g.items.length, 0);
-  console.log("wrote explainers/" + t.file.padEnd(10) + " " + String(n).padStart(2) + " builds, " +
-    t.groups.length + " groups");
-  for (const g of t.groups) console.log("     " + String(g.items.length).padStart(2) + "  " + g.label);
+for (const p of PAGES) {
+  writeFileSync(join(OUT, p.file), workflowPage(p));
+  const named = p.list.filter(w => w.named).length;
+  console.log("wrote explainers/" + p.file.padEnd(15) + String(p.list.length).padStart(3) + " " +
+    plural(p.list.length, p.unit).replace(/^\d+ /, "").padEnd(11) + (p.key === "ghl" ? "" : "  (" + named + " with their builder name)"));
 }
 
 /* ── the same grid, into the hub's Systems room ─────────────────────────────
-   The hub is the page a client actually lands on, so the grid has to live there
-   too - and a hand-copied second version of it is a third thing to keep in
-   step. It is written between sentinels instead, and the sentinels are
-   load-bearing: this script refuses rather than guessing if either is missing,
-   because a half-matched replacement would eat the rest of the room. */
+   Written between sentinels, and the sentinels are load-bearing: this refuses
+   rather than guessing if either is missing, because a half-matched
+   replacement would eat the rest of the room. */
 const HUB = join(ROOT, "index.html");
 const A = "<!-- tools:grid -->", B = "<!-- /tools:grid -->";
 const AC = "/* tools:grid-css */", BC = "/* /tools:grid-css */";
 let hub = readFileSync(HUB, "utf8");
-
 for (const [open, close] of [[A, B], [AC, BC]]) {
   const n = hub.split(open).length - 1, m = hub.split(close).length - 1;
   if (n !== 1 || m !== 1) throw new Error(`index.html must hold exactly one ${open} and one ${close} (found ${n}/${m})`);
 }
-
 const cut = (src, open, close, body) =>
   src.slice(0, src.indexOf(open) + open.length) + body + src.slice(src.indexOf(close));
-
 hub = cut(hub, A, B, `
     <div class="tgrid">
 ${CARDS.map(card("explainers/")).join("\n")}

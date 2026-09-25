@@ -36,19 +36,28 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
   .replace(/"/g, "&quot;");
 const r3 = (n) => Math.round(n * 1000) / 1000;
 
+/* A LOOP edge (4th element "back": n8n's retry-until-done, a Loop Over Items)
+   takes no part in the layout. Counted, a cycle would push its own steps down
+   the page on every pass. It is drawn round the side instead. */
+const isBack = (e) => e[3] === "back";
+
 function depths(ids, edges) {
   const d = new Map(ids.map((i) => [i, 0]));
+  const fwd = edges.filter((e) => !isBack(e));
   for (let pass = 0; pass < ids.length; pass++) {
     let moved = false;
-    for (const [a, z] of edges) if (d.get(a) + 1 > d.get(z)) { d.set(z, d.get(a) + 1); moved = true; }
+    for (const [a, z] of fwd) if (d.get(a) + 1 > d.get(z)) { d.set(z, d.get(a) + 1); moved = true; }
     if (!moved) break;
   }
   return d;
 }
 
+const BOW = 46;   // how far a loop curve swings out past the boxes
+
 export function layout(wf) {
   const ids = Object.keys(wf.nodes);
   const depth = depths(ids, wf.edges);
+  const loops = wf.edges.some(isBack);
   const rows = new Map();
   for (const id of ids) {
     const k = depth.get(id);
@@ -56,7 +65,8 @@ export function layout(wf) {
     rows.get(k).push(id);
   }
   const widest = Math.max(...[...rows.values()].map((r) => r.length));
-  const W = PAD * 2 + widest * NODE_W + (widest - 1) * GAP_X;
+  const side = loops ? BOW + 14 : 0;   // room either side, so centring stays true
+  const W = PAD * 2 + side * 2 + widest * NODE_W + (widest - 1) * GAP_X;
   const H = PAD * 2 + rows.size * NODE_H + (rows.size - 1) * GAP_Y;
   const pos = new Map();
   for (const [dep, row] of [...rows.entries()].sort((a, b) => a[0] - b[0])) {
@@ -89,6 +99,15 @@ const pathD = (A, B) => {
   return `M${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`;
 };
 
+/* A loop leaves the right side of the later step and swings back up into the
+   right side of the earlier one, so it reads as "go round again" rather than
+   as a wire cutting back through the steps it came from. */
+const loopD = (A, B) => {
+  const x1 = A.x + NODE_W, y1 = A.y + NODE_H / 2, x2 = B.x + NODE_W, y2 = B.y + NODE_H / 2;
+  const out = Math.max(x1, x2) + BOW;
+  return `M${x1} ${y1} C ${out} ${y1}, ${out} ${y2}, ${x2} ${y2}`;
+};
+
 /* keyTimes must run 0..1 and never go backwards; equal neighbours are allowed
    and make a clean jump. Build them from slot edges and clamp. */
 function keys(times, values) {
@@ -105,19 +124,37 @@ export function renderSvg(wf, prefix) {
   const drawn = (maxDepth + 1) * DRAW_STEP + 0.5;   // flow starts once it has drawn itself
   const slot = (d) => (d * FLOW_STEP) / cycle;
 
-  const edges = wf.edges.map(([a, z, label], i) => {
+  /* Route labels go on their OWN layer, above every wire. Emitted beside their
+     own path, a label was struck through by whichever wire was drawn after it
+     ("Partial Response", "on error"), and on a straight vertical wire it sat
+     exactly where the signal travels. */
+  const labels = [];
+  const edges = wf.edges.map((e, i) => {
+    const [a, z, label] = e;
     const A = pos.get(a), B = pos.get(z);
     if (!A || !B) throw new Error(wf.key + ": edge " + a + "->" + z + " names a step that does not exist");
     const da = depth.get(a), dz = depth.get(z);
     const id = `${prefix}-e${i}`;
-    const lbl = label
-      ? `<text class="wl" style="--d:${r3(da * DRAW_STEP + 0.2)}s" x="${(A.x + B.x) / 2 + NODE_W / 2}" y="${(A.y + NODE_H + B.y) / 2 + 4}" text-anchor="middle">${esc(label)}</text>`
-      : "";
-    return `<path class="we" id="${id}" pathLength="1" style="--d:${r3(da * DRAW_STEP + 0.12)}s;--len:${r3((dz - da) * DRAW_STEP)}s" d="${pathD(A, B)}"/>${lbl}`;
+    if (isBack(e)) {
+      const out = Math.max(A.x, B.x) + NODE_W + BOW;
+      if (label) labels.push(`<text class="wl" style="--d:${r3(da * DRAW_STEP + 0.3)}s" x="${out - 4}" y="${(A.y + B.y) / 2 + NODE_H / 2 + 3}" text-anchor="end">${esc(label)}</text>`);
+      return `<path class="we is-loop" id="${id}" pathLength="1" style="--d:${r3(da * DRAW_STEP + 0.3)}s;--len:${r3(DRAW_STEP * 2)}s" d="${loopD(A, B)}"/>`;
+    }
+    if (label) {
+      const straight = Math.abs(A.x - B.x) < 1;
+      /* a straight wire gets its label BESIDE it, a curved one at its middle */
+      const lx = straight ? A.x + NODE_W / 2 + 7 : (A.x + B.x) / 2 + NODE_W / 2;
+      labels.push(`<text class="wl" style="--d:${r3(da * DRAW_STEP + 0.2)}s" x="${lx}" y="${(A.y + NODE_H + B.y) / 2 + 3}" text-anchor="${straight ? "start" : "middle"}">${esc(label)}</text>`);
+    }
+    return `<path class="we" id="${id}" pathLength="1" style="--d:${r3(da * DRAW_STEP + 0.12)}s;--len:${r3((dz - da) * DRAW_STEP)}s" d="${pathD(A, B)}"/>`;
   }).join("\n    ");
 
-  /* the packets: one per wire, all on the drawing's single clock */
-  const packets = wf.edges.map(([a, z], i) => {
+  /* the packets: one per forward wire, all on the drawing's single clock. A
+     loop gets no packet - it has no place in the one-way story from trigger to
+     end, and its dashed curve already says "round again". */
+  const packets = wf.edges.map((edge, i) => {
+    if (isBack(edge)) return "";
+    const [a, z] = edge;
     const s0 = slot(depth.get(a)), s1 = slot(depth.get(z));
     const e = 0.012;
     const move = keys([0, s0, s1, 1], [0, 0, 1, 1]);
@@ -133,7 +170,8 @@ export function renderSvg(wf, prefix) {
   /* pings: every trigger as the cycle starts, every END as its packet lands */
   const pings = Object.entries(wf.nodes).map(([k, n]) => {
     const isStart = n.kind === "trigger";
-    const isEnd = n.kind === "end";
+    /* a failure ending is still an ending: the packet lands there too */
+    const isEnd = n.kind === "end" || n.kind === "fail";
     if (!isStart && !isEnd) return "";
     const p = pos.get(k);
     const at = isStart ? 0 : slot(depth.get(k));
@@ -163,6 +201,7 @@ export function renderSvg(wf, prefix) {
   return `<svg class="wsvg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="--w:${W}px" role="img"
     aria-label="${esc(wf.name)}: ${Object.keys(wf.nodes).length} steps">
     ${edges}
+    ${labels.join("\n    ")}
     ${pings}
     ${nodes}
     ${packets}
@@ -180,7 +219,10 @@ export function renderWorkflow(wf, n) {
         <p class="wfd">${esc(wf.does)}</p>
         ${wf.note ? `<p class="wfw"><b>Worth noticing.</b> ${esc(wf.note)}</p>` : ""}
         ${wf.partial ? `<p class="wfp"><b>About this drawing.</b> ${esc(wf.partial)}</p>` : ""}
-        <span class="wfs">${steps} steps</span>
+        <div class="wff">
+          <span class="wfs">${steps} steps</span>
+          ${wf.deep ? `<a class="wfdeep" href="${wf.deep}">Walk through it <i aria-hidden="true">&rarr;</i></a>` : ""}
+        </div>
       </div>
       <button class="wfthumb" type="button" data-open="${wf.key}"
         aria-label="Enlarge the ${esc(wf.name)} workflow">
@@ -194,11 +236,11 @@ export function renderWorkflow(wf, n) {
 /* One lightbox for the whole page. A native <dialog> gives Esc, a focus trap
    and a backdrop for free, which is three things a hand-rolled overlay gets
    wrong at least one of. */
-export const WORKFLOW_DIALOG = `
+export const workflowDialog = (kicker) => `
 <dialog class="wfx" id="wfx" aria-labelledby="wfx-name">
   <div class="wfxh">
     <div>
-      <p class="wfxk">GoHighLevel workflow</p>
+      <p class="wfxk">${esc(kicker)}</p>
       <h2 id="wfx-name" class="wft"><span></span></h2>
       <p class="wfxd"></p>
     </div>
@@ -263,10 +305,26 @@ export const WORKFLOW_CSS = `
 .k-fail .wnb{stroke:var(--bad)}
 .k-end .wnb{fill:var(--pop);stroke-width:3}
 .we{stroke:var(--ink);stroke-width:2;fill:none;opacity:.45}
-.wl{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
+/* a paper halo, so a label reads cleanly even where a wire crosses it */
+.wl{font-family:var(--f-mono);font-size:9px;fill:var(--muted);paint-order:stroke;
+  stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
 .wpk{fill:var(--pop);stroke:var(--ink);stroke-width:2.2}
 .wping{fill:none;stroke:var(--pop)}
 .wping.is-start{stroke:var(--field)}
+/* a loop is dashed, so it never reads as the main road */
+.we.is-loop{stroke-dasharray:.04 .03;opacity:.55}
+.armed .we.is-loop{stroke-dasharray:.04 .03;stroke-dashoffset:0;opacity:0}
+.go .we.is-loop{animation:wl-in .5s ease forwards;animation-delay:var(--d)}
+.k-fail .wnt{fill:var(--ink)}
+.wff{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wfdeep{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:var(--field);
+  border:2px solid var(--ink);border-radius:99px;padding:6px 12px;text-decoration:none;
+  transition:transform .16s var(--ease)}
+.wfdeep i{font-style:normal;transition:transform .16s var(--ease)}
+.wfdeep:hover i{transform:translateX(3px)}
+.wfdeep:active{transform:translateY(1px)}
+.wfdeep:focus-visible{outline:3px solid var(--pop);outline-offset:3px}
 
 /* ── the motion. Only a drawing that has been ARMED by script starts hidden,
    so with no script, or before it runs, every workflow is fully visible. ── */

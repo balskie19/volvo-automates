@@ -42,6 +42,8 @@ const collect = (rootSel, props) => {
   const walk = el => {
     if (SKIP[el.tagName]) return;
     if (el.classList && el.classList.contains("intro")) return;
+    /* the real page draws a custom cursor the embed deliberately leaves out */
+    if (el.classList && (el.classList.contains("vc") || el.classList.contains("vc-dot") || el.classList.contains("vc-ring"))) return;
     const c = getComputedStyle(el);
     const rec = { tag: el.tagName.toLowerCase(), cls: (el.className || "").toString().slice(0, 40) };
     for (const p of props) rec[p] = c[p];

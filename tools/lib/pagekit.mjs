@@ -58,9 +58,14 @@ svg .el{font-family:var(--f-mono);font-size:9px;fill:var(--muted)}
   letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:14px}
 .back:hover{color:var(--ink)}`;
 
+/* every explainer and tool page lives in explainers/, one level below img/ */
+import { cursorBlock } from "./cursor.mjs";
+
 export const page = (title, body, extraCss = "") => `<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${title}</title>${FONTS}
 <style>${BASE}${extraCss}</style></head>
-<body><div class="wrap">${body}</div></body></html>`;
+<body><div class="wrap">${body}</div>
+${cursorBlock("../img/volvo-small.webp")}
+</body></html>`;

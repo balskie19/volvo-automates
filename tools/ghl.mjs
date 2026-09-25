@@ -26,7 +26,16 @@ import { join, resolve, extname } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SCOPE = "#vo-site";
-const src = readFileSync(join(ROOT, "index.html"), "utf8");
+/* The custom cursor (his photo following the mouse) is cut out FIRST, before
+   anything is parsed. It hides the host page's own pointer, which is not
+   something to paste into a client's funnel, and its <script data-cursor> and
+   <style> would otherwise be picked up by the extraction below. The sentinels
+   are load-bearing: a missing pair throws rather than shipping half of it. */
+const rawSrc = readFileSync(join(ROOT, "index.html"), "utf8");
+if ((rawSrc.match(/<!-- cursor -->/g) || []).length !== 1 || (rawSrc.match(/<!-- \/cursor -->/g) || []).length !== 1)
+  throw new Error("index.html must hold exactly one <!-- cursor --> block");
+const src = rawSrc.replace(/<!-- cursor -->[\s\S]*?<!-- \/cursor -->\s*/, "");
+if (/vc-face|data-cursor>/.test(src)) throw new Error("cursor markup survived the strip");
 
 /* ── read a {...} block, honouring nesting and strings ─────────────────────
    A regex cannot do this: `content:"}"` and nested @media both break it. */

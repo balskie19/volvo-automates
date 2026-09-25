@@ -26,6 +26,7 @@ import { GHL, GROUPS as GHL_GROUPS } from "./lib/ghldata.mjs";
 import { N8N, N8N_GROUPS, MAKE, MAKE_GROUPS, RETELL, RETELL_GROUPS,
   INTERCOM, INTERCOM_GROUPS, OPENPHONE, OPENPHONE_GROUPS } from "./lib/workflows.mjs";
 import { TOOLS, DEEP } from "./lib/tooldata.mjs";
+import { cursorBlock } from "./lib/cursor.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const OUT = join(ROOT, "explainers");
@@ -226,5 +227,13 @@ ${CARDS.map(card("explainers/")).join("\n")}
     </div>
   `);
 hub = cut(hub, AC, BC, GRID_CSS + "\n");
+
+/* the cursor: his photo following the mouse. Placed once before </body>, then
+   kept in step from lib/cursor.mjs like the grid. tools/ghl.mjs strips it. */
+const CUR = /<!-- cursor -->[\s\S]*?<!-- \/cursor -->/;
+const nCur = (hub.match(/<!-- cursor -->/g) || []).length;
+if (nCur > 1) throw new Error("index.html holds more than one cursor block");
+hub = nCur ? hub.replace(CUR, cursorBlock("img/volvo-small.webp"))
+           : hub.replace(/<\/body>/, cursorBlock("img/volvo-small.webp") + "\n</body>");
 writeFileSync(HUB, hub);
 console.log("synced the Systems room in index.html (" + CARDS.length + " cards)");
